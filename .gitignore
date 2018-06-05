@@ -7,3 +7,4 @@
 .idea/compiler.xml
 tomcat.iml
 *.class
+.idea/*
