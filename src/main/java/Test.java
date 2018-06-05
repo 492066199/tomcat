@@ -18,7 +18,7 @@ public class Test {
         JavaStreamingContext jssc = new JavaStreamingContext(conf, Durations.seconds(1));
 
         // Create a DStream that will connect to hostname:port, like localhost:9999
-        JavaReceiverInputDStream<String> lines = jssc.socketTextStream("localhost", 9999);
+        JavaReceiverInputDStream<String> lines = jssc.socketTextStream("0.0.0.0", 9999);
 
         // Split each line into words
         JavaDStream<String> words = lines.flatMap(x -> Arrays.asList(x.split(" ")).iterator());
