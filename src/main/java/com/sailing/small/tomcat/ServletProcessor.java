@@ -9,9 +9,9 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLStreamHandler;
 
-public class ServletProcessor1 {
-    public void process(Request request, Response response) {
-        String uri = request.getUri();
+public class ServletProcessor {
+    public void process(HttpRequest request, HttpResponse response) {
+        String uri = request.getRequestURI();
         String servletName = uri.substring(uri.lastIndexOf("/") + 1);
         URLClassLoader loader = null;
         try {

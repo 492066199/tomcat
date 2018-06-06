@@ -10,7 +10,7 @@ public class HttpProcessor {
     OutputStream output = null;
     HttpRequest request = null;
     private HttpRequestLine requestLine = new HttpRequestLine();
-
+    HttpResponse response = null;
 
     public HttpProcessor(HttpConnector httpConnector) {
 
@@ -36,6 +36,7 @@ public class HttpProcessor {
             if (request.getRequestURI().startsWith("/servlet/")) {
                 ServletProcessor processor = new ServletProcessor();
                 processor.process(request, response);
+                response.finishResponse();
             } else {
                 StaticResourceProcessor processor = new
                         StaticResourceProcessor();

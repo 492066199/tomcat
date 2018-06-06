@@ -1,8 +1,11 @@
 package com.sailing.small.tomcat;
 
+import javax.servlet.http.Cookie;
+import java.util.ArrayList;
+
 public class RequestUtil {
     public static Cookie[] parseCookieHeader(String header) {
-        if ((header == null) || (header.length 0 < 1) )
+        if ((header == null) || (header.length() < 1) )
         return (new Cookie[0]);
         ArrayList cookies = new ArrayList();
         while (header.length() > 0) {
