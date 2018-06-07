@@ -1,4 +1,6 @@
-package com.sailing.small.tomcat;
+package com.sailing.tomcat.http;
+
+import com.sailing.tomcat.util.StringManager;
 
 import java.util.HashMap;
 import java.util.Map;

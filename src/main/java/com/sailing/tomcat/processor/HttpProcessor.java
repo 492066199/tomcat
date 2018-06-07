@@ -1,6 +1,17 @@
-package com.sailing.small.tomcat;
+package com.sailing.tomcat.processor;
+
+import com.sailing.tomcat.servlet.HttpRequest;
+import com.sailing.tomcat.servlet.HttpResponse;
+import com.sailing.tomcat.io.SocketInputStream;
+import com.sailing.tomcat.connector.HttpConnector;
+import com.sailing.tomcat.http.HttpHeader;
+import com.sailing.tomcat.http.HttpRequestLine;
+import com.sailing.tomcat.util.Constants;
+import com.sailing.tomcat.util.RequestUtil;
+import com.sailing.tomcat.util.StringManager;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -11,6 +22,8 @@ public class HttpProcessor {
     HttpRequest request = null;
     private HttpRequestLine requestLine = new HttpRequestLine();
     HttpResponse response = null;
+    protected StringManager sm =
+            StringManager.getManager(Constants.Package);
 
     public HttpProcessor(HttpConnector httpConnector) {
 
@@ -51,7 +64,7 @@ public class HttpProcessor {
     }
 
     //private for headers
-    private void parseHeaders(SocketInputStream input) {
+    private void parseHeaders(SocketInputStream input) throws IOException, ServletException {
         HttpHeader header = new HttpHeader();
         // Read the next header
         input.readHeader(header);
@@ -73,7 +86,7 @@ public class HttpProcessor {
 
         if (name.equals("cookie")) {
             // process cookies here
-            Cookie cookies[] = RequestUtil.ParseCookieHeader (value);
+            Cookie cookies[] = RequestUtil.parseCookieHeader(value);
             for (int i = 0; i < cookies.length; i++) {
                 if (cookies[i].getName().equals("jsessionid")) {
                     // Override anything requested in the URL
@@ -170,7 +183,7 @@ public class HttpProcessor {
         }
 
         // Normalize URI (using String operations at the moment)
-        String normalizedUri = normalize(uri);
+        String normalizedUri = RequestUtil.normalize(uri);
 
         // Set the corresponding request properties
         ((HttpRequest) request).setMethod(method);

@@ -1,10 +1,15 @@
-package com.sailing.small.tomcat;
+package com.sailing.tomcat.connector;
+
+import com.sailing.tomcat.processor.HttpProcessor;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ *
+ */
 public class HttpConnector implements Runnable {
     boolean stopped;
     private String scheme = "http";

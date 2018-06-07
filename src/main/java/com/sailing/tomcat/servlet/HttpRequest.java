@@ -1,4 +1,7 @@
-package com.sailing.small.tomcat;
+package com.sailing.tomcat.servlet;
+
+import com.sailing.tomcat.http.ParameterMap;
+import com.sailing.tomcat.io.SocketInputStream;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -13,6 +16,9 @@ public class HttpRequest implements HttpServletRequest{
     protected HashMap headers = new HashMap();
     protected ArrayList cookies = new ArrayList();
     protected ParameterMap parameters = null;
+    private String requestedSessionId;
+    private boolean requestedSessionCookie;
+    private boolean requestedSessionURL;
 
     public void parseParameter(){
         
@@ -284,5 +290,49 @@ public class HttpRequest implements HttpServletRequest{
 
     public DispatcherType getDispatcherType() {
         return null;
+    }
+
+    public void addHeader(String name, String value) {
+
+    }
+
+    public void setRequestedSessionId(String requestedSessionId) {
+        this.requestedSessionId = requestedSessionId;
+    }
+
+    public void setRequestedSessionCookie(boolean requestedSessionCookie) {
+        this.requestedSessionCookie = requestedSessionCookie;
+    }
+
+    public void setRequestedSessionURL(boolean requestedSessionURL) {
+        this.requestedSessionURL = requestedSessionURL;
+    }
+
+    public void addCookie(Cookie cookie) {
+
+    }
+
+    public void setContentLength(int n) {
+
+    }
+
+    public void setContentType(String value) {
+
+    }
+
+    public void setQueryString(String s) {
+
+    }
+
+    public void setMethod(String method) {
+
+    }
+
+    public void setProtocol(String protocol) {
+
+    }
+
+    public void setRequestURI(String uri) {
+
     }
 }

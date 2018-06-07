@@ -1,4 +1,8 @@
-package com.sailing.small.tomcat;
+package com.sailing.tomcat.servlet;
+
+import com.sailing.tomcat.io.ResponseStream;
+import com.sailing.tomcat.io.ResponseWriter;
+import com.sailing.tomcat.util.Constants;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -199,5 +203,17 @@ public class HttpResponse implements HttpServletResponse {
 
     public void setRequest(HttpRequest request) {
         this.request = request;
+    }
+
+    public void write(byte[] b, int off, int actual) {
+
+    }
+
+    public void write(int b) {
+
+    }
+
+    public void finishResponse() {
+
     }
 }

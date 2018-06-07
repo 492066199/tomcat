@@ -1,4 +1,4 @@
-package com.sailing.small.tomcat;
+package com.sailing.tomcat.servlet;
 
 import javax.servlet.*;
 import java.io.IOException;
