@@ -8,7 +8,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class HttpResponse implements HttpServletResponse {
@@ -17,8 +19,21 @@ public class HttpResponse implements HttpServletResponse {
     OutputStream output;
     PrintWriter writer;
 
-    public HttpResponse(OutputStream output) {
+    /**
+     * The HTTP headers explicitly added via addHeader(), but not including
+     * those to be added with setContentLength(), setContentType(), and so on.
+     * This collection is keyed by the header name, and the elements are
+     * ArrayLists containing the associated values that have been set.
+     */
+    protected HashMap headers = new HashMap();
+    /**
+     * The content length associated with this Response.
+     */
+    protected int contentLength = -1;
 
+
+    public HttpResponse(OutputStream output) {
+        this.output = output;
     }
 
     public void addCookie(Cookie cookie) {
@@ -65,8 +80,29 @@ public class HttpResponse implements HttpServletResponse {
 
     }
 
-    public void setHeader(String s, String s1) {
+    public void setHeader(String name, String value) {
+        if (isCommitted())
+            return;
+        //    if (included)
+        //    return;     // Ignore any call from an included servlet
+        ArrayList values = new ArrayList();
+        values.add(value);
+        synchronized (headers) {
+            headers.put(name, values);
+        }
+        String match = name.toLowerCase();
+        if (match.equals("content-length")) {
+            int contentLength = -1;
+            try {
+                contentLength = Integer.parseInt(value);
+            } catch (NumberFormatException e) {
 
+            }
+            if (contentLength >= 0)
+                setContentLength(contentLength);
+        } else if (match.equals("content-type")) {
+            setContentType(value);
+        }
     }
 
     public void addHeader(String s, String s1) {
@@ -129,12 +165,16 @@ public class HttpResponse implements HttpServletResponse {
 
     }
 
-    public void setContentLength(int i) {
-
+    public void setContentLength(int length) {
+        if (isCommitted())
+            return;
+//    if (included)
+        //     return;     // Ignore any call from an included servlet
+        this.contentLength = length;
     }
 
     public void setContentType(String s) {
-
+        //blank
     }
 
     public void setBufferSize(int i) {
@@ -154,6 +194,7 @@ public class HttpResponse implements HttpServletResponse {
     }
 
     public boolean isCommitted() {
+        //TODO must do more thing!
         return false;
     }
 

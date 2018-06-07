@@ -1,18 +1,21 @@
 package com.sailing.tomcat.servlet;
 
 import com.sailing.tomcat.http.ParameterMap;
-import com.sailing.tomcat.io.SocketInputStream;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.*;
 
 public class HttpRequest implements HttpServletRequest{
+    //check
+    private InputStream input;
 
+    //
     protected HashMap headers = new HashMap();
     protected ArrayList cookies = new ArrayList();
     protected ParameterMap parameters = null;
@@ -24,8 +27,8 @@ public class HttpRequest implements HttpServletRequest{
         
     }
 
-    public HttpRequest(SocketInputStream input) {
-
+    public HttpRequest(InputStream input) {
+        this.input = input;
     }
 
     public String getAuthType() {

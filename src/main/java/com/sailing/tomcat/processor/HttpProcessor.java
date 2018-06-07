@@ -16,17 +16,22 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
+/**
+ * yangyang 2018-06-07
+ */
 public class HttpProcessor {
-    SocketInputStream input = null;
-    OutputStream output = null;
+    protected final StringManager sm = StringManager.getManager(Constants.Package);
+    /**
+     * The HttpConnector with which this processor is associated.
+     */
+    private HttpConnector connector = null;
     HttpRequest request = null;
-    private HttpRequestLine requestLine = new HttpRequestLine();
     HttpResponse response = null;
-    protected StringManager sm =
-            StringManager.getManager(Constants.Package);
+
+    private HttpRequestLine requestLine = new HttpRequestLine();
 
     public HttpProcessor(HttpConnector httpConnector) {
-
+        this.connector = httpConnector;
     }
 
     public void process(Socket socket) {
@@ -35,12 +40,16 @@ public class HttpProcessor {
         try {
             input = new SocketInputStream(socket.getInputStream(), 2048);
             output = socket.getOutputStream();
+
             // create HttpRequest object and parse
             request = new HttpRequest(input);
+
             // create HttpResponse object
             response = new HttpResponse(output);
+
             response.setRequest(request);
-            response.setHeader("Server", "Pyrmont Servlet Container");
+            response.setHeader("Server", "Sailing Servlet Container");
+            //TODO  tommorow
 
             parseRequest(input, output);
             parseHeaders(input);
