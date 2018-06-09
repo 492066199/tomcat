@@ -35,6 +35,7 @@ public class ServletProcessor {
             urls[0] = new URL(null, repository, streamHandler);
             loader = new URLClassLoader(urls);
         } catch (IOException e) {
+	    e.printStackTrace();
             System.out.println(e.toString());
         }
 
@@ -43,6 +44,7 @@ public class ServletProcessor {
             servletName = "com.sailing.tomcat.servlet." + servletName;
             myClass = loader.loadClass(servletName);
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
             System.out.println(e.toString());
         }
         Servlet servlet = null;
@@ -51,8 +53,10 @@ public class ServletProcessor {
             servlet.service((ServletRequest) request,
                     (ServletResponse) response);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println(e.toString());
         } catch (Throwable e) {
+            e.printStackTrace();
             System.out.println(e.toString());
         }
     }
