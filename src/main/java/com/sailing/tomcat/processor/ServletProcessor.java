@@ -40,7 +40,7 @@ public class ServletProcessor {
 
         Class myClass = null;
         try {
-            servletName = "com.sailing.small.tomcat." + servletName;
+            servletName = "com.sailing.tomcat.servlet." + servletName;
             myClass = loader.loadClass(servletName);
         } catch (ClassNotFoundException e) {
             System.out.println(e.toString());
