@@ -1,0 +1,1 @@
+java -cp target/tomcat-1.0-jar-with-dependencies.jar com.sailing.tomcat.Bootstrap
