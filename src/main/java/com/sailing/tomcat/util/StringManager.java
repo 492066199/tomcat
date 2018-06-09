@@ -190,6 +190,7 @@ public class StringManager {
      */
 
     public synchronized static StringManager getManager(String packageName) {
+        packageName = "mes";
         StringManager mgr = (StringManager)managers.get(packageName);
         if (mgr == null) {
             mgr = new StringManager(packageName);
