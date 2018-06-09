@@ -49,7 +49,6 @@ public class HttpProcessor {
 
             response.setRequest(request);
             response.setHeader("Server", "Sailing Servlet Container");
-            //TODO  tommorow
 
             parseRequest(input, output);
             parseHeaders(input);
@@ -92,7 +91,6 @@ public class HttpProcessor {
         String value = new String(header.value, 0, header.valueEnd);
 
         request.addHeader(name, value);
-
         if (name.equals("cookie")) {
             // process cookies here
             Cookie cookies[] = RequestUtil.parseCookieHeader(value);
@@ -108,8 +106,7 @@ public class HttpProcessor {
                 }
                 request.addCookie(cookies[i]);
             }
-        }
-        else if (name.equals("content-length")) {
+        } else if (name.equals("content-length")) {
             int n = -1;
             try {
                 n = Integer.parseInt (value);
@@ -130,15 +127,14 @@ public class HttpProcessor {
         input.readRequestLine(requestLine);
         String method = new String(requestLine.method, 0, requestLine.methodEnd);
         String uri = null;
-        String protocol = new String(requestLine.protocol, 0,
-                requestLine.protocolEnd);
+        String protocol = new String(requestLine.protocol, 0, requestLine.protocolEnd);
+
         // Validate the incoming request line
         if (method.length () < 1) {
             throw new ServletException("Missing HTTP request method");
         }else if (requestLine.uriEnd < 1) {
             throw new ServletException("Missing HTTP request URI");
         }
-
 
         // Parse any query parameters out of the request URI
         int question = requestLine.indexOf("?");
@@ -161,8 +157,7 @@ public class HttpProcessor {
                 pos = uri.indexOf('/', pos + 3);
                 if (pos == -1) {
                     uri = "";
-                }
-                else {
+                }else {
                     uri = uri.substring(pos);
                 }
             }
@@ -199,10 +194,10 @@ public class HttpProcessor {
         request.setProtocol(protocol);
         if (normalizedUri != null) {
             ((HttpRequest) request).setRequestURI(normalizedUri);
-        }
-        else {
+        } else {
             ((HttpRequest) request).setRequestURI(uri);
         }
+
         if (normalizedUri == null) {
             throw new ServletException("Invalid URI: " + uri + "'");
         }

@@ -19,9 +19,18 @@ public class HttpRequest implements HttpServletRequest{
     protected HashMap headers = new HashMap();
     protected ArrayList cookies = new ArrayList();
     protected ParameterMap parameters = null;
+
     private String requestedSessionId;
     private boolean requestedSessionCookie;
+
+    private String protocol;
+    private String contentType;
+    private int contentLength;
     private boolean requestedSessionURL;
+
+    private String requestURI;
+    private String queryString;
+    private String method;
 
     public void parseParameter(){
         
@@ -60,7 +69,7 @@ public class HttpRequest implements HttpServletRequest{
     }
 
     public String getMethod() {
-        return null;
+        return method;
     }
 
     public String getPathInfo() {
@@ -76,7 +85,7 @@ public class HttpRequest implements HttpServletRequest{
     }
 
     public String getQueryString() {
-        return null;
+        return this.queryString;
     }
 
     public String getRemoteUser() {
@@ -128,7 +137,7 @@ public class HttpRequest implements HttpServletRequest{
     }
 
     public boolean isRequestedSessionIdFromUrl() {
-        return false;
+        return isRequestedSessionIdFromURL();
     }
 
     public boolean authenticate(HttpServletResponse httpServletResponse) throws IOException, ServletException {
@@ -296,7 +305,15 @@ public class HttpRequest implements HttpServletRequest{
     }
 
     public void addHeader(String name, String value) {
-
+        name = name.toLowerCase();
+        synchronized (headers) {
+            ArrayList values = (ArrayList) headers.get(name);
+            if (values == null) {
+                values = new ArrayList();
+                headers.put(name, values);
+            }
+            values.add(value);
+        }
     }
 
     public void setRequestedSessionId(String requestedSessionId) {
@@ -312,30 +329,32 @@ public class HttpRequest implements HttpServletRequest{
     }
 
     public void addCookie(Cookie cookie) {
-
+        synchronized (cookies) {
+            cookies.add(cookie);
+        }
     }
 
-    public void setContentLength(int n) {
-
+    public void setContentLength(int length) {
+        this.contentLength = length;
     }
 
     public void setContentType(String value) {
-
+        this.contentType = value;
     }
 
-    public void setQueryString(String s) {
-
+    public void setQueryString(String queryString) {
+        this.queryString = queryString;
     }
 
     public void setMethod(String method) {
-
+        this.method = method;
     }
 
     public void setProtocol(String protocol) {
-
+        this.protocol = protocol;
     }
 
-    public void setRequestURI(String uri) {
-
+    public void setRequestURI(String requestURI) {
+        this.requestURI = requestURI;
     }
 }
