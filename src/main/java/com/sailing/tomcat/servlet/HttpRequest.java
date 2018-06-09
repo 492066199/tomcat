@@ -105,7 +105,7 @@ public class HttpRequest implements HttpServletRequest{
     }
 
     public String getRequestURI() {
-        return null;
+        return requestURI;
     }
 
     public StringBuffer getRequestURL() {
