@@ -368,8 +368,8 @@ public class HttpResponse implements HttpServletResponse {
         write(b, 0, b.length);
     }
 
-    public void finishResponse() {
-        // sendHeaders();
+    public void finishResponse() throws IOException {
+        sendHeaders();
         // Flush and close the appropriate output mechanism
         if (writer != null) {
             writer.flush();

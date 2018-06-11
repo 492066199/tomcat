@@ -410,7 +410,7 @@ public class HttpRequest implements HttpServletRequest{
     }
 
     public String getProtocol() {
-        return null;
+        return this.protocol;
     }
 
     public String getScheme() {
