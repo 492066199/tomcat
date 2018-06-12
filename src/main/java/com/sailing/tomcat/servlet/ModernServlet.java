@@ -24,9 +24,9 @@ public class ModernServlet extends HttpServlet {
         out.println("<body>");
 
         out.println("<h2>Headers</h2");
-        Enumeration headers = request.getHeaderNames();
+        Enumeration<String> headers = request.getHeaderNames();
         while (headers.hasMoreElements()) {
-            String header = (String) headers.nextElement();
+            String header = headers.nextElement();
             out.println("<br>" + header + " : " + request.getHeader(header));
         }
 
@@ -34,9 +34,9 @@ public class ModernServlet extends HttpServlet {
         out.println("<br>" + request.getMethod());
 
         out.println("<br><h2>Parameters</h2");
-        Enumeration parameters = request.getParameterNames();
+        Enumeration<String> parameters = request.getParameterNames();
         while (parameters.hasMoreElements()) {
-            String parameter = (String) parameters.nextElement();
+            String parameter = parameters.nextElement();
             out.println("<br>" + parameter + " : " + request.getParameter(parameter));
         }
 
