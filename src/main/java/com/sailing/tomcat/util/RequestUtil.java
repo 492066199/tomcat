@@ -17,10 +17,7 @@ package com.sailing.tomcat.util;
 
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import javax.servlet.http.Cookie;
 
 
@@ -232,7 +229,7 @@ public final class RequestUtil {
         if ((header == null) || (header.length() < 1))
             return (new Cookie[0]);
 
-        ArrayList cookies = new ArrayList();
+       List<Cookie> cookies = new ArrayList();
         while (header.length() > 0) {
             int semicolon = header.indexOf(';');
             if (semicolon < 0)
@@ -256,7 +253,7 @@ public final class RequestUtil {
             }
         }
 
-        return ((Cookie[]) cookies.toArray(new Cookie[cookies.size()]));
+        return cookies.toArray(new Cookie[cookies.size()]);
 
     }
 

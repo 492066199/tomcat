@@ -17,7 +17,6 @@ import java.io.PrintWriter;
  * @version $Revision: 1.3 $ $Date: 2004/08/26 21:30:19 $
  * @deprecated
  */
-
 public class ResponseWriter extends PrintWriter {
 
 
