@@ -1,8 +1,6 @@
 package com.sailing.tomcat.processor;
 
 import com.sailing.tomcat.util.Constants;
-import com.sailing.tomcat.servlet.HttpRequest;
-import com.sailing.tomcat.servlet.HttpResponse;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletRequest;

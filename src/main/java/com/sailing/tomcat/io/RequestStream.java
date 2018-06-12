@@ -1,6 +1,5 @@
 package com.sailing.tomcat.io;
 
-import com.sailing.tomcat.servlet.HttpRequest;
 import com.sailing.tomcat.util.Constants;
 import com.sailing.tomcat.util.StringManager;
 
@@ -20,13 +19,13 @@ public class RequestStream
      *
      * @param request The associated request
      */
-    public RequestStream(HttpRequest request) {
+    public RequestStream(Request request) throws IOException {
 
         super();
         closed = false;
         count = 0;
-        length = request.getContentLength();
-        stream = request.getInput();
+        length = request.getRequest().getContentLength();
+        stream = request.getRequest().getInputStream();
 
     }
 

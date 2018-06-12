@@ -1,7 +1,5 @@
 package com.sailing.tomcat.processor;
 
-import com.sailing.tomcat.servlet.HttpRequest;
-import com.sailing.tomcat.servlet.HttpResponse;
 import com.sailing.tomcat.io.SocketInputStream;
 import com.sailing.tomcat.connector.HttpConnector;
 import com.sailing.tomcat.http.HttpHeader;
@@ -29,8 +27,12 @@ public class HttpProcessor {
     HttpResponse response = null;
 
     private HttpRequestLine requestLine = new HttpRequestLine();
+    private int id;
 
-    public HttpProcessor(HttpConnector httpConnector) {
+    public HttpProcessor(HttpConnector httpConnector, int id) {
+        this.id = id;
+        this.request = connector.createRequest();
+        this.response = connector.createResponse();
         this.connector = httpConnector;
     }
 
@@ -201,5 +203,100 @@ public class HttpProcessor {
         if (normalizedUri == null) {
             throw new ServletException("Invalid URI: " + uri + "'");
         }
+    }
+
+    /**
+     * The thread synchronization object.
+     */
+    private Object threadSync = new Object();
+    /**
+     * Has this component been started yet?
+     */
+    private boolean started = false;
+
+
+    /**
+     * The shutdown signal to our background thread
+     */
+    private boolean stopped = false;
+
+
+    public void run() {
+// Process requests until we receive a shutdown signal
+        while (!stopped) {
+// Wait for the next socket to be assigned
+            Socket socket = await();
+            if (socket == null)
+                continue;
+// Process the request from this socket
+            try {
+                process(socket);
+            }
+            catch (Throwable t) {
+                System.out.println("process.invoke" + t.getMessage());
+            }
+// Finish up this request
+            connector.recycle(this);
+        }
+// Tell threadStop() we have shut ourselves down successfully
+        synchronized (threadSync) {
+            threadSync.notifyAll();
+        }
+    }
+
+    /**
+     * Is there a new socket available?
+     */
+    private boolean available = false;
+    /**
+     * The socket we are currently processing a request for.  This object
+     * is used for inter-thread communication only.
+     */
+    private Socket socket = null;
+    private int debug = 1;
+
+
+    public synchronized void assign(Socket socket) {
+        // Wait for the Processor to get the previous Socket
+        while (available) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+            }
+        }
+
+        // Store the newly available Socket and notify our thread
+        this.socket = socket;
+        available = true;
+        notifyAll();
+
+        if ((debug >= 1) && (socket != null))
+            System.out.println(" An incoming request is being assigned");
+    }
+
+    /**
+     * Await a newly assigned Socket from our Connector, or <code>null</code>
+     * if we are supposed to shut down.
+     */
+    private synchronized Socket await() {
+
+        // Wait for the Connector to provide a new Socket
+        while (!available) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+            }
+        }
+
+        // Notify the Connector that we have received this Socket
+        Socket socket = this.socket;
+        available = false;
+        notifyAll();
+
+        if ((debug >= 1) && (socket != null))
+            System.out.println("  The incoming request has been awaited");
+
+        return (socket);
+
     }
 }

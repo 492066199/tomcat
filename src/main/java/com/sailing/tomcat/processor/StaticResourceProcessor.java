@@ -1,8 +1,5 @@
 package com.sailing.tomcat.processor;
 
-import com.sailing.tomcat.servlet.HttpRequest;
-import com.sailing.tomcat.servlet.HttpResponse;
-
 import java.io.IOException;
 
 public class StaticResourceProcessor {
