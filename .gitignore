@@ -8,3 +8,4 @@
 tomcat.iml
 *.class
 .idea/*
+target/*
