@@ -15,7 +15,10 @@
  */
 
 
-package com.sailing.tomcat.io;
+package com.sailing.tomcat.response;
+
+import com.sailing.tomcat.response.HttpResponseImpl;
+import com.sailing.tomcat.response.ResponseStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

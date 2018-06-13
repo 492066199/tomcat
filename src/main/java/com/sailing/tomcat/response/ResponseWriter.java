@@ -15,8 +15,10 @@
  */
 
 
-package com.sailing.tomcat.io;
+package com.sailing.tomcat.response;
 
+
+import com.sailing.tomcat.response.ResponseStream;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;

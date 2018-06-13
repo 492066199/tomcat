@@ -15,8 +15,10 @@
  */
 
 
-package com.sailing.tomcat.io;
+package com.sailing.tomcat.response;
 
+
+import com.sailing.tomcat.response.Response;
 
 import javax.servlet.http.Cookie;
 import java.util.Collection;

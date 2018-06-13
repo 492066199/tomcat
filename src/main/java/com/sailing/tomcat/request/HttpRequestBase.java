@@ -15,7 +15,7 @@
  */
 
 
-package com.sailing.tomcat.io;
+package com.sailing.tomcat.request;
 
 
 import com.sailing.tomcat.http.ParameterMap;

@@ -1,7 +1,7 @@
 package com.sailing.tomcat.container;
 
-import com.sailing.tomcat.io.Request;
-import com.sailing.tomcat.io.Response;
+import com.sailing.tomcat.request.Request;
+import com.sailing.tomcat.response.Response;
 
 import javax.naming.directory.DirContext;
 import javax.servlet.ServletException;

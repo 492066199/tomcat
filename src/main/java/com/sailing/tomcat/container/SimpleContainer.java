@@ -1,7 +1,8 @@
 package com.sailing.tomcat.container;
 
-import com.sailing.tomcat.io.Request;
-import com.sailing.tomcat.io.Response;
+import com.sailing.tomcat.request.Request;
+import com.sailing.tomcat.response.Response;
+import com.sailing.tomcat.util.Constants;
 
 import javax.naming.directory.DirContext;
 import javax.servlet.Servlet;
@@ -16,9 +17,6 @@ import java.net.URLClassLoader;
 import java.net.URLStreamHandler;
 
 public class SimpleContainer implements Container {
-
-  public static final String WEB_ROOT =
-    System.getProperty("user.dir") + File.separator  + "webroot";
 
   public SimpleContainer() {
   }
@@ -80,7 +78,7 @@ public class SimpleContainer implements Container {
     try {
       URL[] urls = new URL[1];
       URLStreamHandler streamHandler = null;
-      File classPath = new File(WEB_ROOT);
+      File classPath = new File(Constants.WEB_ROOT);
       String repository = (new URL("file", null, classPath.getCanonicalPath() + File.separator)).toString();
       urls[0] = new URL(null, repository, streamHandler);
       loader = new URLClassLoader(urls);

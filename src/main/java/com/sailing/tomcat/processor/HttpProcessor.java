@@ -8,6 +8,9 @@ import com.sailing.tomcat.life.Lifecycle;
 import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.life.LifecycleSupport;
+import com.sailing.tomcat.request.HttpRequest;
+import com.sailing.tomcat.request.HttpRequestImpl;
+import com.sailing.tomcat.response.HttpResponseImpl;
 import com.sailing.tomcat.util.*;
 
 import javax.servlet.ServletException;

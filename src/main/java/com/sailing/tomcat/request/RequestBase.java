@@ -15,10 +15,11 @@
  */
 
 
-package com.sailing.tomcat.io;
+package com.sailing.tomcat.request;
 
 
 import com.sailing.tomcat.connector.Connector;
+import com.sailing.tomcat.response.Response;
 import com.sailing.tomcat.util.Constants;
 import com.sailing.tomcat.util.Enumerator;
 import com.sailing.tomcat.util.RequestUtil;

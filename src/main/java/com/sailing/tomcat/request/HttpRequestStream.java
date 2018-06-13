@@ -15,7 +15,11 @@
  */
 
 
-package com.sailing.tomcat.io;
+package com.sailing.tomcat.request;
+
+import com.sailing.tomcat.request.HttpRequestImpl;
+import com.sailing.tomcat.request.RequestStream;
+import com.sailing.tomcat.response.HttpResponseImpl;
 
 import java.io.IOException;
 

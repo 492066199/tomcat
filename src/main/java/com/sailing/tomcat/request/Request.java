@@ -15,10 +15,11 @@
  */
 
 
-package com.sailing.tomcat.io;
+package com.sailing.tomcat.request;
 
 
 import com.sailing.tomcat.connector.Connector;
+import com.sailing.tomcat.response.Response;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;

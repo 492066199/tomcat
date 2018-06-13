@@ -15,10 +15,11 @@
  */
 
 
-package com.sailing.tomcat.io;
+package com.sailing.tomcat.request;
 
 
 import com.sailing.tomcat.http.HttpHeader;
+import com.sailing.tomcat.response.HttpResponseImpl;
 import com.sailing.tomcat.util.Enumerator;
 
 import javax.servlet.ServletInputStream;

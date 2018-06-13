@@ -18,8 +18,8 @@
 package com.sailing.tomcat.connector;
 
 import com.sailing.tomcat.container.Container;
-import com.sailing.tomcat.io.Request;
-import com.sailing.tomcat.io.Response;
+import com.sailing.tomcat.request.Request;
+import com.sailing.tomcat.response.Response;
 import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.socket.ServerSocketFactory;
 
