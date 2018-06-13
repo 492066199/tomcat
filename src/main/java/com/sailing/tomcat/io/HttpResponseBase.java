@@ -18,10 +18,6 @@
 package com.sailing.tomcat.io;
 
 
-import org.apache.catalina.Globals;
-import org.apache.catalina.Logger;
-import org.apache.catalina.util.CookieTools;
-import org.apache.catalina.util.URL;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.*;
@@ -30,6 +26,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -232,16 +229,19 @@ public class HttpResponseBase
 
     }
 
+    @Override
+    public Collection<String> getHeaders(String name) {
+        return null;
+    }
+
 
     /**
      * Return an array of all the header names set for this response, or
      * a zero-length array if no headers have been set.
      */
-    public String[] getHeaderNames() {
-
+    public Collection<String> getHeaderNames() {
         synchronized (headers) {
-            String results[] = new String[headers.size()];
-            return ((String[]) headers.keySet().toArray(results));
+            return headers.keySet();
         }
 
     }
@@ -438,75 +438,75 @@ public class HttpResponseBase
      **/
     private boolean isEncodeable(String location) {
 
-        if (location == null)
-            return (false);
-
-        // Is this an intra-document reference?
-        if (location.startsWith("#"))
-            return (false);
-
-        // Are we in a valid session that is not using cookies?
-        HttpServletRequest hreq = (HttpServletRequest) request.getRequest();
-        HttpSession session = hreq.getSession(false);
-        if (session == null)
-            return (false);
-        if (hreq.isRequestedSessionIdFromCookie())
-            return (false);
-
-        // Is this a valid absolute URL?
-        URL url = null;
-        try {
-            url = new URL(location);
-        } catch (MalformedURLException e) {
-            return (false);
-        }
-
-        // Does this URL match down to (and including) the context path?
-        if (!hreq.getScheme().equalsIgnoreCase(url.getProtocol()))
-            return (false);
-        if (!hreq.getServerName().equalsIgnoreCase(url.getHost()))
-            return (false);
-        int serverPort = hreq.getServerPort();
-        if (serverPort == -1) {
-            if ("https".equals(hreq.getScheme()))
-                serverPort = 443;
-            else
-                serverPort = 80;
-        }
-        int urlPort = url.getPort();
-        if (urlPort == -1) {
-            if ("https".equals(url.getProtocol()))
-                urlPort = 443;
-            else
-                urlPort = 80;
-        }
-        if (serverPort != urlPort)
-            return (false);
-
-        String contextPath = getContext().getPath();
-        if ((contextPath != null) && (contextPath.length() > 0)) {
-            String file = url.getFile();
-            if ((file == null) || !file.startsWith(contextPath))
-                return (false);
-            if( file.indexOf(";jsessionid=" + session.getId()) >= 0 )
-                return (false);
-        }
-
-        // This URL belongs to our web application, so it is encodeable
-        return (true);
-
+//        if (location == null)
+//            return (false);
+//
+//        // Is this an intra-document reference?
+//        if (location.startsWith("#"))
+//            return (false);
+//
+//        // Are we in a valid session that is not using cookies?
+//        HttpServletRequest hreq = (HttpServletRequest) request.getRequest();
+//        HttpSession session = hreq.getSession(false);
+//        if (session == null)
+//            return (false);
+//        if (hreq.isRequestedSessionIdFromCookie())
+//            return (false);
+//
+//        // Is this a valid absolute URL?
+//        URL url = null;
+//        try {
+//            url = new URL(location);
+//        } catch (MalformedURLException e) {
+//            return (false);
+//        }
+//
+//        // Does this URL match down to (and including) the context path?
+//        if (!hreq.getScheme().equalsIgnoreCase(url.getProtocol()))
+//            return (false);
+//        if (!hreq.getServerName().equalsIgnoreCase(url.getHost()))
+//            return (false);
+//        int serverPort = hreq.getServerPort();
+//        if (serverPort == -1) {
+//            if ("https".equals(hreq.getScheme()))
+//                serverPort = 443;
+//            else
+//                serverPort = 80;
+//        }
+//        int urlPort = url.getPort();
+//        if (urlPort == -1) {
+//            if ("https".equals(url.getProtocol()))
+//                urlPort = 443;
+//            else
+//                urlPort = 80;
+//        }
+//        if (serverPort != urlPort)
+//            return (false);
+//
+//        String contextPath = getContext().getPath();
+//        if ((contextPath != null) && (contextPath.length() > 0)) {
+//            String file = url.getFile();
+//            if ((file == null) || !file.startsWith(contextPath))
+//                return (false);
+//            if( file.indexOf(";jsessionid=" + session.getId()) >= 0 )
+//                return (false);
+//        }
+//
+//        // This URL belongs to our web application, so it is encodeable
+//        return (true);
+        return false;
     }
 
 
     private void log(String message) {
-        Logger logger = context.getLogger();
-        logger.log(message);
+//        Logger logger = context.getLogger();
+//        logger.log(message);
     }
 
 
     private void log(String message, Throwable throwable) {
-        Logger logger = context.getLogger();
-        logger.log(message, throwable);
+//        Logger logger = context.getLogger();
+//        logger.log(message, throwable);
     }
 
     /**
@@ -590,38 +590,38 @@ public class HttpResponseBase
         HttpServletRequest hreq = (HttpServletRequest) request.getRequest();
         HttpSession session = hreq.getSession(false);
 
-        if ((session != null) && session.isNew() && (getContext() != null)
-            && getContext().getCookies()) {
-            Cookie cookie = new Cookie(Globals.SESSION_COOKIE_NAME,
-                                       session.getId());
-            cookie.setMaxAge(-1);
-            String contextPath = null;
-            if (context != null)
-                contextPath = context.getPath();
-            if ((contextPath != null) && (contextPath.length() > 0))
-                cookie.setPath(contextPath);
-            else
-                cookie.setPath("/");
-            if (hreq.isSecure())
-                cookie.setSecure(true);
-            addCookie(cookie);
-        }
+//        if ((session != null) && session.isNew() && (getContext() != null)
+//            && getContext().getCookies()) {
+//            Cookie cookie = new Cookie(Globals.SESSION_COOKIE_NAME,
+//                                       session.getId());
+//            cookie.setMaxAge(-1);
+//            String contextPath = null;
+//            if (context != null)
+//                contextPath = context.getPath();
+//            if ((contextPath != null) && (contextPath.length() > 0))
+//                cookie.setPath(contextPath);
+//            else
+//                cookie.setPath("/");
+//            if (hreq.isSecure())
+//                cookie.setSecure(true);
+//            addCookie(cookie);
+//        }
 
         // Send all specified cookies (if any)
-        synchronized (cookies) {
-            Iterator items = cookies.iterator();
-            while (items.hasNext()) {
-                Cookie cookie = (Cookie) items.next();
-                outputWriter.print(CookieTools.getCookieHeaderName(cookie));
-                outputWriter.print(": ");
-                outputWriter.print(CookieTools.getCookieHeaderValue(cookie));
-                outputWriter.print("\r\n");
-                //System.out.println(" " +
-                //                   CookieTools.getCookieHeaderName(cookie) +
-                //                   ": " +
-                //                   CookieTools.getCookieHeaderValue(cookie));
-            }
-        }
+//        synchronized (cookies) {
+//            Iterator items = cookies.iterator();
+//            while (items.hasNext()) {
+//                Cookie cookie = (Cookie) items.next();
+//                outputWriter.print(CookieTools.getCookieHeaderName(cookie));
+//                outputWriter.print(": ");
+//                outputWriter.print(CookieTools.getCookieHeaderValue(cookie));
+//                outputWriter.print("\r\n");
+//                //System.out.println(" " +
+//                //                   CookieTools.getCookieHeaderName(cookie) +
+//                //                   ": " +
+//                //                   CookieTools.getCookieHeaderValue(cookie));
+//            }
+//        }
 
         // Send a terminating blank line to mark the end of the headers
         outputWriter.print("\r\n");
@@ -760,6 +760,11 @@ public class HttpResponseBase
 
     }
 
+
+    @Override
+    public void setCharacterEncoding(String charset) {
+
+    }
 
     /**
      * Set the content length (in bytes) for this Response.

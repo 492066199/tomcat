@@ -2,18 +2,18 @@ package com.sailing.tomcat.processor;
 
 import com.sailing.tomcat.util.Constants;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLStreamHandler;
 
-public class ServletProcessor {
-    public void process(HttpRequest request, HttpResponse response) {
-        String uri = request.getRequestURI();
+public class ServletProcessor{
+    public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+    String uri = request.getRequestURI();
         String servletName = uri.substring(uri.lastIndexOf("/") + 1);
         URLClassLoader loader = null;
         try {

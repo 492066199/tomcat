@@ -19,6 +19,7 @@ package com.sailing.tomcat.io;
 
 
 import javax.servlet.http.Cookie;
+import java.util.Collection;
 
 
 /**
@@ -59,7 +60,7 @@ public interface HttpResponse
      * Return an array of all the header names set for this response, or
      * a zero-length array if no headers have been set.
      */
-    public String[] getHeaderNames();
+    public Collection<String> getHeaderNames();
 
 
     /**

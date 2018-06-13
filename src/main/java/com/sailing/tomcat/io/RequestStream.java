@@ -19,13 +19,17 @@ public class RequestStream
      *
      * @param request The associated request
      */
-    public RequestStream(Request request) throws IOException {
+    public RequestStream(Request request){
 
         super();
         closed = false;
         count = 0;
         length = request.getRequest().getContentLength();
-        stream = request.getRequest().getInputStream();
+        try {
+            stream = request.getRequest().getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

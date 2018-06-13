@@ -1,7 +1,12 @@
 package com.sailing.tomcat.container;
 
+import com.sailing.tomcat.io.Request;
+import com.sailing.tomcat.io.Response;
+
 import javax.naming.directory.DirContext;
+import javax.servlet.ServletException;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
 public interface Container {
     // ----------------------------------------------------- Manifest Constants
@@ -305,31 +310,31 @@ public interface Container {
 //    public Mapper[] findMappers();
 //
 //
-//    /**
-//     * Process the specified Request, and generate the corresponding Response,
-//     * according to the design of this particular Container.
-//     *
-//     * @param request Request to be processed
-//     * @param response Response to be produced
-//     *
-//     * @exception IOException if an input/output error occurred while
-//     *  processing
-//     * @exception ServletException if a ServletException was thrown
-//     *  while processing this request
-//     */
-//    public void invoke(Request request, Response response)
-//            throws IOException, ServletException;
-//
-//
-//    /**
-//     * Return the child Container that should be used to process this Request,
-//     * based upon its characteristics.  If no such child Container can be
-//     * identified, return <code>null</code> instead.
-//     *
-//     * @param request Request being processed
-//     * @param update Update the Request to reflect the mapping selection?
-//     */
-//    public Container map(Request request, boolean update);
+    /**
+     * Process the specified Request, and generate the corresponding Response,
+     * according to the design of this particular Container.
+     *
+     * @param request Request to be processed
+     * @param response Response to be produced
+     *
+     * @exception IOException if an input/output error occurred while
+     *  processing
+     * @exception ServletException if a ServletException was thrown
+     *  while processing this request
+     */
+    public void invoke(Request request, Response response)
+            throws IOException, ServletException;
+
+
+    /**
+     * Return the child Container that should be used to process this Request,
+     * based upon its characteristics.  If no such child Container can be
+     * identified, return <code>null</code> instead.
+     *
+     * @param request Request being processed
+     * @param update Update the Request to reflect the mapping selection?
+     */
+    public Container map(Request request, boolean update);
 
 
     /**

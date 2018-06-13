@@ -18,12 +18,12 @@
 package com.sailing.tomcat.io;
 
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import com.sailing.tomcat.http.ParameterMap;
+import com.sailing.tomcat.util.Enumerator;
+import com.sailing.tomcat.util.RequestUtil;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.AccessController;
@@ -205,10 +205,10 @@ public class HttpRequestBase
     protected String servletPath = null;
 
 
-    /**
-     * The currently active session for this request.
-     */
-    protected Session session = null;
+//    /**
+//     * The currently active session for this request.
+//     */
+//    protected Session session = null;
 
 
     /**
@@ -371,7 +371,7 @@ public class HttpRequestBase
         decodedRequestURI = null;
         secure = false;
         servletPath = null;
-        session = null;
+//        session = null;
         userPrincipal = null;
 
     }
@@ -716,42 +716,97 @@ public class HttpRequestBase
      */
     public RequestDispatcher getRequestDispatcher(String path) {
 
-        if (context == null)
-            return (null);
+//        if (context == null)
+//            return (null);
+//
+//        // If the path is already context-relative, just pass it through
+//        if (path == null)
+//            return (null);
+//        else if (path.startsWith("/"))
+//            return (context.getServletContext().getRequestDispatcher(path));
+//
+//        // Convert a request-relative path to a context-relative one
+//        String servletPath = (String) getAttribute(Globals.SERVLET_PATH_ATTR);
+//        if (servletPath == null)
+//            servletPath = getServletPath();
+//
+//        // Add the path info, if there is any
+//        String pathInfo = getPathInfo();
+//        String requestPath = null;
+//
+//        if (pathInfo == null) {
+//            requestPath = servletPath;
+//        } else {
+//            requestPath = servletPath + pathInfo;
+//        }
+//
+//        int pos = requestPath.lastIndexOf('/');
+//
+//        String relative = null;
+//        if (pos >= 0) {
+//            relative = RequestUtil.normalize
+//                (requestPath.substring(0, pos + 1) + path);
+//        } else {
+//            relative = RequestUtil.normalize(requestPath + path);
+//        }
+//
+//        return (context.getServletContext().getRequestDispatcher(relative));
+        return null;
+    }
 
-        // If the path is already context-relative, just pass it through
-        if (path == null)
-            return (null);
-        else if (path.startsWith("/"))
-            return (context.getServletContext().getRequestDispatcher(path));
+    @Override
+    public int getRemotePort() {
+        return 0;
+    }
 
-        // Convert a request-relative path to a context-relative one
-        String servletPath = (String) getAttribute(Globals.SERVLET_PATH_ATTR);
-        if (servletPath == null)
-            servletPath = getServletPath();
+    @Override
+    public String getLocalName() {
+        return null;
+    }
 
-        // Add the path info, if there is any
-        String pathInfo = getPathInfo();
-        String requestPath = null;
+    @Override
+    public String getLocalAddr() {
+        return null;
+    }
 
-        if (pathInfo == null) {
-            requestPath = servletPath;
-        } else {
-            requestPath = servletPath + pathInfo;
-        }
+    @Override
+    public int getLocalPort() {
+        return 0;
+    }
 
-        int pos = requestPath.lastIndexOf('/');
+    @Override
+    public ServletContext getServletContext() {
+        return null;
+    }
 
-        String relative = null;
-        if (pos >= 0) {
-            relative = RequestUtil.normalize
-                (requestPath.substring(0, pos + 1) + path);
-        } else {
-            relative = RequestUtil.normalize(requestPath + path);
-        }
+    @Override
+    public AsyncContext startAsync() throws IllegalStateException {
+        return null;
+    }
 
-        return (context.getServletContext().getRequestDispatcher(relative));
+    @Override
+    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) throws IllegalStateException {
+        return null;
+    }
 
+    @Override
+    public boolean isAsyncStarted() {
+        return false;
+    }
+
+    @Override
+    public boolean isAsyncSupported() {
+        return false;
+    }
+
+    @Override
+    public AsyncContext getAsyncContext() {
+        return null;
+    }
+
+    @Override
+    public DispatcherType getDispatcherType() {
+        return null;
     }
 
 
@@ -935,14 +990,14 @@ public class HttpRequestBase
      */
     public String getPathTranslated() {
 
-        if (context == null)
-            return (null);
-
-        if (pathInfo == null)
-            return (null);
-        else
-            return (context.getServletContext().getRealPath(pathInfo));
-
+//        if (context == null)
+//            return (null);
+//
+//        if (pathInfo == null)
+//            return (null);
+//        else
+//            return (context.getServletContext().getRealPath(pathInfo));
+        return null;
     }
 
 
@@ -1091,51 +1146,53 @@ public class HttpRequestBase
     }
 
     private HttpSession doGetSession(boolean create) {
-        // There cannot be a session if no context has been assigned yet
-        if (context == null)
-            return (null);
+//        // There cannot be a session if no context has been assigned yet
+//        if (context == null)
+//            return (null);
+//
+//        // Return the current session if it exists and is valid
+//        if ((session != null) && !session.isValid())
+//            session = null;
+//        if (session != null)
+//            return (session.getSession());
+//
+//
+//        // Return the requested session if it exists and is valid
+//        Manager manager = null;
+//        if (context != null)
+//            manager = context.getManager();
+//        if (manager == null)
+//            return (null);      // Sessions are not supported
+//        if (requestedSessionId != null) {
+//            try {
+//                session = manager.findSession(requestedSessionId);
+//            } catch (IOException e) {
+//                session = null;
+//            }
+//            if ((session != null) && !session.isValid())
+//                session = null;
+//            if (session != null) {
+//                return (session.getSession());
+//            }
+//        }
+//
+//        // Create a new session if requested and the response is not committed
+//        if (!create)
+//            return (null);
+//        if ((context != null) && (response != null) &&
+//            context.getCookies() &&
+//            response.getResponse().isCommitted()) {
+//            throw new IllegalStateException
+//              (sm.getString("httpRequestBase.createCommitted"));
+//        }
+//
+//        session = manager.createSession();
+//        if (session != null)
+//            return (session.getSession());
+//        else
+//            return (null);
 
-        // Return the current session if it exists and is valid
-        if ((session != null) && !session.isValid())
-            session = null;
-        if (session != null)
-            return (session.getSession());
-
-
-        // Return the requested session if it exists and is valid
-        Manager manager = null;
-        if (context != null)
-            manager = context.getManager();
-        if (manager == null)
-            return (null);      // Sessions are not supported
-        if (requestedSessionId != null) {
-            try {
-                session = manager.findSession(requestedSessionId);
-            } catch (IOException e) {
-                session = null;
-            }
-            if ((session != null) && !session.isValid())
-                session = null;
-            if (session != null) {
-                return (session.getSession());
-            }
-        }
-
-        // Create a new session if requested and the response is not committed
-        if (!create)
-            return (null);
-        if ((context != null) && (response != null) &&
-            context.getCookies() &&
-            response.getResponse().isCommitted()) {
-            throw new IllegalStateException
-              (sm.getString("httpRequestBase.createCommitted"));
-        }
-
-        session = manager.createSession();
-        if (session != null)
-            return (session.getSession());
-        else
-            return (null);
+        return null;
 
     }
 
@@ -1181,6 +1238,31 @@ public class HttpRequestBase
 
     }
 
+    @Override
+    public boolean authenticate(HttpServletResponse response) throws IOException, ServletException {
+        return false;
+    }
+
+    @Override
+    public void login(String username, String password) throws ServletException {
+
+    }
+
+    @Override
+    public void logout() throws ServletException {
+
+    }
+
+    @Override
+    public Collection<Part> getParts() throws IOException, ServletException {
+        return null;
+    }
+
+    @Override
+    public Part getPart(String name) throws IOException, ServletException {
+        return null;
+    }
+
 
     /**
      * Return <code>true</code> if the session identifier included in this
@@ -1188,24 +1270,24 @@ public class HttpRequestBase
      */
     public boolean isRequestedSessionIdValid() {
 
-        if (requestedSessionId == null)
-            return (false);
-        if (context == null)
-            return (false);
-        Manager manager = context.getManager();
-        if (manager == null)
-            return (false);
-        Session session = null;
-        try {
-            session = manager.findSession(requestedSessionId);
-        } catch (IOException e) {
-            session = null;
-        }
-        if ((session != null) && session.isValid())
-            return (true);
-        else
-            return (false);
-
+//        if (requestedSessionId == null)
+//            return (false);
+//        if (context == null)
+//            return (false);
+//        Manager manager = context.getManager();
+//        if (manager == null)
+//            return (false);
+//        Session session = null;
+//        try {
+//            session = manager.findSession(requestedSessionId);
+//        } catch (IOException e) {
+//            session = null;
+//        }
+//        if ((session != null) && session.isValid())
+//            return (true);
+//        else
+//            return (false);
+        return false;
     }
 
 
@@ -1217,28 +1299,29 @@ public class HttpRequestBase
      */
     public boolean isUserInRole(String role) {
 
-        // Have we got an authenticated principal at all?
-        if (userPrincipal == null)
-            return (false);
+//        // Have we got an authenticated principal at all?
+//        if (userPrincipal == null)
+//            return (false);
+//
+//        // Identify the Realm we will use for checking role assignmenets
+//        if (context == null)
+//            return (false);
+//        Realm realm = context.getRealm();
+//        if (realm == null)
+//            return (false);
+//
+//        // Check for a role alias defined in a <security-role-ref> element
+//        if (wrapper != null) {
+//            String realRole = wrapper.findSecurityReference(role);
+//            if ((realRole != null) &&
+//                realm.hasRole(userPrincipal, realRole))
+//                return (true);
+//        }
+//
+//        // Check for a role defined directly as a <security-role>
+//        return (realm.hasRole(userPrincipal, role));
 
-        // Identify the Realm we will use for checking role assignmenets
-        if (context == null)
-            return (false);
-        Realm realm = context.getRealm();
-        if (realm == null)
-            return (false);
-
-        // Check for a role alias defined in a <security-role-ref> element
-        if (wrapper != null) {
-            String realRole = wrapper.findSecurityReference(role);
-            if ((realRole != null) &&
-                realm.hasRole(userPrincipal, realRole))
-                return (true);
-        }
-
-        // Check for a role defined directly as a <security-role>
-        return (realm.hasRole(userPrincipal, role));
-
+        return false;
     }
 
 
@@ -1253,14 +1336,14 @@ public class HttpRequestBase
 
 
     private void log(String message) {
-        Logger logger = context.getLogger();
-        logger.log(message);
+//        Logger logger = context.getLogger();
+//        logger.log(message);
     }
      
      
     private void log(String message, Throwable throwable) {
-        Logger logger = context.getLogger();
-        logger.log(message, throwable);
+//        Logger logger = context.getLogger();
+//        logger.log(message, throwable);
     }
 
 }

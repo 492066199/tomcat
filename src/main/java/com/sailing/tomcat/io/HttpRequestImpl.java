@@ -18,8 +18,8 @@
 package com.sailing.tomcat.io;
 
 
-import org.apache.catalina.connector.HttpRequestBase;
-import org.apache.catalina.util.Enumerator;
+import com.sailing.tomcat.http.HttpHeader;
+import com.sailing.tomcat.util.Enumerator;
 
 import javax.servlet.ServletInputStream;
 import java.io.IOException;
@@ -37,7 +37,7 @@ import java.util.Enumeration;
  * @deprecated
  */
 
-final class HttpRequestImpl
+final public class HttpRequestImpl
     extends HttpRequestBase {
 
 
@@ -103,7 +103,7 @@ final class HttpRequestImpl
      * [Package Private] Return the InetAddress of the remote client of
      * this request.
      */
-    InetAddress getInet() {
+    public InetAddress getInet() {
 
         return (inet);
 
@@ -116,7 +116,7 @@ final class HttpRequestImpl
      *
      * @param inet The new InetAddress
      */
-    void setInet(InetAddress inet) {
+    public void setInet(InetAddress inet) {
 
         this.inet = inet;
 
@@ -172,7 +172,7 @@ final class HttpRequestImpl
      *
      * @return an HttpHeader buffer allocated from the pool
      */
-    HttpHeader allocateHeader() {
+    public HttpHeader allocateHeader() {
         if (nextHeader == headerPool.length) {
             // Grow the pool
             HttpHeader[] newHeaderPool =
@@ -191,7 +191,7 @@ final class HttpRequestImpl
     /**
      * Go to the next header.
      */
-    void nextHeader() {
+    public void nextHeader() {
         nextHeader++;
     }
 

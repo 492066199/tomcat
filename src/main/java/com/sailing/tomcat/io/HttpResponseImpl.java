@@ -18,7 +18,6 @@
 package com.sailing.tomcat.io;
 
 
-import org.apache.catalina.connector.HttpResponseBase;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +34,7 @@ import java.util.ArrayList;
  * @deprecated
  */
 
-final class HttpResponseImpl
+final public class HttpResponseImpl
     extends HttpResponseBase {
 
 
@@ -79,7 +78,7 @@ final class HttpResponseImpl
     /**
      * Set the chunking flag.
      */
-    void setAllowChunking(boolean allowChunking) {
+    public void setAllowChunking(boolean allowChunking) {
         this.allowChunking = allowChunking;
     }
 

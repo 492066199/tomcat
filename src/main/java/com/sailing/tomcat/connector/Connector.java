@@ -18,6 +18,8 @@
 package com.sailing.tomcat.connector;
 
 import com.sailing.tomcat.container.Container;
+import com.sailing.tomcat.io.Request;
+import com.sailing.tomcat.io.Response;
 import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.socket.ServerSocketFactory;
 
@@ -198,14 +200,14 @@ public interface Connector {
      * Create (or allocate) and return a Request object suitable for
      * specifying the contents of a Request to the responsible Container.
      */
-    public HttpRequest createRequest();
+    public Request createRequest();
 
 
     /**
      * Create (or allocate) and return a Response object suitable for
      * receiving the contents of a Response from the responsible Container.
      */
-    public HttpResponse createResponse();
+    public Response createResponse();
 
     /**
      * Invoke a pre-startup initialization. This is used to allow connectors

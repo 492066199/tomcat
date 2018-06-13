@@ -17,8 +17,11 @@
 
 package com.sailing.tomcat.connector;
 
-
 import com.sailing.tomcat.container.Container;
+import com.sailing.tomcat.io.HttpRequestImpl;
+import com.sailing.tomcat.io.HttpResponseImpl;
+import com.sailing.tomcat.io.Request;
+import com.sailing.tomcat.io.Response;
 import com.sailing.tomcat.life.Lifecycle;
 import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
@@ -665,16 +668,16 @@ public final class HttpConnector
      * Create (or allocate) and return a Request object suitable for
      * specifying the contents of a Request to the responsible Container.
      */
-    public HttpRequest createRequest() {
+    public Request createRequest() {
 
-//        if (debug >= 2)
-//            log("createRequest: Creating new request");
-//        HttpRequestImpl request = new HttpRequestImpl();
-//        request.setConnector(this);
-//        return (request);
+        if (debug >= 2)
+            log("createRequest: Creating new request");
+        HttpRequestImpl request = new HttpRequestImpl();
+        request.setConnector(this);
+        return (request);
 
-        HttpRequest httpRequest = new HttpRequest(null);
-        return httpRequest;
+//        HttpRequest httpRequest = new HttpRequest(null);
+//        return httpRequest;
     }
 
 
@@ -682,15 +685,15 @@ public final class HttpConnector
      * Create (or allocate) and return a Response object suitable for
      * receiving the contents of a Response from the responsible Container.
      */
-    public HttpResponse createResponse() {
+    public Response createResponse() {
 
-        //        if (debug >= 2)
-        //            log("createResponse: Creating new response");
-//        HttpResponseImpl response = new HttpResponseImpl();
-//        response.setConnector(this);
-//        return (response);
-        HttpResponse httpResponse = new HttpResponse(null);
-        return httpResponse;
+                if (debug >= 2)
+                    log("createResponse: Creating new response");
+        HttpResponseImpl response = new HttpResponseImpl();
+        response.setConnector(this);
+        return (response);
+//        HttpResponse httpResponse = new HttpResponse(null);
+//        return httpResponse;
     }
 
 

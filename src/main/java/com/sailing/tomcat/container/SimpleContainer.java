@@ -1,5 +1,8 @@
 package com.sailing.tomcat.container;
 
+import com.sailing.tomcat.io.Request;
+import com.sailing.tomcat.io.Response;
+
 import javax.naming.directory.DirContext;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -68,7 +71,7 @@ public class SimpleContainer implements Container {
     return null;
   }
 
-  public void invoke(HttpRequest request, HttpResponse response)
+  public void invoke(Request request, Response response)
     throws IOException, ServletException {
 
     String servletName = ((HttpServletRequest) request).getRequestURI();
@@ -103,6 +106,10 @@ public class SimpleContainer implements Container {
     }
   }
 
+  @Override
+  public Container map(Request request, boolean update) {
+    return null;
+  }
 
 
   public void removeChild(Container child) {
