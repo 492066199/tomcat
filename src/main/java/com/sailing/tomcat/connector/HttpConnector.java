@@ -655,33 +655,16 @@ public final class HttpConnector
     }
 
 
-    // --------------------------------------------------------- Public Methods
-    /**
-     * Create (or allocate) and return a Request object suitable for
-     * specifying the contents of a Request to the responsible Container.
-     */
     public Request createRequest() {
-        if (debug >= 2)
-            log("createRequest: Creating new request");
         HttpRequestImpl request = new HttpRequestImpl();
         request.setConnector(this);
-        return (request);
+        return request;
     }
 
-
-    /**
-     * Create (or allocate) and return a Response object suitable for
-     * receiving the contents of a Response from the responsible Container.
-     */
     public Response createResponse() {
-
-                if (debug >= 2)
-                    log("createResponse: Creating new response");
         HttpResponseImpl response = new HttpResponseImpl();
         response.setConnector(this);
-        return (response);
-//        HttpResponse httpResponse = new HttpResponse(null);
-//        return httpResponse;
+        return response;
     }
 
 
@@ -693,7 +676,7 @@ public final class HttpConnector
      *
      * @param processor The processor to be recycled
      */
-    public void recycle(HttpProcessor processor) {
+     public void recycle(HttpProcessor processor) {
 
         //        if (debug >= 2)
         //            log("recycle: Recycling processor " + processor);
