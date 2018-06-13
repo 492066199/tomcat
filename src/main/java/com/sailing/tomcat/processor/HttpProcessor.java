@@ -4,6 +4,10 @@ import com.sailing.tomcat.io.*;
 import com.sailing.tomcat.connector.HttpConnector;
 import com.sailing.tomcat.http.HttpHeader;
 import com.sailing.tomcat.http.HttpRequestLine;
+import com.sailing.tomcat.life.Lifecycle;
+import com.sailing.tomcat.life.LifecycleException;
+import com.sailing.tomcat.life.LifecycleListener;
+import com.sailing.tomcat.life.LifecycleSupport;
 import com.sailing.tomcat.util.*;
 
 import javax.servlet.ServletException;
@@ -20,21 +24,16 @@ import java.util.TreeMap;
 /**
  * yangyang 2018-06-07
  */
-public class HttpProcessor {
+public class HttpProcessor implements Lifecycle, Runnable{
     protected final StringManager sm = StringManager.getManager(Constants.Package);
-    /**
-     * The HttpConnector with which this processor is associated.
-     */
-    private HttpConnector connector = null;
-
-    private HttpRequestLine requestLine = new HttpRequestLine();
-    private int id;
     public HttpProcessor(HttpConnector httpConnector, int id) {
         this.id = id;
+        this.connector = httpConnector;
         this.request = (HttpRequestImpl) connector.createRequest();
         this.response = (HttpResponseImpl) connector.createResponse();
-        this.connector = httpConnector;
         this.serverPort = httpConnector.getPort();
+        this.threadName =
+                "HttpProcessor[" + connector.getPort() + "][" + id + "]";
     }
 
 
@@ -58,7 +57,12 @@ public class HttpProcessor {
 
     }
 
-
+    /**
+     * The HttpConnector with which this processor is associated.
+     */
+    private HttpConnector connector = null;
+    private HttpRequestLine requestLine = new HttpRequestLine();
+    private int id;
     private boolean keepAlive = false;
     private static final String SERVER_INFO = "sailing server (HTTP/1.1 Connector)";
     private boolean http11 = true;
@@ -646,23 +650,23 @@ public class HttpProcessor {
 
 
     public void run() {
-// Process requests until we receive a shutdown signal
+        // Process requests until we receive a shutdown signal
         while (!stopped) {
-// Wait for the next socket to be assigned
+            // Wait for the next socket to be assigned
             Socket socket = await();
             if (socket == null)
                 continue;
-// Process the request from this socket
+            // Process the request from this socket
             try {
                 process(socket);
             }
             catch (Throwable t) {
                 System.out.println("process.invoke" + t.getMessage());
             }
-// Finish up this request
+            // Finish up this request
             connector.recycle(this);
         }
-// Tell threadStop() we have shut ourselves down successfully
+        // Tell threadStop() we have shut ourselves down successfully
         synchronized (threadSync) {
             threadSync.notifyAll();
         }
@@ -721,6 +725,55 @@ public class HttpProcessor {
             System.out.println("  The incoming request has been awaited");
 
         return (socket);
+
+    }
+
+    @Override
+    public void addLifecycleListener(LifecycleListener listener) {
+
+    }
+
+    @Override
+    public LifecycleListener[] findLifecycleListeners() {
+        return new LifecycleListener[0];
+    }
+
+    @Override
+    public void removeLifecycleListener(LifecycleListener listener) {
+
+    }
+
+    private LifecycleSupport lifecycle = new LifecycleSupport(this);
+    @Override
+    public void start() throws LifecycleException {
+        if (started)
+            throw new LifecycleException
+                    (sm.getString("httpProcessor.alreadyStarted"));
+        lifecycle.fireLifecycleEvent(START_EVENT, null);
+        started = true;
+
+        threadStart();
+    }
+
+    private Thread thread = null;
+    private String threadName = null;
+
+    private void threadStart() {
+
+        log(sm.getString("httpProcessor.starting"));
+
+        thread = new Thread(this, threadName);
+        thread.setDaemon(true);
+        thread.start();
+
+        if (debug >= 1)
+            log(" Background thread has been started");
+
+    }
+
+
+    @Override
+    public void stop() throws LifecycleException {
 
     }
 }

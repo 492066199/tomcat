@@ -128,17 +128,11 @@ public final class HttpConnector
      */
     private boolean secure = false;
 
-
-
-
-
     /**
      * The string manager for this package.
      */
-    private StringManager sm =
-        StringManager.getManager(Constants.Package);
 
-
+    private StringManager sm = StringManager.getManager(Constants.Package);
     /**
      * Has this component been initialized yet?
      */
@@ -662,22 +656,16 @@ public final class HttpConnector
 
 
     // --------------------------------------------------------- Public Methods
-
-
     /**
      * Create (or allocate) and return a Request object suitable for
      * specifying the contents of a Request to the responsible Container.
      */
     public Request createRequest() {
-
         if (debug >= 2)
             log("createRequest: Creating new request");
         HttpRequestImpl request = new HttpRequestImpl();
         request.setConnector(this);
         return (request);
-
-//        HttpRequest httpRequest = new HttpRequest(null);
-//        return httpRequest;
     }
 
 
@@ -791,15 +779,7 @@ public final class HttpConnector
 
     }
 
-
-    /**
-     * Create and return a new processor suitable for processing HTTP
-     * requests and returning the corresponding responses.
-     */
     private HttpProcessor newProcessor() {
-
-        //        if (debug >= 2)
-        //            log("newProcessor: Creating new processor");
         HttpProcessor processor = new HttpProcessor(this, curProcessors++);
         if (processor instanceof Lifecycle) {
             try {

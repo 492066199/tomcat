@@ -12,7 +12,6 @@ public final class Bootstrap {
         try {
             connector.initialize();
             connector.start();
-
             // make the application wait until we press any key.
             System.in.read();
         }
