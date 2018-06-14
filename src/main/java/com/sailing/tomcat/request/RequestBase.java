@@ -107,14 +107,7 @@ public abstract class RequestBase
     /**
      * Descriptive information about this Request implementation.
      */
-    protected static final String info =
-        "org.apache.catalina.connector.RequestBase/1.0";
-
-
-    /**
-     * The input stream associated with this Request.
-     */
-    protected InputStream input = null;
+    protected static final String info = "org.apache.catalina.connector.RequestBase/1.0";
 
 
     /**
@@ -153,11 +146,6 @@ public abstract class RequestBase
      */
     protected String remoteHost = null;
 
-
-    /**
-     * The response with which this request is associated.
-     */
-    protected Response response = null;
 
 
     /**
@@ -305,27 +293,6 @@ public abstract class RequestBase
     }
 
 
-    /**
-     * Return the Response with which this Request is associated.
-     */
-    public Response getResponse() {
-
-        return (this.response);
-
-    }
-
-
-    /**
-     * Set the Response with which this Request is associated.
-     *
-     * @param response The new associated response
-     */
-    public void setResponse(Response response) {
-
-        this.response = response;
-
-    }
-
 
     /**
      * Return the Socket (if any) through which this Request was received.
@@ -340,6 +307,7 @@ public abstract class RequestBase
     }
 
 
+
     /**
      * Set the Socket (if any) through which this Request was received.
      *
@@ -352,25 +320,23 @@ public abstract class RequestBase
     }
 
 
-    /**
-     * Return the input stream associated with this Request.
-     */
-    public InputStream getStream() {
+    protected InputStream input = null;
+    protected Response response = null;
 
-        return (this.input);
-
+    public Response getResponse() {
+        return (this.response);
     }
 
+    public void setResponse(Response response) {
+        this.response = response;
+    }
 
-    /**
-     * Set the input stream associated with this Request.
-     *
-     * @param input The new input stream
-     */
+    public InputStream getStream() {
+        return (this.input);
+    }
+
     public void setStream(InputStream input) {
-
         this.input = input;
-
     }
 
 

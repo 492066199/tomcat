@@ -135,19 +135,6 @@ public abstract class ResponseBase
      */
     protected Locale locale = Locale.getDefault();
 
-
-    /**
-     * The output stream associated with this Response.
-     */
-    protected OutputStream output = null;
-
-
-    /**
-     * The Request with which this Response is associated.
-     */
-    protected Request request = null;
-
-
     /**
      * The string manager for this package.
      */
@@ -293,28 +280,14 @@ public abstract class ResponseBase
 
     }
 
-
-    /**
-     * Return the Request with which this Response is associated.
-     */
+    protected Request request = null;
     public Request getRequest() {
-
         return (this.request);
-
     }
 
-
-    /**
-     * Set the Request with which this Response is associated.
-     *
-     * @param request The new associated request
-     */
     public void setRequest(Request request) {
-
         this.request = request;
-
     }
-
 
     /**
      * Return the <code>ServletResponse</code> for which this object
@@ -327,25 +300,14 @@ public abstract class ResponseBase
     }
 
 
-    /**
-     * Return the output stream associated with this Response.
-     */
+    protected OutputStream output = null;
+
     public OutputStream getStream() {
-
         return (this.output);
-
     }
 
-
-    /**
-     * Set the output stream associated with this Response.
-     *
-     * @param stream The new output stream
-     */
     public void setStream(OutputStream stream) {
-
         this.output = stream;
-
     }
 
 

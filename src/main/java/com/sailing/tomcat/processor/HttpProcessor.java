@@ -64,15 +64,19 @@ public class HttpProcessor implements Lifecycle, Runnable{
      * The HttpConnector with which this processor is associated.
      */
     private HttpConnector connector = null;
+
+    //可以回收
     private HttpRequestLine requestLine = new HttpRequestLine();
+    private HttpRequestImpl request = null;
+    private HttpResponseImpl response = null;
+
+
     private int id;
     private boolean keepAlive = false;
     private static final String SERVER_INFO = "sailing server (HTTP/1.1 Connector)";
     private boolean http11 = true;
     private boolean sendAck = false;
     private static final byte[] ack = (new String("HTTP/1.1 100 Continue\r\n\r\n")).getBytes();
-    private HttpRequestImpl request = null;
-    private HttpResponseImpl response = null;
     private int status = Constants.PROCESSOR_IDLE;
     private static final String match = ";" + "jsessionid" + "=";
     private StringParser parser = new StringParser();
@@ -92,8 +96,7 @@ public class HttpProcessor implements Lifecycle, Runnable{
 
         // Construct and initialize the objects we will need
         try {
-            input = new SocketInputStream(socket.getInputStream(),
-                    connector.getBufferSize());
+            input = new SocketInputStream(socket.getInputStream(), connector.getBufferSize());
         } catch (Exception e) {
             log("process.create :" + e.getMessage());
             ok = false;
@@ -111,8 +114,7 @@ public class HttpProcessor implements Lifecycle, Runnable{
                 output = socket.getOutputStream();
                 response.setStream(output);
                 response.setRequest(request);
-                ((HttpServletResponse) response.getResponse()).setHeader
-                        ("Server", SERVER_INFO);
+                ((HttpServletResponse) response.getResponse()).setHeader("Server", SERVER_INFO);
             } catch (Exception e) {
                 log("process.create:" + e.getMessage());
                 ok = false;
@@ -123,8 +125,7 @@ public class HttpProcessor implements Lifecycle, Runnable{
                 if (ok) {
                     parseConnection(socket);
                     parseRequest(input, output);
-                    if (!request.getRequest().getProtocol()
-                            .startsWith("HTTP/0"))
+                    if (!request.getRequest().getProtocol().startsWith("HTTP/0"))
                         parseHeaders(input);
                     if (http11) {
                         // Sending a request acknowledge back to the client if

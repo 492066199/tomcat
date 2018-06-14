@@ -458,7 +458,6 @@ public class SocketInputStream extends InputStream {
         }
 
         header.valueEnd = readCount;
-
     }
 
 
