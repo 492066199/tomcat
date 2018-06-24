@@ -52,32 +52,20 @@ public interface Container {
     public static final String REMOVE_VALVE_EVENT = "removeValve";
 
 
-    // ------------------------------------------------------------- Properties
+    String getInfo();
 
+    Loader getLoader();
 
-    /**
-     * Return descriptive information about this Container implementation and
-     * the corresponding version number, in the format
-     * <code>&lt;description&gt;/&lt;version&gt;</code>.
-     */
-    public String getInfo();
+    void setLoader(Loader loader);
 
+    void addChild(Container child);
 
-//    /**
-//     * Return the Loader with which this Container is associated.  If there is
-//     * no associated Loader, return the Loader associated with our parent
-//     * Container (if any); otherwise, return <code>null</code>.
-//     */
-//    public Loader getLoader();
-//
-//
-//    /**
-//     * Set the Loader with which this Container is associated.
-//     *
-//     * @param loader The newly associated loader
-//     */
-//    public void setLoader(Loader loader);
-//
+    Container findChild(String name);
+
+    Container[] findChildren();
+
+    void removeChild(Container child);
+
 //
 //    /**
 //     * Return the Logger with which this Container is associated.  If there is
@@ -218,30 +206,6 @@ public interface Container {
      */
     public void setResources(DirContext resources);
 
-
-    // --------------------------------------------------------- Public Methods
-
-
-    /**
-     * Add a new child Container to those associated with this Container,
-     * if supported.  Prior to adding this Container to the set of children,
-     * the child's <code>setParent()</code> method must be called, with this
-     * Container as an argument.  This method may thrown an
-     * <code>IllegalArgumentException</code> if this Container chooses not
-     * to be attached to the specified Container, in which case it is not added
-     *
-     * @param child New child Container to be added
-     *
-     * @exception IllegalArgumentException if this exception is thrown by
-     *  the <code>setParent()</code> method of the child Container
-     * @exception IllegalArgumentException if the new child does not have
-     *  a name unique from that of existing children of this Container
-     * @exception IllegalStateException if this Container does not support
-     *  child Containers
-     */
-    public void addChild(Container child);
-
-
 //    /**
 //     * Add a container event listener to this component.
 //     *
@@ -268,23 +232,6 @@ public interface Container {
      */
     public void addPropertyChangeListener(PropertyChangeListener listener);
 
-
-    /**
-     * Return the child Container, associated with this Container, with
-     * the specified name (if any); otherwise, return <code>null</code>
-     *
-     * @param name Name of the child Container to be retrieved
-     */
-    public Container findChild(String name);
-
-
-    /**
-     * Return the set of children Containers associated with this Container.
-     * If this Container has no children, a zero-length array is returned.
-     */
-    public Container[] findChildren();
-
-
 //    /**
 //     * Return the set of container listeners associated with this Container.
 //     * If this Container has no registered container listeners, a zero-length
@@ -310,6 +257,7 @@ public interface Container {
 //    public Mapper[] findMappers();
 //
 //
+
     /**
      * Process the specified Request, and generate the corresponding Response,
      * according to the design of this particular Container.
@@ -336,14 +284,6 @@ public interface Container {
      */
     public Container map(Request request, boolean update);
 
-
-    /**
-     * Remove an existing child Container from association with this parent
-     * Container.
-     *
-     * @param child Existing child Container to be removed
-     */
-    public void removeChild(Container child);
 
 
 //    /**
