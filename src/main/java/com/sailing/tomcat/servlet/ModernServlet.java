@@ -15,6 +15,9 @@ public class ModernServlet extends HttpServlet {
                       HttpServletResponse response)
             throws ServletException, IOException {
 
+        InputStream inputStream = request.getInputStream();
+
+
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         out.println("<html>");
