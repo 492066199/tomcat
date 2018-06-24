@@ -35,8 +35,7 @@ public class HttpProcessor implements Lifecycle, Runnable{
         this.request = (HttpRequestImpl) connector.createRequest();
         this.response = (HttpResponseImpl) connector.createResponse();
         this.serverPort = httpConnector.getPort();
-        this.threadName =
-                "HttpProcessor[" + connector.getPort() + "][" + id + "]";
+        this.threadName = "HttpProcessor[" + connector.getPort() + "][" + id + "]";
     }
 
 
@@ -47,15 +46,11 @@ public class HttpProcessor implements Lifecycle, Runnable{
     private int serverPort = 0;
     private void parseConnection(Socket socket)
             throws IOException, ServletException {
-
         if (debug >= 2)
             log("  parseConnection: address=" + socket.getInetAddress() +
                     ", port=" + connector.getPort());
         ((HttpRequestImpl) request).setInet(socket.getInetAddress());
-//        if (proxyPort != 0)
-//            request.setServerPort(proxyPort);
-//        else
-            request.setServerPort(serverPort);
+        request.setServerPort(serverPort);
         request.setSocket(socket);
 
     }
@@ -179,7 +174,10 @@ public class HttpProcessor implements Lifecycle, Runnable{
                     connector.getContainer().invoke(request, response);
                 }
             } catch (ServletException e) {
-                log("process.invoke" + e);
+                log("process.invoke");
+                System.out.println();
+                System.out.println(e);
+                e.printStackTrace();
                 try {
                     ((HttpServletResponse) response.getResponse()).sendError
                             (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -191,6 +189,9 @@ public class HttpProcessor implements Lifecycle, Runnable{
                 ok = false;
             } catch (Throwable e) {
                 log("process.invoke" + e);
+                System.out.println();
+                System.out.println(e);
+                e.printStackTrace();
                 try {
                     ((HttpServletResponse) response.getResponse()).sendError
                             (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -208,6 +209,9 @@ public class HttpProcessor implements Lifecycle, Runnable{
                     ok = false;
                 } catch (Throwable e) {
                     log("process.invoke" + e);
+                    System.out.println();
+                    System.out.println(e);
+                    e.printStackTrace();
                     ok = false;
                 }
                 try {
@@ -216,6 +220,9 @@ public class HttpProcessor implements Lifecycle, Runnable{
                     ok = false;
                 } catch (Throwable e) {
                     log("process.invoke"+ e);
+                    System.out.println();
+                    System.out.println(e);
+                    e.printStackTrace();
                     ok = false;
                 }
                 try {
@@ -249,6 +256,9 @@ public class HttpProcessor implements Lifecycle, Runnable{
             ;
         } catch (Throwable e) {
             log("process.invoke"+ e);
+            System.out.println();
+            System.out.println(e);
+            e.printStackTrace();
         }
         socket = null;
     }
@@ -666,6 +676,7 @@ public class HttpProcessor implements Lifecycle, Runnable{
             }
             catch (Throwable t) {
                 System.out.println("process.invoke" + t.getMessage());
+                t.printStackTrace();
             }
             // Finish up this request
             connector.recycle(this);

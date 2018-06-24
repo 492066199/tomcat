@@ -1,6 +1,5 @@
 package com.sailing.tomcat.request;
 
-import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.util.Constants;
 import com.sailing.tomcat.util.StringManager;
 
@@ -168,6 +167,4 @@ public class RequestStream
         return (actuallyRead);
 
     }
-
-
 }
