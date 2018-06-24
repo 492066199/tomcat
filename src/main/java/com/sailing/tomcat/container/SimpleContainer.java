@@ -97,7 +97,7 @@ public class SimpleContainer implements Container {
 
     try {
       servlet = (Servlet) myClass.newInstance();
-      servlet.service((HttpServletRequest) request, (HttpServletResponse) response);
+      servlet.service(request.getRequest(), response.getResponse());
     } catch (Exception e) {
       System.out.println(e.toString());
     } catch (Throwable e) {

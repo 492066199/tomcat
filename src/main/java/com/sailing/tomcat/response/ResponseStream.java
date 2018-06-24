@@ -18,8 +18,6 @@
 package com.sailing.tomcat.response;
 
 
-import com.sailing.tomcat.response.Response;
-import com.sailing.tomcat.response.ResponseBase;
 import com.sailing.tomcat.util.Constants;
 import com.sailing.tomcat.util.StringManager;
 

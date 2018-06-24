@@ -671,8 +671,7 @@ public abstract class ResponseBase
 
         ResponseStream newStream = (ResponseStream) createOutputStream();
         newStream.setCommit(false);
-        OutputStreamWriter osr =
-            new OutputStreamWriter(newStream, getCharacterEncoding());
+        OutputStreamWriter osr = new OutputStreamWriter(newStream, getCharacterEncoding());
         writer = new ResponseWriter(osr, newStream);
         stream = newStream;
         return (writer);
