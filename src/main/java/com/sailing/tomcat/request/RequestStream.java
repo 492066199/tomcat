@@ -25,12 +25,7 @@ public class RequestStream
         closed = false;
         count = 0;
         length = request.getRequest().getContentLength();
-        try {
-            stream = request.getRequest().getInputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        stream = request.getStream();
     }
 
 

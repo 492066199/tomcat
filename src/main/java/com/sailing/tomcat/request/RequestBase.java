@@ -320,9 +320,7 @@ public abstract class RequestBase
     }
 
 
-    protected InputStream input = null;
     protected Response response = null;
-
     public Response getResponse() {
         return (this.response);
     }
@@ -331,10 +329,11 @@ public abstract class RequestBase
         this.response = response;
     }
 
+    //input stream for servlet! must be socket input stream!
+    protected InputStream input = null;
     public InputStream getStream() {
-        return (this.input);
+        return this.input;
     }
-
     public void setStream(InputStream input) {
         this.input = input;
     }

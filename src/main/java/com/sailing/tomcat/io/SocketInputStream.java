@@ -534,7 +534,8 @@ public class SocketInputStream extends InputStream {
         if (nRead > 0) {
             count = nRead;
         }
+
+        String s = new String(buf, 0 , count);
+        System.out.println("fill and get:" + s);
     }
-
-
 }
