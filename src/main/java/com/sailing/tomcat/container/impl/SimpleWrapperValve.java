@@ -54,6 +54,7 @@ public class SimpleWrapperValve implements Valve, Contained {
             }
         }
         catch (ServletException e) {
+            e.printStackTrace();
         }
     }
 
