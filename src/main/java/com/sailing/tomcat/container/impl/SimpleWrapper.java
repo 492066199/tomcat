@@ -12,11 +12,9 @@ import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 
 
-
-
 public class SimpleWrapper implements Wrapper, Pipeline {
-
     // the servlet instance
+
     private Servlet instance = null;
     private String servletClass;
     private Loader loader;
@@ -28,20 +26,23 @@ public class SimpleWrapper implements Wrapper, Pipeline {
         pipeline.setBasic(new SimpleWrapperValve());
     }
 
+    public void invoke(Request request, Response response)
+            throws IOException, ServletException {
+        pipeline.invoke(request, response);
+    }
+
     public synchronized void addValve(Valve valve) {
         pipeline.addValve(valve);
     }
 
     public Servlet allocate() throws ServletException {
         // Load and initialize our instance if necessary
-        if (instance==null) {
+        if (instance == null) {
             try {
                 instance = loadServlet();
-            }
-            catch (ServletException e) {
+            } catch (ServletException e) {
                 throw e;
-            }
-            catch (Throwable e) {
+            } catch (Throwable e) {
                 throw new ServletException("Cannot allocate a servlet instance", e);
             }
         }
@@ -49,7 +50,7 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     }
 
     private Servlet loadServlet() throws ServletException {
-        if (instance!=null)
+        if (instance != null)
             return instance;
 
         Servlet servlet = null;
@@ -60,7 +61,7 @@ public class SimpleWrapper implements Wrapper, Pipeline {
 
         Loader loader = getLoader();
         // Acquire an instance of the class loader to be used
-        if (loader==null) {
+        if (loader == null) {
             throw new ServletException("No loader.");
         }
         ClassLoader classLoader = loader.getClassLoader();
@@ -68,26 +69,23 @@ public class SimpleWrapper implements Wrapper, Pipeline {
         // Load the specified servlet class from the appropriate class loader
         Class classClass = null;
         try {
-            if (classLoader!=null) {
+            if (classLoader != null) {
                 classClass = classLoader.loadClass(actualClass);
             }
-        }
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             throw new ServletException("Servlet class not found");
         }
         // Instantiate and initialize an instance of the servlet class itself
         try {
             servlet = (Servlet) classClass.newInstance();
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
             throw new ServletException("Failed to instantiate servlet");
         }
 
         // Call the initialization method of this servlet
         try {
             servlet.init(null);
-        }
-        catch (Throwable f) {
+        } catch (Throwable f) {
             throw new ServletException("Failed initialize servlet.");
         }
         return servlet;
@@ -108,8 +106,8 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     public void setLoader(Loader loader) {
         this.loader = loader;
     }
-
     // method implementations of Pipeline
+
     public Valve getBasic() {
         return pipeline.getBasic();
     }
@@ -125,26 +123,26 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     public void removeValve(Valve valve) {
         pipeline.removeValve(valve);
     }
-
+    //    public void setLogger(Logger logger) {
+    //
+    //    }
+    //        return null;
 //    public Logger getLogger() {
-//        return null;
-//    }
-//
-//    public void setLogger(Logger logger) {
-//    }
 
+//    }
+    //    public void setManager(Manager manager) {
+    //
+    //    }
+    //        return null;
 //    public Manager getManager() {
-//        return null;
-//    }
-//
-//    public void setManager(Manager manager) {
-//    }
 
-//    public Cluster getCluster() {
-//        return null;
 //    }
-//
-//    public void setCluster(Cluster cluster) {
+    //    public void setCluster(Cluster cluster) {
+    //
+    //    }
+    //        return null;
+//    public Cluster getCluster() {
+
 //    }
 
     public String getName() {
@@ -169,12 +167,12 @@ public class SimpleWrapper implements Wrapper, Pipeline {
 
     public void setParentClassLoader(ClassLoader parent) {
     }
-
+    //    public void setRealm(Realm realm) {
+    //
+    //    }
+    //        return null;
 //    public Realm getRealm() {
-//        return null;
-//    }
-//
-//    public void setRealm(Realm realm) {
+
 //    }
 
     public DirContext getResources() {
@@ -222,11 +220,11 @@ public class SimpleWrapper implements Wrapper, Pipeline {
 
     public void addChild(Container child) {
     }
-
+    //    public void addMapper(Mapper mapper) {
+    //
+    //    }
 //    public void addContainerListener(ContainerListener listener) {
-//    }
-//
-//    public void addMapper(Mapper mapper) {
+
 //    }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -239,15 +237,15 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     public Container[] findChildren() {
         return null;
     }
-
+    //        return null;
 //    public ContainerListener[] findContainerListeners() {
-//        return null;
+
 //    }
 
     public void addInitParameter(String name, String value) {
     }
-
 //    public void addInstanceListener(InstanceListener listener) {
+
 //    }
 
     public void addSecurityReference(String name, String link) {
@@ -271,19 +269,14 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     public String[] findSecurityReferences() {
         return null;
     }
-
+    //        return null;
+    //    public Mapper[] findMappers() {
+    //
+    //    }
+    //        return null;
 //    public Mapper findMapper(String protocol) {
-//        return null;
-//    }
-//
-//    public Mapper[] findMappers() {
-//        return null;
-//    }
 
-    public void invoke(Request request, Response response)
-            throws IOException, ServletException {
-        pipeline.invoke(request, response);
-    }
+//    }
 
     public boolean isUnavailable() {
         return false;

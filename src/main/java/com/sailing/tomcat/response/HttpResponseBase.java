@@ -82,7 +82,7 @@ public class HttpResponseBase
     /**
      * The set of Cookies associated with this Response.
      */
-    protected ArrayList cookies = new ArrayList();
+    protected List<Cookie> cookies = new ArrayList();
 
 
     /**
@@ -104,7 +104,7 @@ public class HttpResponseBase
      * This collection is keyed by the header name, and the elements are
      * ArrayLists containing the associated values that have been set.
      */
-    protected HashMap headers = new HashMap();
+    protected Map<String, Object> headers = new HashMap();
 
 
     /**
@@ -160,10 +160,10 @@ public class HttpResponseBase
         // If an HTTP error >= 400 has been created with no content,
         // attempt to create a simple error message
         if (!isCommitted() &&
-            (stream == null) && (writer == null) &&
-            (status >= HttpServletResponse.SC_BAD_REQUEST) &&
-            (contentType == null) &&
-            (contentCount == 0)) {
+                (stream == null) && (writer == null) &&
+                (status >= HttpServletResponse.SC_BAD_REQUEST) &&
+                (contentType == null) &&
+                (contentCount == 0)) {
             try {
                 setContentType("text/html");
                 PrintWriter writer = getWriter();
@@ -184,7 +184,7 @@ public class HttpResponseBase
             } catch (IOException e) {
                 throw e;
             } catch (Throwable e) {
-                ;       // Just eat it
+                e.printStackTrace();       // Just eat it
             }
         }
 
@@ -200,11 +200,9 @@ public class HttpResponseBase
      * a zero-length array if no cookies have been set.
      */
     public Cookie[] getCookies() {
-
         synchronized (cookies) {
-            return ((Cookie[]) cookies.toArray(new Cookie[cookies.size()]));
+            return cookies.toArray(new Cookie[cookies.size()]);
         }
-
     }
 
 
@@ -217,15 +215,16 @@ public class HttpResponseBase
      * @param name Header name to look up
      */
     public String getHeader(String name) {
-
-        ArrayList values = null;
+        List values = null;
         synchronized (headers) {
             values = (ArrayList) headers.get(name);
         }
-        if (values != null)
+
+        if (values != null) {
             return ((String) values.get(0));
-        else
+        } else {
             return (null);
+        }
 
     }
 

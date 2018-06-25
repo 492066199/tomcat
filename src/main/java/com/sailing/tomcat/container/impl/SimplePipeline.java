@@ -7,13 +7,13 @@ import com.sailing.tomcat.response.Response;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
-public class SimplePipeline implements Pipeline{
+public class SimplePipeline implements Pipeline {
 
     protected Valve basic = null;
     protected Container container = null;
     protected Valve valves[] = new Valve[0];
 
-    public SimplePipeline(Container container){
+    public SimplePipeline(Container container) {
         this.container = container;
     }
 
@@ -31,7 +31,7 @@ public class SimplePipeline implements Pipeline{
             ((Contained) valve).setContainer(this.container);
 
         synchronized (valves) {
-            Valve results[] = new Valve[valves.length +1];
+            Valve results[] = new Valve[valves.length + 1];
             System.arraycopy(valves, 0, results, 0, valves.length);
             results[valves.length] = valve;
             valves = results;
@@ -67,8 +67,7 @@ public class SimplePipeline implements Pipeline{
                 valves[subscript].invoke(request, response, this);
             } else if ((subscript == valves.length) && (basic != null)) {
                 basic.invoke(request, response, this);
-            }
-            else {
+            } else {
                 throw new ServletException("No valve");
             }
         }

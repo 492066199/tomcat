@@ -300,8 +300,9 @@ public abstract class ResponseBase
     }
 
 
-    protected OutputStream output = null;
 
+    //这是最真实的outputstream 最后才会写在这个里面 被flushBuffer调用
+    protected OutputStream output = null;
     public OutputStream getStream() {
         return (this.output);
     }
@@ -357,15 +358,10 @@ public abstract class ResponseBase
 
 
     /**
-     * Create and return a ServletOutputStream to write the content
-     * associated with this Response.
-     *
-     * @exception IOException if an input/output error occurs
+     * 这是一个假的outputstream 写到buffer里面去的
      */
     public ServletOutputStream createOutputStream() throws IOException {
-
         return (new ResponseStream(this));
-
     }
 
 
@@ -586,6 +582,12 @@ public abstract class ResponseBase
         if (bufferCount > 0) {
             try {
                 output.write(buffer, 0, bufferCount);
+                //check
+                String c = new String(buffer, 0, bufferCount, getCharacterEncoding());
+
+                System.out.println("flush begin--------------------------");
+                System.out.println(c);
+                System.out.println("flush over---------------------------");
             } catch(IOException ioe) {
                 // An IOException on a write is almost always due to
                 // the remote client aborting the request.  Wrap this
@@ -595,7 +597,6 @@ public abstract class ResponseBase
                 bufferCount = 0;
             }
         }
-
     }
 
 

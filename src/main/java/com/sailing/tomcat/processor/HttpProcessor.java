@@ -182,7 +182,7 @@ public class HttpProcessor implements Lifecycle, Runnable{
                     ((HttpServletResponse) response.getResponse()).sendError
                             (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 } catch (Exception f) {
-                    ;
+                    f.printStackTrace();
                 }
                 ok = false;
             } catch (InterruptedIOException e) {
