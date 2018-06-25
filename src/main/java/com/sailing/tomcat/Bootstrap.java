@@ -12,7 +12,7 @@ public final class Bootstrap {
 
         HttpConnector connector = new HttpConnector();
         Wrapper wrapper = new SimpleWrapper();
-        wrapper.setServletClass("ModernServlet");
+        wrapper.setServletClass("com.sailing.tomcat.servlet.ModernServlet");
         Loader loader = new SimpleLoader();
         Valve valve1 = new HeaderLoggerValve();
         Valve valve2 = new ClientIPLoggerValve();
