@@ -1,22 +1,4 @@
-/*
- * Copyright 1999,2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
 package com.sailing.tomcat.response;
-
 
 
 import javax.servlet.ServletResponse;
@@ -33,8 +15,6 @@ import java.security.PrivilegedExceptionAction;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-// import java.net.URL;
-
 
 /**
  * Convenience base implementation of the <b>HttpResponse</b> interface, which
@@ -47,14 +27,9 @@ import java.util.*;
  * @version $Revision: 1.55 $ $Date: 2004/08/26 21:30:19 $
  * @deprecated
  */
+public class HttpResponseBase extends ResponseBase implements HttpResponse, HttpServletResponse {
 
-public class HttpResponseBase
-    extends ResponseBase
-    implements HttpResponse, HttpServletResponse {
-
-
-    protected class PrivilegedFlushBuffer
-        implements PrivilegedExceptionAction {
+    protected class PrivilegedFlushBuffer implements PrivilegedExceptionAction {
                                               
         PrivilegedFlushBuffer() {
         }                              
@@ -65,32 +40,14 @@ public class HttpResponseBase
         }                                                             
     }
 
-
-    // ----------------------------------------------------------- Constructors
-
+    protected final SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz",Locale.US);
 
     public HttpResponseBase() {
-
         format.setTimeZone(TimeZone.getTimeZone("GMT"));
-
     }
 
 
-    // ----------------------------------------------------- Instance Variables
-
-
-    /**
-     * The set of Cookies associated with this Response.
-     */
     protected List<Cookie> cookies = new ArrayList();
-
-
-    /**
-     * The date format we will use for creating date headers.
-     */
-    protected final SimpleDateFormat format =
-        new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz",Locale.US);
-
 
     /**
      * The facade associated with this response.

@@ -6,12 +6,14 @@ import com.sailing.tomcat.response.Response;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SimplePipeline implements Pipeline {
 
     protected Valve basic = null;
     protected Container container = null;
-    protected Valve valves[] = new Valve[0];
+    protected List<Valve> valves = new ArrayList<>();
 
     public SimplePipeline(Container container) {
         this.container = container;
@@ -31,15 +33,14 @@ public class SimplePipeline implements Pipeline {
             ((Contained) valve).setContainer(this.container);
 
         synchronized (valves) {
-            Valve results[] = new Valve[valves.length + 1];
-            System.arraycopy(valves, 0, results, 0, valves.length);
-            results[valves.length] = valve;
-            valves = results;
+            valves.add(valve);
         }
     }
 
     public Valve[] getValves() {
-        return this.valves;
+        synchronized (valves) {
+            return valves.toArray(new Valve[valves.size()]);
+        }
     }
 
     public void invoke(Request request, Response response) throws IOException, ServletException {
@@ -63,9 +64,9 @@ public class SimplePipeline implements Pipeline {
             int subscript = stage;
             stage = stage + 1;
             // Invoke the requested Valve for the current request thread
-            if (subscript < valves.length) {
-                valves[subscript].invoke(request, response, this);
-            } else if ((subscript == valves.length) && (basic != null)) {
+            if (subscript < valves.size()) {
+                valves.get(subscript).invoke(request, response, this);
+            } else if ((subscript == valves.size()) && (basic != null)) {
                 basic.invoke(request, response, this);
             } else {
                 throw new ServletException("No valve");

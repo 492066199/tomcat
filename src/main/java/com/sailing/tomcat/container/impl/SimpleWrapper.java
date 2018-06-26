@@ -1,6 +1,7 @@
 package com.sailing.tomcat.container.impl;
 
 import com.sailing.tomcat.container.*;
+import com.sailing.tomcat.container.Mapper;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.response.Response;
 
@@ -14,20 +15,45 @@ import javax.servlet.UnavailableException;
 
 public class SimpleWrapper implements Wrapper, Pipeline {
     // the servlet instance
-
     private Servlet instance = null;
-    private String servletClass;
     private Loader loader;
-    private String name;
+
     private SimplePipeline pipeline = new SimplePipeline(this);
+
     protected Container parent = null;
+    private String servletClass;
+    private String name;
+
 
     public SimpleWrapper() {
         pipeline.setBasic(new SimpleWrapperValve());
     }
 
-    public void invoke(Request request, Response response)
-            throws IOException, ServletException {
+    public String getServletClass() {
+        return this.servletClass;
+    }
+
+    public void setServletClass(String servletClass) {
+        this.servletClass = servletClass;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Container getParent() {
+        return parent;
+    }
+
+    public void setParent(Container container) {
+        parent = container;
+    }
+
+    public void invoke(Request request, Response response) throws IOException, ServletException {
         pipeline.invoke(request, response);
     }
 
@@ -91,6 +117,11 @@ public class SimpleWrapper implements Wrapper, Pipeline {
         return servlet;
     }
 
+    @Override
+    public void addMapper(Mapper mapper) {
+
+    }
+
     public String getInfo() {
         return null;
     }
@@ -106,71 +137,56 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     public void setLoader(Loader loader) {
         this.loader = loader;
     }
+
     // method implementations of Pipeline
 
     public Valve getBasic() {
         return pipeline.getBasic();
     }
-
     public void setBasic(Valve valve) {
         pipeline.setBasic(valve);
     }
-
     public Valve[] getValves() {
         return pipeline.getValves();
     }
-
     public void removeValve(Valve valve) {
         pipeline.removeValve(valve);
     }
-    //    public void setLogger(Logger logger) {
-    //
     //    }
-    //        return null;
-//    public Logger getLogger() {
+    //
 
-//    }
-    //    public void setManager(Manager manager) {
-    //
-    //    }
     //        return null;
+    //        return null;
+    //    }
+    //
+    //    public void setManager(Manager manager) {
+    //    public void setLogger(Logger logger) {
+
+//    public Logger getLogger() {
+    //        return null;
+    //    }
+    //
+    //    public void setCluster(Cluster cluster) {
+//    }
+
 //    public Manager getManager() {
 
 //    }
-    //    public void setCluster(Cluster cluster) {
-    //
-    //    }
-    //        return null;
+
 //    public Cluster getCluster() {
 
 //    }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Container getParent() {
-        return parent;
-    }
-
-    public void setParent(Container container) {
-        parent = container;
-    }
-
     public ClassLoader getParentClassLoader() {
         return null;
     }
-
     public void setParentClassLoader(ClassLoader parent) {
     }
-    //    public void setRealm(Realm realm) {
-    //
-    //    }
     //        return null;
+    //    }
+    //
+    //    public void setRealm(Realm realm) {
+
 //    public Realm getRealm() {
 
 //    }
@@ -208,14 +224,6 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     }
 
     public void setRunAs(String runAs) {
-    }
-
-    public String getServletClass() {
-        return null;
-    }
-
-    public void setServletClass(String servletClass) {
-        this.servletClass = servletClass;
     }
 
     public void addChild(Container child) {

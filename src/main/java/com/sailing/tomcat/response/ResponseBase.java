@@ -1,24 +1,8 @@
-/*
- * Copyright 1999,2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
 package com.sailing.tomcat.response;
 
 
 import com.sailing.tomcat.connector.Connector;
+import com.sailing.tomcat.container.Context;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.util.Constants;
 import com.sailing.tomcat.util.RequestUtil;
@@ -33,22 +17,16 @@ import java.io.PrintWriter;
 import java.util.Locale;
 
 
-/**
- * Convenience base implementation of the <b>Response</b> interface, which can
- * be used for the Response implementation required by most Connectors.  Only
- * the connector-specific methods need to be implemented.
- *
- * @author Craig R. McClanahan
- * @author Remy Maucherat
- * @version $Revision: 1.27 $ $Date: 2004/08/26 21:30:19 $
- * @deprecated
- */
+public abstract class ResponseBase implements Response, ServletResponse {
 
-public abstract class ResponseBase
-    implements Response, ServletResponse {
+    protected Context context = null;
+    public Context getContext() {
+        return (this.context);
+    }
 
-
-    // ----------------------------------------------------- Instance Variables
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
 
     /**
@@ -97,12 +75,6 @@ public abstract class ResponseBase
      * The content type associated with this Response.
      */
     protected String contentType = null;
-
-
-//    /**
-//     * The Context within which this Response is being produced.
-//     */
-//    protected Context context = null;
 
 
     /**
@@ -221,30 +193,6 @@ public abstract class ResponseBase
         return (this.contentCount);
 
     }
-
-
-//    /**
-//     * Return the Context with which this Response is associated.
-//     */
-//    public Context getContext() {
-//
-//        return (this.context);
-//
-//    }
-//
-//
-//    /**
-//     * Set the Context with which this Response is associated.  This should
-//     * be called as soon as the appropriate Context is identified.
-//     *
-//     * @param context The associated Context
-//     */
-//    public void setContext(Context context) {
-//
-//        this.context = context;
-//
-//    }
-
 
     /**
      * Return the "processing inside an include" flag.

@@ -51,6 +51,7 @@ public interface Container {
      */
     public static final String REMOVE_VALVE_EVENT = "removeValve";
 
+    void addMapper(Mapper mapper);
 
     String getInfo();
 
@@ -213,17 +214,6 @@ public interface Container {
 //     */
 //    public void addContainerListener(ContainerListener listener);
 //
-//
-//    /**
-//     * Add the specified Mapper associated with this Container.
-//     *
-//     * @param mapper The corresponding Mapper implementation
-//     *
-//     * @exception IllegalArgumentException if this exception is thrown by
-//     *  the <code>setContainer()</code> method of the Mapper
-//     */
-//    public void addMapper(Mapper mapper);
-
 
     /**
      * Add a property change listener to this component.

@@ -19,101 +19,41 @@ import java.io.EOFException;
 public class SocketInputStream extends InputStream {
 
 
-    // -------------------------------------------------------------- Constants
+    protected static StringManager sm = StringManager.getManager(Constants.Package);
 
-
-    /**
-     * CR.
-     */
     private static final byte CR = (byte) '\r';
-
-
-    /**
-     * LF.
-     */
     private static final byte LF = (byte) '\n';
-
-
-    /**
-     * SP.
-     */
     private static final byte SP = (byte) ' ';
-
-
-    /**
-     * HT.
-     */
     private static final byte HT = (byte) '\t';
-
-
-    /**
-     * COLON.
-     */
     private static final byte COLON = (byte) ':';
-
-
-    /**
-     * Lower case offset.
-     */
     private static final int LC_OFFSET = 'A' - 'a';
-
-
-    /**
-     * Internal buffer.
-     */
     protected byte buf[];
 
-
-    /**
-     * Last valid byte.
-     */
     protected int count;
-
-
-    /**
-     * Position in the buffer.
-     */
     protected int pos;
-
-
-    /**
-     * Underlying input stream.
-     */
     protected InputStream is;
 
 
-    // ----------------------------------------------------------- Constructors
-
-
     /**
-     * Construct a servlet input stream associated with the specified socket
-     * input.
-     *
-     * @param is socket input stream
-     * @param bufferSize size of the internal buffer
+     * inputstream important method
+     * @return
+     * @throws IOException
      */
-    public SocketInputStream(InputStream is, int bufferSize) {
-
-        this.is = is;
-        buf = new byte[bufferSize];
-
+    public int read()
+            throws IOException {
+        if (pos >= count) {
+            fill();
+            if (pos >= count)
+                return -1;
+        }
+        return buf[pos++] & 0xff;
     }
 
+    public SocketInputStream(InputStream is, int bufferSize) {
+        this.is = is;
+        buf = new byte[bufferSize];
+    }
 
-    // -------------------------------------------------------------- Variables
-
-
-    /**
-     * The string manager for this package.
-     */
-    protected static StringManager sm =
-            StringManager.getManager(Constants.Package);
-
-
-    // ----------------------------------------------------- Instance Variables
-
-
-    // --------------------------------------------------------- Public Methods
 
 
     /**
@@ -461,20 +401,6 @@ public class SocketInputStream extends InputStream {
 
 
     /**
-     * Read byte.
-     */
-    public int read()
-            throws IOException {
-        if (pos >= count) {
-            fill();
-            if (pos >= count)
-                return -1;
-        }
-        return buf[pos++] & 0xff;
-    }
-
-
-    /**
      *
      */
     /*
@@ -517,10 +443,6 @@ public class SocketInputStream extends InputStream {
         is = null;
         buf = null;
     }
-
-
-    // ------------------------------------------------------ Protected Methods
-
 
     /**
      * Fill the internal buffer using data from the undelying input stream.
