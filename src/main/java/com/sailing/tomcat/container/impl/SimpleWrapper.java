@@ -108,7 +108,9 @@ public class SimpleWrapper implements Wrapper, Pipeline, Lifecycle{
     public void stop() throws LifecycleException {
         System.out.println("Stopping wrapper " + name);
         try {
-            instance.destroy();
+            if(instance != null) {
+                instance.destroy();
+            }
         } catch (Throwable t) {
             t.printStackTrace();
         }
