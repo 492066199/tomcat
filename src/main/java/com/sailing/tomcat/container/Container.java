@@ -1,5 +1,6 @@
 package com.sailing.tomcat.container;
 
+import com.sailing.tomcat.logger.Logger;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.response.Response;
 
@@ -72,24 +73,11 @@ public interface Container {
 
     void removeChild(Container child);
 
-//
-//    /**
-//     * Return the Logger with which this Container is associated.  If there is
-//     * no associated Logger, return the Logger associated with our parent
-//     * Container (if any); otherwise return <code>null</code>.
-//     */
-//    public Logger getLogger();
-//
-//
-//    /**
-//     * Set the Logger with which this Container is associated.
-//     *
-//     * @param logger The newly associated Logger
-//     */
-//    public void setLogger(Logger logger);
-//
-//
-//    /**
+    Logger getLogger();
+
+    void setLogger(Logger logger);
+
+    //    /**
 //     * Return the Manager with which this Container is associated.  If there is
 //     * no associated Manager, return the Manager associated with our parent
 //     * Container (if any); otherwise return <code>null</code>.

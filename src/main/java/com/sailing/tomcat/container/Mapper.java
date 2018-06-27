@@ -1,6 +1,5 @@
 package com.sailing.tomcat.container;
 
-import com.sailing.tomcat.container.Container;
 import com.sailing.tomcat.request.Request;
 
 public interface Mapper {

@@ -6,6 +6,7 @@ import com.sailing.tomcat.life.Lifecycle;
 import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.life.LifecycleSupport;
+import com.sailing.tomcat.logger.Logger;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.response.Response;
 
@@ -239,19 +240,9 @@ public class SimpleWrapper implements Wrapper, Pipeline, Lifecycle{
     public void removeValve(Valve valve) {
         pipeline.removeValve(valve);
     }
-    //    }
-    //
 
-    //        return null;
-    //        return null;
-    //    }
-    //
+
     //    public void setManager(Manager manager) {
-    //    public void setLogger(Logger logger) {
-
-//    public Logger getLogger() {
-    //        return null;
-    //    }
     //
     //    public void setCluster(Cluster cluster) {
 //    }
@@ -376,6 +367,16 @@ public class SimpleWrapper implements Wrapper, Pipeline, Lifecycle{
     }
 
     public void removeChild(Container child) {
+    }
+
+    @Override
+    public Logger getLogger() {
+        return null;
+    }
+
+    @Override
+    public void setLogger(Logger logger) {
+
     }
 
 //    public void removeContainerListener(ContainerListener listener) {

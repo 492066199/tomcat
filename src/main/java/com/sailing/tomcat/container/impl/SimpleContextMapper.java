@@ -39,6 +39,9 @@ public class SimpleContextMapper implements Mapper {
         String requestURI = ((HttpRequest) request).getDecodedRequestURI();
         String relativeURI = requestURI.substring(contextPath.length());
 
+        context.getLogger().log("request: " + relativeURI, Integer.MIN_VALUE);
+        context.getLogger().log("request: " + relativeURI, 1);
+
         String servletPath = relativeURI;
         String name = context.findServletMapping(relativeURI);
         return  (Wrapper) context.findChild(name);

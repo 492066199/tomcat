@@ -8,6 +8,7 @@ import com.sailing.tomcat.life.Lifecycle;
 import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.life.LifecycleSupport;
+import com.sailing.tomcat.logger.Logger;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.response.Response;
 
@@ -38,6 +39,7 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
     protected Map<String, Container> children = Maps.newConcurrentMap();
     private Container parent = null;
     protected boolean started = false;
+    private Logger logger;
 
     public Container getParent() {
         return parent;
@@ -656,6 +658,15 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
     public void setLoader(Loader loader) {
         this.loader = loader;
     }
+
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
     //    public void setCluster(Cluster cluster) {
     //
     //    }
@@ -670,13 +681,6 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
     //    public Manager getManager() {
     //
     //    }
-    //    public void setLogger(Logger logger) {
-    //
-    //    }
-    //        return null;
-//    public Logger getLogger() {
-
-//    }
 
     public String getName() {
         return null;

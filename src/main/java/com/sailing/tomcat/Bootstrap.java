@@ -7,6 +7,7 @@ import com.sailing.tomcat.container.Mapper;
 import com.sailing.tomcat.life.Lifecycle;
 import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.life.SimpleContextLifecycleListener;
+import com.sailing.tomcat.logger.FileLogger;
 
 public final class Bootstrap {
     public static void main(String[] args) {
@@ -45,6 +46,15 @@ public final class Bootstrap {
         context.setLoader(loader);
         context.addServletMapping("/servlet/PrimitiveServlet", "Primitive");
         context.addServletMapping("/servlet/ModernServlet", "Modern");
+
+        System.setProperty("catalina.base", System.getProperty("user.dir"));
+        FileLogger logger = new FileLogger();
+        logger.setPrefix("FileLog_");
+        logger.setSuffix(".txt");
+        logger.setTimestamp(true);
+        logger.setVerbosity(0);
+
+        context.setLogger(logger);
 
         connector.setContainer(context);
         try {
