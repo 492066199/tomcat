@@ -1,19 +1,22 @@
 package com.sailing.tomcat.container.impl;
 
+import com.google.common.collect.Lists;
 import com.sailing.tomcat.container.*;
+import com.sailing.tomcat.life.Lifecycle;
+import com.sailing.tomcat.life.LifecycleException;
+import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.response.Response;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class SimplePipeline implements Pipeline {
+public class SimplePipeline implements Pipeline, Lifecycle {
 
     protected Valve basic = null;
     protected Container container = null;
-    protected List<Valve> valves = new ArrayList<>();
+    protected List<Valve> valves = Lists.newCopyOnWriteArrayList();
 
     public SimplePipeline(Container container) {
         this.container = container;
@@ -29,18 +32,14 @@ public class SimplePipeline implements Pipeline {
     }
 
     public void addValve(Valve valve) {
-        if (valve instanceof Contained)
+        if (valve instanceof Contained){
             ((Contained) valve).setContainer(this.container);
-
-        synchronized (valves) {
-            valves.add(valve);
         }
+        valves.add(valve);
     }
 
     public Valve[] getValves() {
-        synchronized (valves) {
-            return valves.toArray(new Valve[valves.size()]);
-        }
+        return valves.toArray(new Valve[valves.size()]);
     }
 
     public void invoke(Request request, Response response) throws IOException, ServletException {
@@ -48,6 +47,32 @@ public class SimplePipeline implements Pipeline {
     }
 
     public void removeValve(Valve valve) {
+
+    }
+
+    //left blank
+    @Override
+    public LifecycleListener[] findLifecycleListeners() {
+        return new LifecycleListener[0];
+    }
+
+    @Override
+    public void addLifecycleListener(LifecycleListener listener) {
+
+    }
+
+    @Override
+    public void removeLifecycleListener(LifecycleListener listener) {
+
+    }
+
+    @Override
+    public void start() throws LifecycleException {
+
+    }
+
+    @Override
+    public void stop() throws LifecycleException {
 
     }
 

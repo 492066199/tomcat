@@ -4,6 +4,10 @@ package com.sailing.tomcat.container.impl;
 import com.google.common.collect.Maps;
 import com.sailing.tomcat.container.*;
 import com.sailing.tomcat.container.Mapper;
+import com.sailing.tomcat.life.Lifecycle;
+import com.sailing.tomcat.life.LifecycleException;
+import com.sailing.tomcat.life.LifecycleListener;
+import com.sailing.tomcat.life.LifecycleSupport;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.response.Response;
 
@@ -15,7 +19,7 @@ import java.io.IOException;
 import java.util.Map;
 
 
-public class SimpleContext implements Context, Pipeline {
+public class SimpleContext implements Context, Pipeline, Lifecycle {
 
     public SimpleContext() {
         pipeline.setBasic(new SimpleContextValve());
@@ -25,12 +29,15 @@ public class SimpleContext implements Context, Pipeline {
     protected SimplePipeline pipeline = new SimplePipeline(this);
     protected Map<String, String> servletMappings = Maps.newConcurrentMap();
 
+    protected LifecycleSupport lifecycle = new LifecycleSupport(this);
+
     //default
     protected Mapper mapper = null;
     protected Map<String, Mapper> mappers = Maps.newConcurrentMap();
 
     protected Map<String, Container> children = Maps.newConcurrentMap();
     private Container parent = null;
+    protected boolean started = false;
 
     public Container getParent() {
         return parent;
@@ -90,8 +97,6 @@ public class SimpleContext implements Context, Pipeline {
     }
 
     public Mapper findMapper(String protocol) {
-        // the default mapper will always be returned, if any,
-        // regardless the value of protocol
         if (mapper != null) {
             return (mapper);
         }else {
@@ -121,8 +126,99 @@ public class SimpleContext implements Context, Pipeline {
 
     public Container findChild(String name) {
         if (name == null)
-            return (null);
+            return null;
         return children.get(name);
+    }
+
+    @Override
+    public LifecycleListener[] findLifecycleListeners() {
+        return new LifecycleListener[0];
+    }
+
+    @Override
+    public void addLifecycleListener(LifecycleListener listener) {
+        this.lifecycle.addLifecycleListener(listener);
+    }
+
+    @Override
+    public void removeLifecycleListener(LifecycleListener listener) {
+        this.lifecycle.removeLifecycleListener(listener);
+    }
+
+    @Override
+    public void start() throws LifecycleException {
+        if (started) {
+            throw new LifecycleException("SimpleContext has already started");
+        }
+
+        lifecycle.fireLifecycleEvent(BEFORE_START_EVENT, null);
+        started = true;
+        try {
+            //loader
+            if ((loader != null) && (loader instanceof Lifecycle)) {
+                ((Lifecycle) loader).start();
+            }
+
+            //childern
+            Container children[] = this.findChildren();
+            for (int i = 0; i < children.length; i++) {
+                if (children[i] instanceof Lifecycle) {
+                    ((Lifecycle) children[i]).start();
+                }
+            }
+
+            //pipeline
+            if (pipeline instanceof Lifecycle) {
+                ((Lifecycle) pipeline).start();
+            }
+
+            lifecycle.fireLifecycleEvent(START_EVENT, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        lifecycle.fireLifecycleEvent(AFTER_START_EVENT, null);
+    }
+
+    @Override
+    public void stop() throws LifecycleException {
+        if (!started) {
+            throw new LifecycleException("SimpleContext has not been started");
+        }
+        lifecycle.fireLifecycleEvent(BEFORE_STOP_EVENT, null);
+        lifecycle.fireLifecycleEvent(STOP_EVENT, null);
+        started = false;
+
+        try {
+            //pipeline
+            if (pipeline instanceof Lifecycle) {
+                ((Lifecycle) pipeline).stop();
+            }
+
+            //childern
+            Container children[] = findChildren();
+            for (int i = 0; i < children.length; i++) {
+                if (children[i] instanceof Lifecycle)
+                    ((Lifecycle) children[i]).stop();
+            }
+
+            //loader
+            if ((loader != null) && (loader instanceof Lifecycle)) {
+                ((Lifecycle) loader).stop();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        lifecycle.fireLifecycleEvent(AFTER_STOP_EVENT, null);
+    }
+
+    public Mapper[] findMappers() {
+        return null;
+    }
+
+    public void removeMapper(Mapper mapper) {
+
     }
 
     public Object[] getApplicationListeners() {
@@ -627,18 +723,11 @@ public class SimpleContext implements Context, Pipeline {
 //        return null;
 //    }
 
-    public Mapper[] findMappers() {
-        return null;
-    }
-
     public void removeChild(Container child) {
     }
 
 //    public void removeContainerListener(ContainerListener listener) {
 //    }
-
-    public void removeMapper(Mapper mapper) {
-    }
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
     }

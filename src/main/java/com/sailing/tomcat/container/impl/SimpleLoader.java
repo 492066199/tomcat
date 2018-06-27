@@ -2,6 +2,9 @@ package com.sailing.tomcat.container.impl;
 
 import com.sailing.tomcat.container.Container;
 import com.sailing.tomcat.container.Loader;
+import com.sailing.tomcat.life.Lifecycle;
+import com.sailing.tomcat.life.LifecycleException;
+import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.util.Constants;
 
 import java.beans.PropertyChangeListener;
@@ -11,7 +14,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLStreamHandler;
 
-public class SimpleLoader implements Loader{
+public class SimpleLoader implements Loader, Lifecycle{
 
     ClassLoader classLoader = null;
     Container container = null;
@@ -48,6 +51,32 @@ public class SimpleLoader implements Loader{
     @Override
     public void setContainer(Container container) {
         this.container = container;
+    }
+
+    @Override
+    public LifecycleListener[] findLifecycleListeners() {
+        return new LifecycleListener[0];
+    }
+
+    @Override
+    public void addLifecycleListener(LifecycleListener listener) {
+
+    }
+
+    @Override
+    public void removeLifecycleListener(LifecycleListener listener) {
+
+    }
+
+    //simple use!
+    @Override
+    public void start() throws LifecycleException {
+        System.out.println("Starting SimpleLoader");
+    }
+
+    @Override
+    public void stop() throws LifecycleException {
+
     }
 
     @Override

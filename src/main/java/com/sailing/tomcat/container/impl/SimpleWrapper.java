@@ -2,6 +2,10 @@ package com.sailing.tomcat.container.impl;
 
 import com.sailing.tomcat.container.*;
 import com.sailing.tomcat.container.Mapper;
+import com.sailing.tomcat.life.Lifecycle;
+import com.sailing.tomcat.life.LifecycleException;
+import com.sailing.tomcat.life.LifecycleListener;
+import com.sailing.tomcat.life.LifecycleSupport;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.response.Response;
 
@@ -13,7 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 
 
-public class SimpleWrapper implements Wrapper, Pipeline {
+public class SimpleWrapper implements Wrapper, Pipeline, Lifecycle{
     // the servlet instance
     private Servlet instance = null;
     private Loader loader;
@@ -23,7 +27,8 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     protected Container parent = null;
     private String servletClass;
     private String name;
-
+    private LifecycleSupport lifecycle = new LifecycleSupport(this);
+    protected boolean started = false;
 
     public SimpleWrapper() {
         pipeline.setBasic(new SimpleWrapperValve());
@@ -57,8 +62,76 @@ public class SimpleWrapper implements Wrapper, Pipeline {
         pipeline.invoke(request, response);
     }
 
-    public synchronized void addValve(Valve valve) {
+    public void addValve(Valve valve) {
         pipeline.addValve(valve);
+    }
+
+    @Override
+    public LifecycleListener[] findLifecycleListeners() {
+        return new LifecycleListener[0];
+    }
+
+    @Override
+    public void addLifecycleListener(LifecycleListener listener) {
+
+    }
+
+    @Override
+    public void removeLifecycleListener(LifecycleListener listener) {
+
+    }
+
+    @Override
+    public void start() throws LifecycleException {
+        System.out.println("Starting Wrapper " + name);
+        if (started) {
+            throw new LifecycleException("Wrapper already started");
+        }
+        lifecycle.fireLifecycleEvent(BEFORE_START_EVENT, null);
+        started = true;
+
+        // loader
+        if ((loader != null) && (loader instanceof Lifecycle)) {
+            ((Lifecycle) loader).start();
+        }
+
+        // pipe
+        if (pipeline instanceof Lifecycle) {
+            ((Lifecycle) pipeline).start();
+        }
+
+        lifecycle.fireLifecycleEvent(START_EVENT, null);
+        lifecycle.fireLifecycleEvent(AFTER_START_EVENT, null);
+    }
+
+    @Override
+    public void stop() throws LifecycleException {
+        System.out.println("Stopping wrapper " + name);
+        try {
+            instance.destroy();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        instance = null;
+        if (!started) {
+            throw new LifecycleException("Wrapper " + name + " not started");
+        }
+
+        lifecycle.fireLifecycleEvent(BEFORE_STOP_EVENT, null);
+        lifecycle.fireLifecycleEvent(STOP_EVENT, null);
+        started = false;
+
+        // pipe
+        if (pipeline instanceof Lifecycle) {
+            ((Lifecycle) pipeline).stop();
+        }
+
+        // loader
+        if ((loader != null) && (loader instanceof Lifecycle)) {
+            ((Lifecycle) loader).stop();
+        }
+
+        lifecycle.fireLifecycleEvent(AFTER_STOP_EVENT, null);
     }
 
     public Servlet allocate() throws ServletException {
@@ -119,6 +192,18 @@ public class SimpleWrapper implements Wrapper, Pipeline {
 
     @Override
     public void addMapper(Mapper mapper) {
+
+    }
+
+    public Mapper[] findMappers() {
+        return null;
+    }
+
+    public Mapper findMapper(String protocol) {
+        return null;
+    }
+
+    public void removeMapper(Mapper mapper) {
 
     }
 
@@ -228,9 +313,7 @@ public class SimpleWrapper implements Wrapper, Pipeline {
 
     public void addChild(Container child) {
     }
-    //    public void addMapper(Mapper mapper) {
-    //
-    //    }
+
 //    public void addContainerListener(ContainerListener listener) {
 
 //    }
@@ -277,14 +360,6 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     public String[] findSecurityReferences() {
         return null;
     }
-    //        return null;
-    //    public Mapper[] findMappers() {
-    //
-    //    }
-    //        return null;
-//    public Mapper findMapper(String protocol) {
-
-//    }
 
     public boolean isUnavailable() {
         return false;
@@ -302,9 +377,6 @@ public class SimpleWrapper implements Wrapper, Pipeline {
     }
 
 //    public void removeContainerListener(ContainerListener listener) {
-//    }
-//
-//    public void removeMapper(Mapper mapper) {
 //    }
 
     public void removeInitParameter(String name) {

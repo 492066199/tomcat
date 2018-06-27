@@ -9,7 +9,6 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 public interface Container {
-    // ----------------------------------------------------- Manifest Constants
     /**
      * The ContainerEvent event type sent when a child container is added
      * by <code>addChild()</code>.
@@ -52,6 +51,12 @@ public interface Container {
     public static final String REMOVE_VALVE_EVENT = "removeValve";
 
     void addMapper(Mapper mapper);
+
+    void removeMapper(Mapper mapper);
+
+    Mapper findMapper(String protocol);
+
+    Mapper[] findMappers();
 
     String getInfo();
 
@@ -228,25 +233,6 @@ public interface Container {
 //     * array is returned.
 //     */
 //    public ContainerListener[] findContainerListeners();
-//
-//
-//    /**
-//     * Return the Mapper associated with the specified protocol, if there
-//     * is one.  If there is only one defined Mapper, use it for all protocols.
-//     * If there is no matching Mapper, return <code>null</code>.
-//     *
-//     * @param protocol Protocol for which to find a Mapper
-//     */
-//    public Mapper findMapper(String protocol);
-//
-//
-//    /**
-//     * Return the set of Mappers associated with this Container.  If this
-//     * Container has no Mappers, a zero-length array is returned.
-//     */
-//    public Mapper[] findMappers();
-//
-//
 
     /**
      * Process the specified Request, and generate the corresponding Response,
@@ -283,14 +269,6 @@ public interface Container {
 //     */
 //    public void removeContainerListener(ContainerListener listener);
 //
-//
-//    /**
-//     * Remove a Mapper associated with this Container, if any.
-//     *
-//     * @param mapper The Mapper to be removed
-//     */
-//    public void removeMapper(Mapper mapper);
-
 
     /**
      * Remove a property change listener from this component.

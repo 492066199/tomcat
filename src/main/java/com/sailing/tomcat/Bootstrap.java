@@ -4,6 +4,9 @@ import com.sailing.tomcat.connector.HttpConnector;
 import com.sailing.tomcat.container.*;
 import com.sailing.tomcat.container.impl.*;
 import com.sailing.tomcat.container.Mapper;
+import com.sailing.tomcat.life.Lifecycle;
+import com.sailing.tomcat.life.LifecycleListener;
+import com.sailing.tomcat.life.SimpleContextLifecycleListener;
 
 public final class Bootstrap {
     public static void main(String[] args) {
@@ -18,8 +21,11 @@ public final class Bootstrap {
         wrapper2.setName("Modern");
         wrapper2.setServletClass("com.sailing.tomcat.servlet.ModernServlet");
 
-
         Context context = new SimpleContext();
+
+        LifecycleListener listener = new SimpleContextLifecycleListener();
+        ((Lifecycle) context).addLifecycleListener(listener);
+
         context.addChild(wrapper1);
         context.addChild(wrapper2);
 
@@ -37,7 +43,6 @@ public final class Bootstrap {
         Loader loader = new SimpleLoader();
 
         context.setLoader(loader);
-        // context.addServletMapping(pattern, name);
         context.addServletMapping("/servlet/PrimitiveServlet", "Primitive");
         context.addServletMapping("/servlet/ModernServlet", "Modern");
 
@@ -45,8 +50,10 @@ public final class Bootstrap {
         try {
             connector.initialize();
             connector.start();
+            ((Lifecycle) context).start();
             // make the application wait until we press a key.
             System.in.read();
+            ((Lifecycle) context).stop();
         }
         catch (Exception e) {
             e.printStackTrace();

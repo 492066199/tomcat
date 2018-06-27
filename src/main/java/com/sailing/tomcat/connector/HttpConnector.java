@@ -1,20 +1,3 @@
-/*
- * Copyright 1999,2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
 package com.sailing.tomcat.connector;
 
 import com.sailing.tomcat.container.Container;
@@ -43,18 +26,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 
-/**
- * Implementation of an HTTP/1.1 connector.
- *
- * @author Craig R. McClanahan
- * @author Remy Maucherat
- * @version $Revision: 1.35 $ $Date: 2004/08/26 21:28:57 $
- * @deprecated
- */
-
-
-public final class HttpConnector
-    implements Connector, Lifecycle, Runnable {
+public final class HttpConnector implements Connector, Lifecycle, Runnable {
 
     //    private Service service = null;
 
@@ -69,12 +41,8 @@ public final class HttpConnector
      */
     private boolean enableLookups = false;
 
-    /**
-     * The lifecycle event support for this component.
-     */
+
     protected LifecycleSupport lifecycle = new LifecycleSupport(this);
-
-
     //for processor
     private Vector created = new Vector();
     protected int minProcessors = 5;
@@ -90,6 +58,8 @@ public final class HttpConnector
     private int acceptCount = 10;
     private int connectionTimeout = Constants.DEFAULT_CONNECTION_TIMEOUT;
 
+    private StringManager sm = StringManager.getManager(Constants.Package);
+    private boolean started = false;
 
     /**
      * The server name to which we should pretend requests to this Connector
@@ -129,20 +99,9 @@ public final class HttpConnector
     private boolean secure = false;
 
     /**
-     * The string manager for this package.
-     */
-
-    private StringManager sm = StringManager.getManager(Constants.Package);
-    /**
      * Has this component been initialized yet?
      */
     private boolean initialized = false;
-
-
-    /**
-     * Has this component been started yet?
-     */
-    private boolean started = false;
 
 
     /**
@@ -891,7 +850,7 @@ public final class HttpConnector
                     log(sm.getString("httpConnector.noProcessor"));
                     socket.close();
                 } catch (IOException e) {
-                    ;
+                    e.printStackTrace();
                 }
                 continue;
             }
@@ -929,63 +888,35 @@ public final class HttpConnector
      * Stop the background processing thread.
      */
     private void threadStop() {
-
         log(sm.getString("httpConnector.stopping"));
-
         stopped = true;
         try {
             threadSync.wait(5000);
         } catch (InterruptedException e) {
-            ;
+            e.printStackTrace();
         }
         thread = null;
-
     }
 
-
-    // ------------------------------------------------------ Lifecycle Methods
-
-
-    /**
-     * Add a lifecycle event listener to this component.
-     *
-     * @param listener The listener to add
-     */
     public void addLifecycleListener(LifecycleListener listener) {
-
         lifecycle.addLifecycleListener(listener);
-
     }
 
 
-    /**
-     * Get the lifecycle listeners associated with this lifecycle. If this 
-     * Lifecycle has no listeners registered, a zero-length array is returned.
-     */
     public LifecycleListener[] findLifecycleListeners() {
-
         return lifecycle.findLifecycleListeners();
-
     }
 
 
-    /**
-     * Remove a lifecycle event listener from this component.
-     *
-     * @param listener The listener to add
-     */
     public void removeLifecycleListener(LifecycleListener listener) {
-
         lifecycle.removeLifecycleListener(listener);
-
     }
 
 
     /**
      * Initialize this connector (create ServerSocket here!)
      */
-    public void initialize()
-    throws LifecycleException {
+    public void initialize() throws LifecycleException {
         if (initialized)
             throw new LifecycleException (
                 sm.getString("httpConnector.alreadyInitialized"));
@@ -1016,23 +947,18 @@ public final class HttpConnector
             eRethrow = kme;
         }
 
-        if ( eRethrow != null )
+        if (eRethrow != null )
             throw new LifecycleException(threadName + ".open", eRethrow);
 
     }
 
 
-    /**
-     * Begin processing requests via this Connector.
-     *
-     * @exception LifecycleException if a fatal startup error occurs
-     */
     public void start() throws LifecycleException {
-
         // Validate and update our current state
-        if (started)
-            throw new LifecycleException
-                (sm.getString("httpConnector.alreadyStarted"));
+        if (started) {
+            throw new LifecycleException(sm.getString("httpConnector.alreadyStarted"));
+        }
+
         threadName = "HttpConnector[" + port + "]";
         lifecycle.fireLifecycleEvent(START_EVENT, null);
         started = true;
@@ -1042,26 +968,20 @@ public final class HttpConnector
 
         // Create the specified minimum number of processors
         while (curProcessors < minProcessors) {
-            if ((maxProcessors > 0) && (curProcessors >= maxProcessors))
+            if ((maxProcessors > 0) && (curProcessors >= maxProcessors)) {
                 break;
+            }
             HttpProcessor processor = newProcessor();
             recycle(processor);
         }
-
     }
 
 
-    /**
-     * Terminate processing requests via this Connector.
-     *
-     * @exception LifecycleException if a fatal shutdown error occurs
-     */
     public void stop() throws LifecycleException {
-
         // Validate and update our current state
-        if (!started)
-            throw new LifecycleException
-                (sm.getString("httpConnector.notStarted"));
+        if (!started) {
+            throw new LifecycleException(sm.getString("httpConnector.notStarted"));
+        }
         lifecycle.fireLifecycleEvent(STOP_EVENT, null);
         started = false;
 
@@ -1083,13 +1003,12 @@ public final class HttpConnector
                 try {
                     serverSocket.close();
                 } catch (IOException e) {
-                    ;
+                    e.printStackTrace();
                 }
             }
             // Stop our background thread
             threadStop();
         }
         serverSocket = null;
-
     }
 }
