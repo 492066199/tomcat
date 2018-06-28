@@ -1,7 +1,6 @@
-package com.sailing.tomcat.container.impl;
+package com.sailing.tomcat.loader;
 
 import com.sailing.tomcat.container.Container;
-import com.sailing.tomcat.container.Loader;
 import com.sailing.tomcat.life.Lifecycle;
 import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
@@ -100,11 +99,6 @@ public class SimpleLoader implements Loader, Lifecycle{
     }
 
     @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-
-    }
-
-    @Override
     public void addRepository(String repository) {
 
     }
@@ -117,6 +111,11 @@ public class SimpleLoader implements Loader, Lifecycle{
     @Override
     public boolean modified() {
         return false;
+    }
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+
     }
 
     @Override
