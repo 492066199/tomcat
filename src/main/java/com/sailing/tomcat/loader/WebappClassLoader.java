@@ -1,9 +1,14 @@
 package com.sailing.tomcat.loader;
 
 
+import com.google.common.collect.Maps;
 import com.sailing.tomcat.life.Lifecycle;
+import com.sailing.tomcat.life.LifecycleException;
+import com.sailing.tomcat.life.LifecycleListener;
+import com.sailing.tomcat.util.URLEncoder;
 
 import javax.naming.NameClassPair;
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import java.io.*;
@@ -68,8 +73,6 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
     };
 
 
-    // ----------------------------------------------------------- Constructors
-
 
     /**
      * Construct a new ClassLoader with no defined repositories and no
@@ -106,6 +109,8 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
 
     }
 
+    protected Map<String, ResourceEntry> resourceEntries = Maps.newHashMap();
+    protected Map<String, String> notFoundResources = Maps.newHashMap();
 
     // ----------------------------------------------------- Instance Variables
 
@@ -124,19 +129,6 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
      * <code>org.apache.catalina.loader.Extension</code>.
      */
     protected ArrayList available = new ArrayList();
-
-
-    /**
-     * The cache of ResourceEntry for classes and resources we have loaded,
-     * keyed by resource name.
-     */
-    protected HashMap resourceEntries = new HashMap();
-
-
-    /**
-     * The list of not found resources.
-     */
-    protected HashMap notFoundResources = new HashMap();
 
 
     /**
@@ -392,7 +384,6 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
     /**
      * If there is a Java SecurityManager create a Permission.
      *
-     * @param url URL for a file or directory on local system
      */
     public void addPermission(Permission permission) {
         if ((securityManager != null) && (permission != null)) {
@@ -714,10 +705,10 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
         if (getJarPath() != null) {
 
             try {
-                NamingEnumeration enum = resources.listBindings(getJarPath());
+                NamingEnumeration enum1 = resources.listBindings(getJarPath());
                 int i = 0;
-                while (enum.hasMoreElements() && (i < length)) {
-                    NameClassPair ncPair = (NameClassPair) enum.nextElement();
+                while (enum1.hasMoreElements() && (i < length)) {
+                    NameClassPair ncPair = (NameClassPair) enum1.nextElement();
                     String name = ncPair.getName();
                     // Ignore non JARs present in the lib folder
                     if (!name.endsWith(".jar"))
@@ -730,10 +721,10 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
                     }
                     i++;
                 }
-                if (enum.hasMoreElements()) {
-                    while (enum.hasMoreElements()) {
+                if (enum1.hasMoreElements()) {
+                    while (enum1.hasMoreElements()) {
                         NameClassPair ncPair = 
-                            (NameClassPair) enum.nextElement();
+                            (NameClassPair) enum1.nextElement();
                         String name = ncPair.getName();
                         // Additional non-JAR files are allowed
                         if (name.endsWith(".jar")) {
@@ -1285,7 +1276,7 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
                     return (clazz);
                 }
             } catch (ClassNotFoundException e) {
-                ;
+                e.printStackTrace();
             }
         }
 
@@ -1302,7 +1293,7 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
                 return (clazz);
             }
         } catch (ClassNotFoundException e) {
-            ;
+            e.printStackTrace();
         }
 
         // (3) Delegate to parent unconditionally
@@ -1339,7 +1330,7 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
      * directory (if unpacked),
      * the context URL, and jar file resources.
      *
-     * @param CodeSource where the code was loaded from
+     * @param codeSource where the code was loaded from
      * @return PermissionCollection for CodeSource
      */
     protected PermissionCollection getPermissions(CodeSource codeSource) {
@@ -1816,7 +1807,7 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
      */
     protected Class findLoadedClass0(String name) {
 
-        ResourceEntry entry = (ResourceEntry) resourceEntries.get(name);
+        ResourceEntry entry = resourceEntries.get(name);
         if (entry != null) {
             return entry.loadedClass;
         }

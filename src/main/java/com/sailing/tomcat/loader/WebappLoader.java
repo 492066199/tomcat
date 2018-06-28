@@ -108,7 +108,7 @@ public class WebappLoader implements Lifecycle, Loader, PropertyChangeListener, 
                 ((Lifecycle) classLoader).start();
 
             // Binding the Webapp class loader to the directory context
-            DirContextURLStreamHandler.bind((ClassLoader) classLoader, this.container.getResources());
+            //TODO DirContextURLStreamHandler.bind((ClassLoader) classLoader, this.container.getResources());
 
         } catch (Throwable t) {
             throw new LifecycleException("start: ", t);
@@ -160,7 +160,7 @@ public class WebappLoader implements Lifecycle, Loader, PropertyChangeListener, 
         // Throw away our current class loader
         if (classLoader instanceof Lifecycle)
             ((Lifecycle) classLoader).stop();
-        DirContextURLStreamHandler.unbind((ClassLoader) classLoader);
+        //TODO DirContextURLStreamHandler.unbind((ClassLoader) classLoader);
         classLoader = null;
 
     }
