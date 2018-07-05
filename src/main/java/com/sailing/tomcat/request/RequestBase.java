@@ -19,6 +19,8 @@ package com.sailing.tomcat.request;
 
 
 import com.sailing.tomcat.connector.Connector;
+import com.sailing.tomcat.container.Context;
+import com.sailing.tomcat.container.Wrapper;
 import com.sailing.tomcat.response.Response;
 import com.sailing.tomcat.util.Constants;
 import com.sailing.tomcat.util.Enumerator;
@@ -86,10 +88,10 @@ public abstract class RequestBase
     protected String contentType = null;
 
 
-//    /**
-//     * The Context within which this Request is being processed.
-//     */
-//    protected Context context = null;
+    /**
+     * The Context within which this Request is being processed.
+     */
+    protected Context context = null;
 
 
     /**
@@ -192,10 +194,10 @@ public abstract class RequestBase
     protected ServletInputStream stream = null;
 
 
-//    /**
-//     * The Wrapper within which this Request is being processed.
-//     */
-//    protected Wrapper wrapper = null;
+    /**
+     * The Wrapper within which this Request is being processed.
+     */
+    protected Wrapper wrapper = null;
 
 
     // ------------------------------------------------------------- Properties
@@ -245,29 +247,29 @@ public abstract class RequestBase
     }
 
 
-//    /**
-//     * Return the Context within which this Request is being processed.
-//     */
-//    public Context getContext() {
-//
-//        return (this.context);
-//
-//    }
-//
-//
-//    /**
-//     * Set the Context within which this Request is being processed.  This
-//     * must be called as soon as the appropriate Context is identified, because
-//     * it identifies the value to be returned by <code>getContextPath()</code>,
-//     * and thus enables parsing of the request URI.
-//     *
-//     * @param context The newly associated Context
-//     */
-//    public void setContext(Context context) {
-//
-//        this.context = context;
-//
-//    }
+    /**
+     * Return the Context within which this Request is being processed.
+     */
+    public Context getContext() {
+
+        return (this.context);
+
+    }
+
+
+    /**
+     * Set the Context within which this Request is being processed.  This
+     * must be called as soon as the appropriate Context is identified, because
+     * it identifies the value to be returned by <code>getContextPath()</code>,
+     * and thus enables parsing of the request URI.
+     *
+     * @param context The newly associated Context
+     */
+    public void setContext(Context context) {
+
+        this.context = context;
+
+    }
 
 
     /**
@@ -339,28 +341,28 @@ public abstract class RequestBase
     }
 
 
-//    /**
-//     * Return the Wrapper within which this Request is being processed.
-//     */
-//    public Wrapper getWrapper() {
-//
-//        return (this.wrapper);
-//
-//    }
-//
-//
-//    /**
-//     * Set the Wrapper within which this Request is being processed.  This
-//     * must be called as soon as the appropriate Wrapper is identified, and
-//     * before the Request is ultimately passed to an application servlet.
-//     *
-//     * @param wrapper The newly associated Wrapper
-//     */
-//    public void setWrapper(Wrapper wrapper) {
-//
-//        this.wrapper = wrapper;
-//
-//    }
+    /**
+     * Return the Wrapper within which this Request is being processed.
+     */
+    public Wrapper getWrapper() {
+
+        return (this.wrapper);
+
+    }
+
+
+    /**
+     * Set the Wrapper within which this Request is being processed.  This
+     * must be called as soon as the appropriate Wrapper is identified, and
+     * before the Request is ultimately passed to an application servlet.
+     *
+     * @param wrapper The newly associated Wrapper
+     */
+    public void setWrapper(Wrapper wrapper) {
+
+        this.wrapper = wrapper;
+
+    }
 
 
     // --------------------------------------------------------- Public Methods

@@ -4,6 +4,8 @@ import com.sailing.tomcat.loader.Loader;
 import com.sailing.tomcat.logger.Logger;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.response.Response;
+import com.sailing.tomcat.security.Realm;
+import com.sailing.tomcat.session.Manager;
 
 import javax.naming.directory.DirContext;
 import javax.servlet.ServletException;
@@ -78,22 +80,22 @@ public interface Container {
 
     void setLogger(Logger logger);
 
-    //    /**
-//     * Return the Manager with which this Container is associated.  If there is
-//     * no associated Manager, return the Manager associated with our parent
-//     * Container (if any); otherwise return <code>null</code>.
-//     */
-//    public Manager getManager();
-//
-//
-//    /**
-//     * Set the Manager with which this Container is associated.
-//     *
-//     * @param manager The newly associated Manager
-//     */
-//    public void setManager(Manager manager);
-//
-//
+    /**
+     * Return the Manager with which this Container is associated.  If there is
+     * no associated Manager, return the Manager associated with our parent
+     * Container (if any); otherwise return <code>null</code>.
+     */
+    public Manager getManager();
+
+
+    /**
+     * Set the Manager with which this Container is associated.
+     *
+     * @param manager The newly associated Manager
+     */
+    public void setManager(Manager manager);
+
+
 //    /**
 //     * Return the Cluster with which this Container is associated.  If there is
 //     * no associated Cluster, return the Cluster associated with our parent
@@ -170,20 +172,20 @@ public interface Container {
     public void setParentClassLoader(ClassLoader parent);
 
 
-//    /**
-//     * Return the Realm with which this Container is associated.  If there is
-//     * no associated Realm, return the Realm associated with our parent
-//     * Container (if any); otherwise return <code>null</code>.
-//     */
-//    public Realm getRealm();
-//
-//
-//    /**
-//     * Set the Realm with which this Container is associated.
-//     *
-//     * @param realm The newly associated Realm
-//     */
-//    public void setRealm(Realm realm);
+    /**
+     * Return the Realm with which this Container is associated.  If there is
+     * no associated Realm, return the Realm associated with our parent
+     * Container (if any); otherwise return <code>null</code>.
+     */
+    public Realm getRealm();
+
+
+    /**
+     * Set the Realm with which this Container is associated.
+     *
+     * @param realm The newly associated Realm
+     */
+    public void setRealm(Realm realm);
 
 
     /**
@@ -201,13 +203,13 @@ public interface Container {
      */
     public void setResources(DirContext resources);
 
-//    /**
-//     * Add a container event listener to this component.
-//     *
-//     * @param listener The listener to add
-//     */
-//    public void addContainerListener(ContainerListener listener);
-//
+    /**
+     * Add a container event listener to this component.
+     *
+     * @param listener The listener to add
+     */
+    public void addContainerListener(ContainerListener listener);
+
 
     /**
      * Add a property change listener to this component.
@@ -216,12 +218,12 @@ public interface Container {
      */
     public void addPropertyChangeListener(PropertyChangeListener listener);
 
-//    /**
-//     * Return the set of container listeners associated with this Container.
-//     * If this Container has no registered container listeners, a zero-length
-//     * array is returned.
-//     */
-//    public ContainerListener[] findContainerListeners();
+    /**
+     * Return the set of container listeners associated with this Container.
+     * If this Container has no registered container listeners, a zero-length
+     * array is returned.
+     */
+    public ContainerListener[] findContainerListeners();
 
     /**
      * Process the specified Request, and generate the corresponding Response,
@@ -251,13 +253,13 @@ public interface Container {
 
 
 
-//    /**
-//     * Remove a container event listener from this component.
-//     *
-//     * @param listener The listener to remove
-//     */
-//    public void removeContainerListener(ContainerListener listener);
-//
+    /**
+     * Remove a container event listener from this component.
+     *
+     * @param listener The listener to remove
+     */
+    public void removeContainerListener(ContainerListener listener);
+
 
     /**
      * Remove a property change listener from this component.

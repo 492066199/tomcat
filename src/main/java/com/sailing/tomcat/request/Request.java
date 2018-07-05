@@ -19,6 +19,8 @@ package com.sailing.tomcat.request;
 
 
 import com.sailing.tomcat.connector.Connector;
+import com.sailing.tomcat.container.Context;
+import com.sailing.tomcat.container.Wrapper;
 import com.sailing.tomcat.response.Response;
 
 import javax.servlet.ServletInputStream;
@@ -72,21 +74,21 @@ public interface Request {
     public void setConnector(Connector connector);
 
 
-//    /**
-//     * Return the Context within which this Request is being processed.
-//     */
-//    public Context getContext();
-//
-//
-//    /**
-//     * Set the Context within which this Request is being processed.  This
-//     * must be called as soon as the appropriate Context is identified, because
-//     * it identifies the value to be returned by <code>getContextPath()</code>,
-//     * and thus enables parsing of the request URI.
-//     *
-//     * @param context The newly associated Context
-//     */
-//    public void setContext(Context context);
+    /**
+     * Return the Context within which this Request is being processed.
+     */
+    public Context getContext();
+
+
+    /**
+     * Set the Context within which this Request is being processed.  This
+     * must be called as soon as the appropriate Context is identified, because
+     * it identifies the value to be returned by <code>getContextPath()</code>,
+     * and thus enables parsing of the request URI.
+     *
+     * @param context The newly associated Context
+     */
+    public void setContext(Context context);
 
 
     /**
@@ -149,20 +151,20 @@ public interface Request {
     public void setStream(InputStream stream);
 
 
-//    /**
-//     * Return the Wrapper within which this Request is being processed.
-//     */
-//    public Wrapper getWrapper();
-//
-//
-//    /**
-//     * Set the Wrapper within which this Request is being processed.  This
-//     * must be called as soon as the appropriate Wrapper is identified, and
-//     * before the Request is ultimately passed to an application servlet.
-//     *
-//     * @param wrapper The newly associated Wrapper
-//     */
-//    public void setWrapper(Wrapper wrapper);
+    /**
+     * Return the Wrapper within which this Request is being processed.
+     */
+    public Wrapper getWrapper();
+
+
+    /**
+     * Set the Wrapper within which this Request is being processed.  This
+     * must be called as soon as the appropriate Wrapper is identified, and
+     * before the Request is ultimately passed to an application servlet.
+     *
+     * @param wrapper The newly associated Wrapper
+     */
+    public void setWrapper(Wrapper wrapper);
 
 
     // --------------------------------------------------------- Public Methods

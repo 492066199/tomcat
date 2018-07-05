@@ -1,6 +1,8 @@
 package com.sailing.tomcat.container;
 
 
+import com.sailing.tomcat.wrapper.InstanceListener;
+
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -108,12 +110,12 @@ public interface Wrapper extends Container {
     public void addInitParameter(String name, String value);
 
 
-//    /**
-//     * Add a new listener interested in InstanceEvents.
-//     *
-//     * @param listener The new listener
-//     */
-//    public void addInstanceListener(InstanceListener listener);
+    /**
+     * Add a new listener interested in InstanceEvents.
+     *
+     * @param listener The new listener
+     */
+    public void addInstanceListener(InstanceListener listener);
 
 
     /**
@@ -176,12 +178,12 @@ public interface Wrapper extends Container {
     public void removeInitParameter(String name);
 
 
-//    /**
-//     * Remove a listener no longer interested in InstanceEvents.
-//     *
-//     * @param listener The listener to remove
-//     */
-//    public void removeInstanceListener(InstanceListener listener);
+    /**
+     * Remove a listener no longer interested in InstanceEvents.
+     *
+     * @param listener The listener to remove
+     */
+    public void removeInstanceListener(InstanceListener listener);
 
 
     /**

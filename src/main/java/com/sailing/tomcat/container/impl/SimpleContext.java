@@ -12,6 +12,12 @@ import com.sailing.tomcat.loader.Loader;
 import com.sailing.tomcat.logger.Logger;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.response.Response;
+import com.sailing.tomcat.security.LoginConfig;
+import com.sailing.tomcat.security.Realm;
+import com.sailing.tomcat.security.SecurityConstraint;
+import com.sailing.tomcat.session.Manager;
+import com.sailing.tomcat.wrapper.FilterDef;
+import com.sailing.tomcat.wrapper.FilterMap;
 
 import javax.naming.directory.DirContext;
 import javax.servlet.ServletContext;
@@ -117,6 +123,11 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
         }
         // Use this Mapper to perform this mapping
         return mapper.map(request, update);
+    }
+
+    @Override
+    public void removeContainerListener(ContainerListener listener) {
+
     }
 
     public void addServletMapping(String pattern, String name) {
@@ -286,6 +297,16 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
 
     public void setDocBase(String docBase) {
     }
+
+    @Override
+    public LoginConfig getLoginConfig() {
+        return null;
+    }
+
+    @Override
+    public void setLoginConfig(LoginConfig config) {
+
+    }
     //    public void setNamingResources(NamingResources namingResources) {
     //
     //    }
@@ -356,6 +377,21 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
 
     public void addApplicationListener(String listener) {
     }
+
+    @Override
+    public void addConstraint(SecurityConstraint constraint) {
+
+    }
+
+    @Override
+    public void addFilterDef(FilterDef filterDef) {
+
+    }
+
+    @Override
+    public void addFilterMap(FilterMap filterMap) {
+
+    }
     //    public void addFilterMap(FilterMap filterMap) {
     //
     //    }
@@ -423,6 +459,26 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
 
     public String[] findApplicationListeners() {
         return null;
+    }
+
+    @Override
+    public SecurityConstraint[] findConstraints() {
+        return new SecurityConstraint[0];
+    }
+
+    @Override
+    public FilterDef findFilterDef(String filterName) {
+        return null;
+    }
+
+    @Override
+    public FilterDef[] findFilterDefs() {
+        return new FilterDef[0];
+    }
+
+    @Override
+    public FilterMap[] findFilterMaps() {
+        return new FilterMap[0];
     }
     //        return null;
     //    public FilterMap[] findFilterMaps() {
@@ -581,6 +637,11 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
 
     public void removeApplicationParameter(String name) {
     }
+
+    @Override
+    public void removeConstraint(SecurityConstraint constraint) {
+
+    }
 //    public void removeConstraint(SecurityConstraint constraint) {
 
 //    }
@@ -589,6 +650,16 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
     }
 
     public void removeEnvironment(String name) {
+    }
+
+    @Override
+    public void removeFilterDef(FilterDef filterDef) {
+
+    }
+
+    @Override
+    public void removeFilterMap(FilterMap filterMap) {
+
     }
     //    public void removeFilterMap(FilterMap filterMap) {
     //
@@ -664,6 +735,16 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
         this.logger = logger;
     }
 
+    @Override
+    public Manager getManager() {
+        return null;
+    }
+
+    @Override
+    public void setManager(Manager manager) {
+
+    }
+
     public Logger getLogger() {
         return logger;
     }
@@ -697,6 +778,16 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
     public void setParentClassLoader(ClassLoader parent) {
     }
 
+    @Override
+    public Realm getRealm() {
+        return null;
+    }
+
+    @Override
+    public void setRealm(Realm realm) {
+
+    }
+
 //    public Realm getRealm() {
 //        return null;
 //    }
@@ -711,10 +802,20 @@ public class SimpleContext implements Context, Pipeline, Lifecycle {
     public void setResources(DirContext resources) {
     }
 
+    @Override
+    public void addContainerListener(ContainerListener listener) {
+
+    }
+
 //    public void addContainerListener(ContainerListener listener) {
 //    }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
+    }
+
+    @Override
+    public ContainerListener[] findContainerListeners() {
+        return new ContainerListener[0];
     }
 
     public Container[] findChildren() {

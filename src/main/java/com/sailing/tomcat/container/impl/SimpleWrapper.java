@@ -10,6 +10,9 @@ import com.sailing.tomcat.loader.Loader;
 import com.sailing.tomcat.logger.Logger;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.response.Response;
+import com.sailing.tomcat.security.Realm;
+import com.sailing.tomcat.session.Manager;
+import com.sailing.tomcat.wrapper.InstanceListener;
 
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -261,6 +264,16 @@ public class SimpleWrapper implements Wrapper, Pipeline, Lifecycle{
     }
     public void setParentClassLoader(ClassLoader parent) {
     }
+
+    @Override
+    public Realm getRealm() {
+        return null;
+    }
+
+    @Override
+    public void setRealm(Realm realm) {
+
+    }
     //        return null;
     //    }
     //
@@ -275,6 +288,11 @@ public class SimpleWrapper implements Wrapper, Pipeline, Lifecycle{
     }
 
     public void setResources(DirContext resources) {
+    }
+
+    @Override
+    public void addContainerListener(ContainerListener listener) {
+
     }
 
     public long getAvailable() {
@@ -315,6 +333,11 @@ public class SimpleWrapper implements Wrapper, Pipeline, Lifecycle{
     public void addPropertyChangeListener(PropertyChangeListener listener) {
     }
 
+    @Override
+    public ContainerListener[] findContainerListeners() {
+        return new ContainerListener[0];
+    }
+
     public Container findChild(String name) {
         return null;
     }
@@ -328,6 +351,11 @@ public class SimpleWrapper implements Wrapper, Pipeline, Lifecycle{
 //    }
 
     public void addInitParameter(String name, String value) {
+    }
+
+    @Override
+    public void addInstanceListener(InstanceListener listener) {
+
     }
 //    public void addInstanceListener(InstanceListener listener) {
 
@@ -367,6 +395,11 @@ public class SimpleWrapper implements Wrapper, Pipeline, Lifecycle{
         return null;
     }
 
+    @Override
+    public void removeContainerListener(ContainerListener listener) {
+
+    }
+
     public void removeChild(Container child) {
     }
 
@@ -380,10 +413,25 @@ public class SimpleWrapper implements Wrapper, Pipeline, Lifecycle{
 
     }
 
+    @Override
+    public Manager getManager() {
+        return null;
+    }
+
+    @Override
+    public void setManager(Manager manager) {
+
+    }
+
 //    public void removeContainerListener(ContainerListener listener) {
 //    }
 
     public void removeInitParameter(String name) {
+    }
+
+    @Override
+    public void removeInstanceListener(InstanceListener listener) {
+
     }
 
 //    public void removeInstanceListener(InstanceListener listener) {

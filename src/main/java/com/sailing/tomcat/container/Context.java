@@ -1,5 +1,10 @@
 package com.sailing.tomcat.container;
 
+import com.sailing.tomcat.security.LoginConfig;
+import com.sailing.tomcat.security.SecurityConstraint;
+import com.sailing.tomcat.wrapper.FilterDef;
+import com.sailing.tomcat.wrapper.FilterMap;
+
 import javax.servlet.ServletContext;
 
 public interface Context extends Container {
@@ -145,18 +150,18 @@ public interface Context extends Container {
     public void setDocBase(String docBase);
 
 
-//    /**
-//     * Return the login configuration descriptor for this web application.
-//     */
-//    public LoginConfig getLoginConfig();
-//
-//
-//    /**
-//     * Set the login configuration descriptor for this web application.
-//     *
-//     * @param config The new login configuration
-//     */
-//    public void setLoginConfig(LoginConfig config);
+    /**
+     * Return the login configuration descriptor for this web application.
+     */
+    public LoginConfig getLoginConfig();
+
+
+    /**
+     * Set the login configuration descriptor for this web application.
+     *
+     * @param config The new login configuration
+     */
+    public void setLoginConfig(LoginConfig config);
 
 
 //    /**
@@ -301,14 +306,14 @@ public interface Context extends Container {
 //     * @param parameter The new application parameter
 //     */
 //    public void addApplicationParameter(ApplicationParameter parameter);
-//
-//
-//    /**
-//     * Add a security constraint to the set for this web application.
-//     */
-//    public void addConstraint(SecurityConstraint constraint);
-//
-//
+
+
+    /**
+     * Add a security constraint to the set for this web application.
+     */
+    public void addConstraint(SecurityConstraint constraint);
+
+
 //    /**
 //     * Add an EJB resource reference for this web application.
 //     *
@@ -332,21 +337,21 @@ public interface Context extends Container {
 //     */
 //    public void addErrorPage(ErrorPage errorPage);
 //
-//
-//    /**
-//     * Add a filter definition to this Context.
-//     *
-//     * @param filterDef The filter definition to be added
-//     */
-//    public void addFilterDef(FilterDef filterDef);
-//
-//
-//    /**
-//     * Add a filter mapping to this Context.
-//     *
-//     * @param filterMap The filter mapping to be added
-//     */
-//    public void addFilterMap(FilterMap filterMap);
+
+    /**
+     * Add a filter definition to this Context.
+     *
+     * @param filterDef The filter definition to be added
+     */
+    public void addFilterDef(FilterDef filterDef);
+
+
+    /**
+     * Add a filter mapping to this Context.
+     *
+     * @param filterMap The filter mapping to be added
+     */
+    public void addFilterMap(FilterMap filterMap);
 
 
     /**
@@ -484,12 +489,12 @@ public interface Context extends Container {
 //     */
 //    public ApplicationParameter[] findApplicationParameters();
 //
-//
-//    /**
-//     * Return the set of security constraints for this web application.
-//     * If there are none, a zero-length array is returned.
-//     */
-//    public SecurityConstraint[] findConstraints();
+
+    /**
+     * Return the set of security constraints for this web application.
+     * If there are none, a zero-length array is returned.
+     */
+    public SecurityConstraint[] findConstraints();
 
 
 //    /**
@@ -551,25 +556,25 @@ public interface Context extends Container {
 //    public ErrorPage[] findErrorPages();
 //
 //
-//    /**
-//     * Return the filter definition for the specified filter name, if any;
-//     * otherwise return <code>null</code>.
-//     *
-//     * @param filterName Filter name to look up
-//     */
-//    public FilterDef findFilterDef(String filterName);
-//
-//
-//    /**
-//     * Return the set of defined filters for this Context.
-//     */
-//    public FilterDef[] findFilterDefs();
-//
-//
-//    /**
-//     * Return the set of filter mappings for this Context.
-//     */
-//    public FilterMap[] findFilterMaps();
+    /**
+     * Return the filter definition for the specified filter name, if any;
+     * otherwise return <code>null</code>.
+     *
+     * @param filterName Filter name to look up
+     */
+    public FilterDef findFilterDef(String filterName);
+
+
+    /**
+     * Return the set of defined filters for this Context.
+     */
+    public FilterDef[] findFilterDefs();
+
+
+    /**
+     * Return the set of filter mappings for this Context.
+     */
+    public FilterMap[] findFilterMaps();
 
 
     /**
@@ -810,12 +815,12 @@ public interface Context extends Container {
     public void removeApplicationParameter(String name);
 
 
-//    /**
-//     * Remove the specified security constraint from this web application.
-//     *
-//     * @param constraint Constraint to be removed
-//     */
-//    public void removeConstraint(SecurityConstraint constraint);
+    /**
+     * Remove the specified security constraint from this web application.
+     *
+     * @param constraint Constraint to be removed
+     */
+    public void removeConstraint(SecurityConstraint constraint);
 
 
     /**
@@ -843,21 +848,21 @@ public interface Context extends Container {
 //    public void removeErrorPage(ErrorPage errorPage);
 
 
-//    /**
-//     * Remove the specified filter definition from this Context, if it exists;
-//     * otherwise, no action is taken.
-//     *
-//     * @param filterDef Filter definition to be removed
-//     */
-//    public void removeFilterDef(FilterDef filterDef);
-//
-//
-//    /**
-//     * Remove a filter mapping from this Context.
-//     *
-//     * @param filterMap The filter mapping to be removed
-//     */
-//    public void removeFilterMap(FilterMap filterMap);
+    /**
+     * Remove the specified filter definition from this Context, if it exists;
+     * otherwise, no action is taken.
+     *
+     * @param filterDef Filter definition to be removed
+     */
+    public void removeFilterDef(FilterDef filterDef);
+
+
+    /**
+     * Remove a filter mapping from this Context.
+     *
+     * @param filterMap The filter mapping to be removed
+     */
+    public void removeFilterMap(FilterMap filterMap);
 
 
     /**
