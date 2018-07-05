@@ -72,8 +72,7 @@ public class StandardEngine
     /**
      * The Java class name of the default Mapper class for this Container.
      */
-    private String mapperClass =
-        "org.apache.catalina.core.StandardEngineMapper";
+    private String mapperClass = "com.sailing.tomcat.engine.StandardEngineMapper";
 
 
 //    /**

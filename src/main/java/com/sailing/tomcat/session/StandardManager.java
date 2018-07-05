@@ -695,12 +695,12 @@ public class StandardManager
         File file = new File(pathname);
         if (!file.isAbsolute()) {
             if (container instanceof Context) {
-                ServletContext servletContext =
-                    ((Context) container).getServletContext();
-                File tempdir = (File)
-                    servletContext.getAttribute(Globals.WORK_DIR_ATTR);
-                if (tempdir != null)
+                ServletContext servletContext = ((Context) container).getServletContext();
+                //TODO
+                File tempdir = new File("");//(File) servletContext.getAttribute(Globals.WORK_DIR_ATTR);
+                if (tempdir != null) {
                     file = new File(tempdir, pathname);
+                }
             }
         }
 //        if (!file.isAbsolute())

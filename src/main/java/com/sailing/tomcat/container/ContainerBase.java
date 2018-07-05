@@ -18,6 +18,7 @@
 package com.sailing.tomcat.container;
 
 
+import com.google.common.collect.Maps;
 import com.sailing.tomcat.life.Lifecycle;
 import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
@@ -38,10 +39,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.*;
 
 
 /**
@@ -193,7 +191,7 @@ public abstract class ContainerBase
     /**
      * The set of Mappers associated with this Container, keyed by protocol.
      */
-    protected HashMap mappers = new HashMap();
+    protected Map<String, Mapper> mappers = Maps.newConcurrentMap();
 
 
     /**
@@ -804,29 +802,24 @@ public abstract class ContainerBase
      */
     public void addMapper(Mapper mapper) {
 
-        synchronized(mappers) {
-            if (mappers.get(mapper.getProtocol()) != null)
-                throw new IllegalArgumentException("addMapper:  Protocol '" +
-                                                   mapper.getProtocol() +
-                                                   "' is not unique");
-            mapper.setContainer((Container) this);      // May throw IAE
-            if (started && (mapper instanceof Lifecycle)) {
-                try {
-                    ((Lifecycle) mapper).start();
-                } catch (LifecycleException e) {
-                    log("ContainerBase.addMapper: start: ", e);
-                    throw new IllegalStateException
-                        ("ContainerBase.addMapper: start: " + e);
-                }
+        if (mappers.get(mapper.getProtocol()) != null)
+            throw new IllegalArgumentException("addMapper:  Protocol '" + mapper.getProtocol() + "' is not unique");
+        mapper.setContainer((Container) this);      // May throw IAE
+        if (started && (mapper instanceof Lifecycle)) {
+            try {
+                ((Lifecycle) mapper).start();
+            } catch (LifecycleException e) {
+                log("ContainerBase.addMapper: start: ", e);
+                throw new IllegalStateException
+                    ("ContainerBase.addMapper: start: " + e);
             }
-            mappers.put(mapper.getProtocol(), mapper);
-            if (mappers.size() == 1)
-                this.mapper = mapper;
-            else
-                this.mapper = null;
-            fireContainerEvent(ADD_MAPPER_EVENT, mapper);
         }
-
+        mappers.put(mapper.getProtocol(), mapper);
+        if (mappers.size() == 1)
+            this.mapper = mapper;
+        else
+            this.mapper = null;
+        fireContainerEvent(ADD_MAPPER_EVENT, mapper);
     }
 
 
@@ -1099,8 +1092,7 @@ public abstract class ContainerBase
 
         // Validate and update our current component state
         if (started)
-            throw new LifecycleException
-                (sm.getString("containerBase.alreadyStarted", logName()));
+            throw new LifecycleException(sm.getString("containerBase.alreadyStarted", logName()));
 
         // Notify our interested LifecycleListeners
         lifecycle.fireLifecycleEvent(BEFORE_START_EVENT, null);
@@ -1324,8 +1316,7 @@ public abstract class ContainerBase
             mapper.setProtocol("http");
             addMapper(mapper);
         } catch (Exception e) {
-            log(sm.getString("containerBase.addDefaultMapper", mapperClass),
-                e);
+            log(sm.getString("containerBase.addDefaultMapper", mapperClass), e);
         }
 
     }

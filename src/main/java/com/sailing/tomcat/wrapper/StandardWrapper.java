@@ -457,9 +457,7 @@ public final class StandardWrapper
 
         String oldServletClass = this.servletClass;
         this.servletClass = servletClass;
-        support.firePropertyChange("servletClass", oldServletClass,
-                                   this.servletClass);
-
+        support.firePropertyChange("servletClass", oldServletClass, this.servletClass);
     }
 
 

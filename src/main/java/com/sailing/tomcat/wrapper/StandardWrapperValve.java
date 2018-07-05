@@ -44,8 +44,7 @@ import java.io.IOException;
  * @version $Revision: 1.37 $ $Date: 2004/08/26 21:32:20 $
  */
 
-final class StandardWrapperValve
-    extends ValveBase {
+final class StandardWrapperValve extends ValveBase {
 
 
     // ----------------------------------------------------- Instance Variables

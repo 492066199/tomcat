@@ -1,20 +1,3 @@
-/*
- * Copyright 1999,2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
 package com.sailing.tomcat.context;
 
 
@@ -234,8 +217,7 @@ public class StandardContext
     /**
      * The Java class name of the default Mapper class for this Container.
      */
-    private String mapperClass =
-        "org.apache.catalina.core.StandardContextMapper";
+    private String mapperClass = "com.sailing.tomcat.context.StandardContextMapper";
 
 
     /**
@@ -3422,7 +3404,7 @@ public class StandardContext
 //        getCharsetMapper();
 
         // Post work directory
-        postWorkDirectory();
+//        postWorkDirectory();
 
         // Reading the "catalina.useNaming" environment variable
         String useNamingProperty = System.getProperty("catalina.useNaming");
@@ -3509,8 +3491,7 @@ public class StandardContext
 
         // We put the resources into the servlet context
         if (ok)
-            getServletContext().setAttribute
-                (Globals.RESOURCES_ATTR, getResources());
+            getServletContext().setAttribute(Globals.RESOURCES_ATTR, getResources());
 
         // Binding thread
         oldCCL = bindThread();
