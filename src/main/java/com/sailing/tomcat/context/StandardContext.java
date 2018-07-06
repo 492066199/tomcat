@@ -120,7 +120,7 @@ public class StandardContext
     /**
      * The ServletContext implementation associated with this Context.
      */
-//    private ApplicationContext context = null;
+    private ApplicationContext context = null;
 
 
     /**
@@ -946,12 +946,10 @@ public class StandardContext
      */
     public ServletContext getServletContext() {
 
-//        if (context == null)
-//            context = new ApplicationContext(getBasePath(), this);
-//
-//        return (context);
-        return null;
-        //TODO
+        if (context == null)
+            context = new ApplicationContext(getBasePath(), this);
+
+        return (context);
     }
 
 
@@ -3490,10 +3488,11 @@ public class StandardContext
             ok = false;
 
         // We put the resources into the servlet context
-        if (ok)
+        if (ok) {
             getServletContext().setAttribute(Globals.RESOURCES_ATTR, getResources());
+        }
 
-        // Binding thread
+        // ------------ Binding thread ------------
         oldCCL = bindThread();
 
         // Create context attributes that will be required
@@ -3513,7 +3512,7 @@ public class StandardContext
                 ok = false;
         }
 
-        // Unbinding thread
+        // ------------ Unbinding thread ------------
         unbindThread(oldCCL);
 
         // Set available status depending upon startup success

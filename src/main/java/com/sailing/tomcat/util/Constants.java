@@ -11,4 +11,6 @@ public class Constants {
             "org.apache.jasper.servlet.JspServlet";
     public static final String JSP_SERVLET_NAME = "jsp";
 
+    public static final int MAJOR_VERSION = 2;
+    public static final int MINOR_VERSION = 3;
 }
