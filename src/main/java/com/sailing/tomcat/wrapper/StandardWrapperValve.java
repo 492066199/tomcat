@@ -156,7 +156,7 @@ final class StandardWrapperValve extends ValveBase {
         // Allocate a servlet instance to process this request
         try {
             if (!unavailable) {
-                servlet = wrapper.allocate();
+                 servlet = wrapper.allocate();
             }
         } catch (ServletException e) {
             log(sm.getString("standardWrapper.allocateException",

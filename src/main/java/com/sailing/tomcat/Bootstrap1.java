@@ -4,23 +4,23 @@ import com.sailing.tomcat.connector.Connector;
 import com.sailing.tomcat.connector.HttpConnector;
 import com.sailing.tomcat.container.Context;
 import com.sailing.tomcat.container.Wrapper;
-import com.sailing.tomcat.container.impl.SimpleWrapper;
 import com.sailing.tomcat.context.StandardContext;
 import com.sailing.tomcat.life.Lifecycle;
 import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.loader.Loader;
 import com.sailing.tomcat.loader.WebappLoader;
 import com.sailing.tomcat.security.*;
+import com.sailing.tomcat.wrapper.StandardWrapper;
 
 public class Bootstrap1 {
     public static void main(String[] args) {
         System.setProperty("catalina.base",
                 System.getProperty("user.dir"));
         Connector connector = new HttpConnector();
-        Wrapper wrapper1 = new SimpleWrapper();
+        Wrapper wrapper1 = new StandardWrapper();
         wrapper1.setName("Primitive");
         wrapper1.setServletClass("PrimitiveServlet");
-        Wrapper wrapper2 = new SimpleWrapper();
+        Wrapper wrapper2 = new StandardWrapper();
         wrapper2.setName("Modern");
         wrapper2.setServletClass("ModernServlet");
         Context context = new StandardContext();
