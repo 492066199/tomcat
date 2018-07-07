@@ -19,10 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * yangyang 2018-06-07
@@ -281,30 +278,92 @@ public class HttpProcessor implements Lifecycle, Runnable{
 
         while (true) {
 
-            HttpHeader header = request.allocateHeader();
+            // Read the next header line
+            String line = read(input);
+            if ((line == null) || (line.length() < 1))
+                break;
 
-            // Read the next header
-            input.readHeader(header);
-            if (header.nameEnd == 0) {
-                if (header.valueEnd == 0) {
-                    return;
-                } else {
-                    throw new ServletException
-                            (sm.getString("httpProcessor.parseHeaders.colon"));
-                }
+            // Parse the header name and value
+            int colon = line.indexOf(':');
+            if (colon < 0) {
+                throw new ServletException(sm.getString("httpProcessor.parseHeaders.colon"));
             }
+            String name = line.substring(0, colon).trim();
+            String value = line.substring(colon + 1).trim();
 
-            String value = new String(header.value, 0, header.valueEnd);
+            String match = name.toLowerCase();
             if (debug >= 1)
-                log(" Header " + new String(header.name, 0, header.nameEnd)
-                        + " = " + value);
+                log(" Header " + name + " = " + value);
 
             // Set the corresponding request headers
-            if (header.equals(DefaultHeaders.AUTHORIZATION_NAME)) {
+            if (match.equals("authorization")) {
                 request.setAuthorization(value);
-            } else if (header.equals(DefaultHeaders.ACCEPT_LANGUAGE_NAME)) {
-                parseAcceptLanguage(value);
-            } else if (header.equals(DefaultHeaders.COOKIE_NAME)) {
+                request.addHeader(name, value);
+            } else if (match.equals("accept-language")) {
+                request.addHeader(name, value);
+                //
+                // Adapted from old code perhaps maybe optimized
+                //
+                //
+                Hashtable languages = new Hashtable();
+                StringTokenizer languageTokenizer = new StringTokenizer(value, ",");
+
+                while (languageTokenizer.hasMoreTokens()) {
+                    String language = languageTokenizer.nextToken().trim();
+                    int qValueIndex = language.indexOf(';');
+                    int qIndex = language.indexOf('q');
+                    int equalIndex = language.indexOf('=');
+                    Double qValue = new Double(1);
+
+                    if (qValueIndex > -1 && qValueIndex < qIndex && qIndex < equalIndex) {
+                        String qValueStr = language.substring(qValueIndex + 1);
+                        language = language.substring(0, qValueIndex);
+                        qValueStr = qValueStr.trim().toLowerCase();
+                        qValueIndex = qValueStr.indexOf('=');
+                        qValue = new Double(0);
+                        if (qValueStr.startsWith("q") &&
+                                qValueIndex > -1) {
+                            qValueStr = qValueStr.substring(qValueIndex + 1);
+                            try {
+                                qValue = new Double(qValueStr.trim());
+                            } catch (NumberFormatException nfe) {
+                            }
+                        }
+                    }
+                    // XXX
+                    // may need to handle "*" at some point in time
+                    if (! language.equals("*")) {
+                        String key = qValue.toString();
+                        Vector v = (Vector)((languages.containsKey(key)) ? languages.get(key) : new Vector());
+                        v.addElement(language);
+                        languages.put(key, v);
+                    }
+                }
+                Vector l = new Vector();
+                Enumeration e = languages.keys();
+                while (e.hasMoreElements()) {
+                    String key = (String)e.nextElement();
+                    Vector v = (Vector)languages.get(key);
+                    Enumeration le = v.elements();
+                    while (le.hasMoreElements()) {
+                        String language = (String)le.nextElement();
+                        String country = "";
+                        String variant = "";
+                        int countryIndex = language.indexOf('-');
+                        if (countryIndex > -1) {
+                            country = language.substring(countryIndex + 1).trim();
+                            language = language.substring(0, countryIndex).trim();
+                            int vDash = country.indexOf("-");
+                            if (vDash > 0) {
+                                String cTemp = country.substring(0, vDash);
+                                variant = country.substring(vDash + 1);
+                                country = cTemp;
+                            }
+                        }
+                        request.addLocale(new Locale(language, country, variant));
+                    }
+                }
+            } else if (match.equals("cookie")) {
                 Cookie cookies[] = RequestUtil.parseCookieHeader(value);
                 for (int i = 0; i < cookies.length; i++) {
                     if (cookies[i].getName().equals
@@ -322,84 +381,68 @@ public class HttpProcessor implements Lifecycle, Runnable{
                                                 .getRequestedSessionId());
                         }
                     }
-                    if (debug >= 1)
-                        log(" Adding cookie " + cookies[i].getName() + "=" +
-                                cookies[i].getValue());
                     request.addCookie(cookies[i]);
                 }
-            } else if (header.equals(DefaultHeaders.CONTENT_LENGTH_NAME)) {
+                // Keep Watchdog from whining by adding the header as well
+                // (GetHeaderTest, GetIntHeader_1Test)
+                request.addHeader(name, value);
+            } else if (match.equals("content-length")) {
                 int n = -1;
                 try {
                     n = Integer.parseInt(value);
                 } catch (Exception e) {
                     throw new ServletException
-                            (sm.getString
-                                    ("httpProcessor.parseHeaders.contentLength"));
+                            (sm.getString("httpProcessor.parseHeaders.contentLength"));
                 }
                 request.setContentLength(n);
-            } else if (header.equals(DefaultHeaders.CONTENT_TYPE_NAME)) {
+                request.addHeader(name, value);
+            } else if (match.equals("content-type")) {
                 request.setContentType(value);
-            } else if (header.equals(DefaultHeaders.HOST_NAME)) {
+                request.addHeader(name, value);
+            } else if (match.equals("host")) {
                 int n = value.indexOf(':');
-                if (n < 0) {
-                    if (connector.getScheme().equals("http")) {
-                        request.setServerPort(80);
-                    } else if (connector.getScheme().equals("https")) {
-                        request.setServerPort(443);
+                if (n < 0)
+                    request.setServerName(value);
+                else {
+                    request.setServerName(value.substring(0, n).trim());
+                    int port = 80;
+                    try {
+                        port = Integer.parseInt(value.substring(n+1).trim());
+                    } catch (Exception e) {
+                        throw new ServletException
+                                (sm.getString("httpProcessor.parseHeaders.portNumber"));
                     }
-
-                    //no proxy
-//                    if (proxyName != null)
-//                        request.setServerName(proxyName);
-//                    else
-//                        request.setServerName(value);
-                } else {
-                    //no proxy
-//                    if (proxyName != null)
-//                        request.setServerName(proxyName);
-//                    else
-//                        request.setServerName(value.substring(0, n).trim());
-//                    if (proxyPort != 0)
-//                        request.setServerPort(proxyPort);
-//                    else {
-                        int port = 80;
-                        try {
-                            port =
-                                    Integer.parseInt(value.substring(n+1).trim());
-                        } catch (Exception e) {
-                            throw new ServletException
-                                    (sm.getString
-                                            ("httpProcessor.parseHeaders.portNumber"));
-                        }
-                        request.setServerPort(port);
-//                    }
+                    request.setServerPort(port);
                 }
-            } else if (header.equals(DefaultHeaders.CONNECTION_NAME)) {
-                if (header.valueEquals
-                        (DefaultHeaders.CONNECTION_CLOSE_VALUE)) {
-                    keepAlive = false;
-                    response.setHeader("Connection", "close");
-                }
-                //request.setConnection(header);
-                /*
-                  if ("keep-alive".equalsIgnoreCase(value)) {
-                  keepAlive = true;
-                  }
-                */
-            } else if (header.equals(DefaultHeaders.EXPECT_NAME)) {
-                if (header.valueEquals(DefaultHeaders.EXPECT_100_VALUE))
-                    sendAck = true;
-                else
-                    throw new ServletException
-                            (sm.getString
-                                    ("httpProcessor.parseHeaders.unknownExpectation"));
-            } else if (header.equals(DefaultHeaders.TRANSFER_ENCODING_NAME)) {
-                //request.setTransferEncoding(header);
+                request.addHeader(name, value);
+            } else {
+                request.addHeader(name, value);
             }
-
-            request.nextHeader();
-
         }
+
+    }
+
+    private String read(InputStream input) throws IOException {
+
+        StringBuffer sb = new StringBuffer();
+        while (true) {
+            int ch = input.read();
+            if (ch < 0) {
+                if (sb.length() == 0) {
+                    return (null);
+                } else {
+                    break;
+                }
+            } else if (ch == '\r') {
+                continue;
+            } else if (ch == '\n') {
+                break;
+            }
+            sb.append((char) ch);
+        }
+        if (debug >= 2)
+            log("  Read: " + sb.toString());
+        return (sb.toString());
 
     }
 

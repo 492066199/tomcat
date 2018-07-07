@@ -1,23 +1,7 @@
-/*
- * Copyright 1999,2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
 package com.sailing.tomcat.request;
 
 
+import com.google.common.collect.Lists;
 import com.sailing.tomcat.http.HttpHeader;
 import com.sailing.tomcat.response.HttpResponseImpl;
 import com.sailing.tomcat.util.Enumerator;
@@ -27,6 +11,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 
 /**
@@ -69,14 +54,13 @@ final public class HttpRequestImpl
     /**
      * Descriptive information about this Request implementation.
      */
-    protected static final String info =
-        "org.apache.catalina.connector.http.HttpRequestImpl/1.0";
+    protected static final String info = "com.sailing.tomcat.request.HttpRequestImpl/1.0";
 
 
     /**
      * Headers pool.
      */
-    protected HttpHeader[] headerPool = new HttpHeader[INITIAL_POOL_SIZE];
+    protected List<HttpHeader> headerPool = Lists.newArrayList();
 
 
     /**
@@ -167,28 +151,6 @@ final public class HttpRequestImpl
 
     }
 
-
-    /**
-     * Allocate new header.
-     *
-     * @return an HttpHeader buffer allocated from the pool
-     */
-    public HttpHeader allocateHeader() {
-        if (nextHeader == headerPool.length) {
-            // Grow the pool
-            HttpHeader[] newHeaderPool =
-                new HttpHeader[headerPool.length + POOL_SIZE_INCREMENT];
-            for (int i = 0; i < nextHeader; i++) {
-                newHeaderPool[i] = headerPool[i];
-            }
-            headerPool = newHeaderPool;
-        }
-        if (headerPool[nextHeader] == null)
-            headerPool[nextHeader] = new HttpHeader();
-        return headerPool[nextHeader];
-    }
-
-
     /**
      * Go to the next header.
      */
@@ -205,18 +167,7 @@ final public class HttpRequestImpl
      * @deprecated Don't use
      */
     public void addHeader(String name, String value) {
-
-        if (nextHeader == headerPool.length) {
-            // Grow the pool
-            HttpHeader[] newHeaderPool =
-                new HttpHeader[headerPool.length + POOL_SIZE_INCREMENT];
-            for (int i = 0; i < nextHeader; i++) {
-                newHeaderPool[i] = headerPool[i];
-            }
-            headerPool = newHeaderPool;
-        }
-        headerPool[nextHeader++] = new HttpHeader(name, value);
-
+        headerPool.add(new HttpHeader(name, value));
     }
 
 
@@ -238,12 +189,11 @@ final public class HttpRequestImpl
      */
     public HttpHeader getHeader(HttpHeader header) {
 
-        for (int i = 0; i < nextHeader; i++) {
-            if (headerPool[i].equals(header))
-                return headerPool[i];
+        for(HttpHeader httpHeader : headerPool){
+            if (httpHeader.equals(header))
+                return httpHeader;
         }
         return null;
-
     }
 
 
@@ -254,13 +204,11 @@ final public class HttpRequestImpl
      * @param headerName Name of the requested header
      */
     public HttpHeader getHeader(char[] headerName) {
-
-        for (int i = 0; i < nextHeader; i++) {
-            if (headerPool[i].equals(headerName))
-                return headerPool[i];
+        for(HttpHeader httpHeader : headerPool){
+            if (httpHeader.equals(headerName))
+                return httpHeader;
         }
         return null;
-
     }
 
 
@@ -323,10 +271,10 @@ final public class HttpRequestImpl
     public String getHeader(String name) {
 
         name = name.toLowerCase();
-        for (int i = 0; i < nextHeader; i++) {
-            if (headerPool[i].equals(name))
-                return new String(headerPool[i].value, 0,
-                                  headerPool[i].valueEnd);
+        for(HttpHeader httpHeader : headerPool){
+            if (httpHeader.equals(name)) {
+                return new String(httpHeader.value, 0, httpHeader.valueEnd);
+            }
         }
         return null;
 
@@ -341,15 +289,14 @@ final public class HttpRequestImpl
      * @param name Name of the requested header
      */
     public Enumeration getHeaders(String name) {
-
         name = name.toLowerCase();
-        ArrayList tempArrayList = new ArrayList();
-        for (int i = 0; i < nextHeader; i++) {
-            if (headerPool[i].equals(name))
-                tempArrayList.add(new String(headerPool[i].value, 0,
-                                             headerPool[i].valueEnd));
+        List<String> tempArrayList = Lists.newArrayList();
+        for(HttpHeader httpHeader : headerPool){
+            if(httpHeader.equals(name)){
+                tempArrayList.add(new String(httpHeader.value, 0, httpHeader.valueEnd));
+            }
         }
-        return (Enumeration) new Enumerator(tempArrayList);
+        return new Enumerator(tempArrayList);
 
     }
 
@@ -358,12 +305,11 @@ final public class HttpRequestImpl
      * Return the names of all headers received with this request.
      */
     public Enumeration getHeaderNames() {
-        ArrayList tempArrayList = new ArrayList();
-        for (int i = 0; i < nextHeader; i++) {
-            tempArrayList.add(new String(headerPool[i].name, 0,
-                                         headerPool[i].nameEnd));
+        List<String> tempArrayList = Lists.newArrayList();
+        for(HttpHeader httpHeader : headerPool){
+            tempArrayList.add(new String(httpHeader.name, 0, httpHeader.nameEnd));
         }
-        return (Enumeration) new Enumerator(tempArrayList);
+        return new Enumerator(tempArrayList);
 
     }
 

@@ -1,6 +1,7 @@
 package com.sailing.tomcat.connector;
 
 import com.sailing.tomcat.container.Container;
+import com.sailing.tomcat.logger.Logger;
 import com.sailing.tomcat.request.HttpRequestImpl;
 import com.sailing.tomcat.response.HttpResponseImpl;
 import com.sailing.tomcat.request.Request;
@@ -626,8 +627,8 @@ public final class HttpConnector implements Connector, Lifecycle, Runnable {
      */
      public void recycle(HttpProcessor processor) {
 
-        //        if (debug >= 2)
-        //            log("recycle: Recycling processor " + processor);
+        if (debug >= 2)
+            log("recycle: Recycling processor " + processor);
         processors.push(processor);
 
     }
@@ -669,14 +670,14 @@ public final class HttpConnector implements Connector, Lifecycle, Runnable {
      */
     private void log(String message) {
 
-//        Logger logger = container.getLogger();
-//        String localName = threadName;
-//        if (localName == null)
-//            localName = "HttpConnector";
-//        if (logger != null)
-//            logger.log(localName + " " + message);
-//        else
-//            System.out.println(localName + " " + message);
+        Logger logger = container.getLogger();
+        String localName = threadName;
+        if (localName == null)
+            localName = "HttpConnector";
+        if (logger != null)
+            logger.log(localName + " " + message);
+        else
+            System.out.println(localName + " " + message);
 
     }
 
@@ -689,16 +690,16 @@ public final class HttpConnector implements Connector, Lifecycle, Runnable {
      */
     private void log(String message, Throwable throwable) {
 
-//        Logger logger = container.getLogger();
-//        String localName = threadName;
-//        if (localName == null)
-//            localName = "HttpConnector";
-//        if (logger != null)
-//            logger.log(localName + " " + message, throwable);
-//        else {
-//            System.out.println(localName + " " + message);
-//            throwable.printStackTrace(System.out);
-//        }
+        Logger logger = container.getLogger();
+        String localName = threadName;
+        if (localName == null)
+            localName = "HttpConnector";
+        if (logger != null)
+            logger.log(localName + " " + message, throwable);
+        else {
+            System.out.println(localName + " " + message);
+            throwable.printStackTrace(System.out);
+        }
 
     }
 
