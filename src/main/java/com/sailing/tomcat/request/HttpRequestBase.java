@@ -19,6 +19,8 @@ package com.sailing.tomcat.request;
 
 
 import com.sailing.tomcat.http.ParameterMap;
+import com.sailing.tomcat.logger.Logger;
+import com.sailing.tomcat.session.Session;
 import com.sailing.tomcat.util.Enumerator;
 import com.sailing.tomcat.util.RequestUtil;
 
@@ -205,10 +207,10 @@ public class HttpRequestBase
     protected String servletPath = null;
 
 
-//    /**
-//     * The currently active session for this request.
-//     */
-//    protected Session session = null;
+    /**
+     * The currently active session for this request.
+     */
+    protected Session session = null;
 
 
     /**
@@ -371,7 +373,7 @@ public class HttpRequestBase
         decodedRequestURI = null;
         secure = false;
         servletPath = null;
-//        session = null;
+        session = null;
         userPrincipal = null;
 
     }
@@ -1336,14 +1338,14 @@ public class HttpRequestBase
 
 
     private void log(String message) {
-//        Logger logger = context.getLogger();
-//        logger.log(message);
+        Logger logger = context.getLogger();
+        logger.log(message);
     }
      
      
     private void log(String message, Throwable throwable) {
-//        Logger logger = context.getLogger();
-//        logger.log(message, throwable);
+        Logger logger = context.getLogger();
+        logger.log(message, throwable);
     }
 
 }

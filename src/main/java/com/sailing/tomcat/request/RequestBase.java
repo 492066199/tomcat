@@ -470,7 +470,7 @@ public abstract class RequestBase
         // connector is NOT reset when recycling
         contentLength = -1;
         contentType = null;
-//        context = null;
+        context = null;
         input = null;
         locales.clear();
         notes.clear();
@@ -485,7 +485,7 @@ public abstract class RequestBase
         serverPort = -1;
         socket = null;
         stream = null;
-//        wrapper = null;
+        wrapper = null;
 
     }
 
