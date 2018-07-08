@@ -1,6 +1,10 @@
 package com.sailing.tomcat.response;
 
 
+import com.google.common.collect.Lists;
+import com.sailing.tomcat.util.CookieTools;
+import com.sailing.tomcat.util.Globals;
+
 import javax.servlet.ServletResponse;
 import javax.servlet.http.*;
 import java.io.IOException;
@@ -47,7 +51,7 @@ public class HttpResponseBase extends ResponseBase implements HttpResponse, Http
     }
 
 
-    protected List<Cookie> cookies = new ArrayList();
+    protected List<Cookie> cookies = Lists.newCopyOnWriteArrayList();
 
     /**
      * The facade associated with this response.
@@ -509,36 +513,25 @@ public class HttpResponseBase extends ResponseBase implements HttpResponse, Http
             outputWriter.print(message);
         }
         outputWriter.print("\r\n");
-        // System.out.println("sendHeaders: " +
-        //                    request.getRequest().getProtocol() +
-        //                    " " + status + " " + message);
 
         // Send the content-length and content-type headers (if any)
         if (getContentType() != null) {
             outputWriter.print("Content-Type: " + getContentType() + "\r\n");
-            // System.out.println(" Content-Type: " + getContentType());
         }
         if (getContentLength() >= 0) {
             outputWriter.print("Content-Length: " + getContentLength() +
                                "\r\n");
-            // System.out.println(" Content-Length: " + getContentLength());
         }
 
         // Send all specified headers (if any)
-        synchronized (headers) {
-        Iterator names = headers.keySet().iterator();
-        while (names.hasNext()) {
-            String name = (String) names.next();
-            ArrayList values = (ArrayList) headers.get(name);
-            Iterator items = values.iterator();
-            while (items.hasNext()) {
-                String value = (String) items.next();
-                    outputWriter.print(name);
-                    outputWriter.print(": ");
-                    outputWriter.print(value);
-                    outputWriter.print("\r\n");
-                    // System.out.println(" " + name + ": " + value);
-                }
+        for(Map.Entry<String, Object> entry : headers.entrySet()){
+            String name = entry.getKey();
+            List<String> values = (List) entry.getValue();
+            for(String value : values){
+                outputWriter.print(name);
+                outputWriter.print(": ");
+                outputWriter.print(value);
+                outputWriter.print("\r\n");
             }
         }
 
@@ -546,38 +539,29 @@ public class HttpResponseBase extends ResponseBase implements HttpResponse, Http
         HttpServletRequest hreq = (HttpServletRequest) request.getRequest();
         HttpSession session = hreq.getSession(false);
 
-//        if ((session != null) && session.isNew() && (getContext() != null)
-//            && getContext().getCookies()) {
-//            Cookie cookie = new Cookie(Globals.SESSION_COOKIE_NAME,
-//                                       session.getId());
-//            cookie.setMaxAge(-1);
-//            String contextPath = null;
-//            if (context != null)
-//                contextPath = context.getPath();
-//            if ((contextPath != null) && (contextPath.length() > 0))
-//                cookie.setPath(contextPath);
-//            else
-//                cookie.setPath("/");
-//            if (hreq.isSecure())
-//                cookie.setSecure(true);
-//            addCookie(cookie);
-//        }
+        if ((session != null) && session.isNew() && (getContext() != null)
+            && getContext().getCookies()) {
+            Cookie cookie = new Cookie(Globals.SESSION_COOKIE_NAME, session.getId());
+            cookie.setMaxAge(-1);
+            String contextPath = null;
+            if (context != null)
+                contextPath = context.getPath();
+            if ((contextPath != null) && (contextPath.length() > 0))
+                cookie.setPath(contextPath);
+            else
+                cookie.setPath("/");
+            if (hreq.isSecure())
+                cookie.setSecure(true);
+            addCookie(cookie);
+        }
 
         // Send all specified cookies (if any)
-//        synchronized (cookies) {
-//            Iterator items = cookies.iterator();
-//            while (items.hasNext()) {
-//                Cookie cookie = (Cookie) items.next();
-//                outputWriter.print(CookieTools.getCookieHeaderName(cookie));
-//                outputWriter.print(": ");
-//                outputWriter.print(CookieTools.getCookieHeaderValue(cookie));
-//                outputWriter.print("\r\n");
-//                //System.out.println(" " +
-//                //                   CookieTools.getCookieHeaderName(cookie) +
-//                //                   ": " +
-//                //                   CookieTools.getCookieHeaderValue(cookie));
-//            }
-//        }
+        for (Cookie cookie : cookies) {
+            outputWriter.print(CookieTools.getCookieHeaderName(cookie));
+            outputWriter.print(": ");
+            outputWriter.print(CookieTools.getCookieHeaderValue(cookie));
+            outputWriter.print("\r\n");
+        }
 
         // Send a terminating blank line to mark the end of the headers
         outputWriter.print("\r\n");

@@ -366,13 +366,11 @@ public class HttpProcessor implements Lifecycle, Runnable{
             } else if (match.equals("cookie")) {
                 Cookie cookies[] = RequestUtil.parseCookieHeader(value);
                 for (int i = 0; i < cookies.length; i++) {
-                    if (cookies[i].getName().equals
-                            (Globals.SESSION_COOKIE_NAME)) {
+                    if (cookies[i].getName().equals(Globals.SESSION_COOKIE_NAME)) {
                         // Override anything requested in the URL
                         if (!request.isRequestedSessionIdFromCookie()) {
                             // Accept only the first session id cookie
-                            request.setRequestedSessionId
-                                    (cookies[i].getValue());
+                            request.setRequestedSessionId(cookies[i].getValue());
                             request.setRequestedSessionCookie(true);
                             request.setRequestedSessionURL(false);
                             if (debug >= 1)

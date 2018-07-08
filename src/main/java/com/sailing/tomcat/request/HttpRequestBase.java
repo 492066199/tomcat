@@ -20,6 +20,7 @@ package com.sailing.tomcat.request;
 
 import com.sailing.tomcat.http.ParameterMap;
 import com.sailing.tomcat.logger.Logger;
+import com.sailing.tomcat.session.Manager;
 import com.sailing.tomcat.session.Session;
 import com.sailing.tomcat.util.Enumerator;
 import com.sailing.tomcat.util.RequestUtil;
@@ -1148,54 +1149,53 @@ public class HttpRequestBase
     }
 
     private HttpSession doGetSession(boolean create) {
-//        // There cannot be a session if no context has been assigned yet
-//        if (context == null)
-//            return (null);
-//
-//        // Return the current session if it exists and is valid
-//        if ((session != null) && !session.isValid())
-//            session = null;
-//        if (session != null)
-//            return (session.getSession());
-//
-//
-//        // Return the requested session if it exists and is valid
-//        Manager manager = null;
-//        if (context != null)
-//            manager = context.getManager();
-//        if (manager == null)
-//            return (null);      // Sessions are not supported
-//        if (requestedSessionId != null) {
-//            try {
-//                session = manager.findSession(requestedSessionId);
-//            } catch (IOException e) {
-//                session = null;
-//            }
-//            if ((session != null) && !session.isValid())
-//                session = null;
-//            if (session != null) {
-//                return (session.getSession());
-//            }
-//        }
-//
-//        // Create a new session if requested and the response is not committed
-//        if (!create)
-//            return (null);
-//        if ((context != null) && (response != null) &&
-//            context.getCookies() &&
-//            response.getResponse().isCommitted()) {
-//            throw new IllegalStateException
-//              (sm.getString("httpRequestBase.createCommitted"));
-//        }
-//
-//        session = manager.createSession();
-//        if (session != null)
-//            return (session.getSession());
-//        else
-//            return (null);
+        // There cannot be a session if no context has been assigned yet
+        if (context == null)
+            return (null);
 
-        return null;
+        // Return the current session if it exists and is valid
+        if ((session != null) && !session.isValid()) {
+            session = null;
+        }
 
+        if (session != null) {
+            return (session.getSession());
+        }
+
+        // Return the requested session if it exists and is valid
+        Manager manager = null;
+        if (context != null)
+            manager = context.getManager();
+        if (manager == null)
+            return (null);      // Sessions are not supported
+        if (requestedSessionId != null) {
+            try {
+                session = manager.findSession(requestedSessionId);
+            } catch (IOException e) {
+                session = null;
+            }
+            if ((session != null) && !session.isValid())
+                session = null;
+            if (session != null) {
+                return (session.getSession());
+            }
+        }
+
+        // Create a new session if requested and the response is not committed
+        if (!create)
+            return (null);
+        if ((context != null) && (response != null) &&
+            context.getCookies() &&
+            response.getResponse().isCommitted()) {
+            throw new IllegalStateException
+              (sm.getString("httpRequestBase.createCommitted"));
+        }
+
+        session = manager.createSession();
+        if (session != null)
+            return (session.getSession());
+        else
+            return (null);
     }
 
 

@@ -492,11 +492,9 @@ class StandardSession
      * is the facade.
      */
     public HttpSession getSession() {
-
         if (facade == null)
             facade = new StandardSessionFacade(this);
         return (facade);
-
     }
 
 

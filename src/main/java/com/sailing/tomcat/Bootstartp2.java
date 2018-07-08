@@ -14,6 +14,8 @@ import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.loader.Loader;
 import com.sailing.tomcat.loader.WebappLoader;
 import com.sailing.tomcat.security.SimpleContextConfig;
+import com.sailing.tomcat.session.Manager;
+import com.sailing.tomcat.session.StandardManager;
 import com.sailing.tomcat.wrapper.StandardWrapper;
 
 public class Bootstartp2 {
@@ -25,19 +27,29 @@ public class Bootstartp2 {
         Wrapper wrapper1 = new StandardWrapper();
         wrapper1.setName("Primitive");
         wrapper1.setServletClass("com.sailing.tomcat.servlet.PrimitiveServlet");
+
         Wrapper wrapper2 = new StandardWrapper();
         wrapper2.setName("Modern");
         wrapper2.setServletClass("com.sailing.tomcat.servlet.ModernServlet");
+
+        Wrapper wrapper3 = new StandardWrapper();
+        wrapper3.setName("Session");
+        wrapper3.setServletClass("com.sailing.tomcat.servlet.SessionServlet");
 
         Context context = new StandardContext();
         // StandardContext's start method adds a default mapper
         context.setPath("/app1");
         context.setDocBase("app1");
+
         context.addChild(wrapper1);
         context.addChild(wrapper2);
+        context.addChild(wrapper3);
 
         LifecycleListener listener = new SimpleContextConfig();
         ((Lifecycle) context).addLifecycleListener(listener);
+
+        Manager manager = new StandardManager();
+        context.setManager(manager);
 
         Host host = new StandardHost();
         host.addChild(context);
@@ -50,6 +62,7 @@ public class Bootstartp2 {
         // context.addServletMapping(pattern, name);
         context.addServletMapping("/Primitive", "Primitive");
         context.addServletMapping("/Modern", "Modern");
+        context.addServletMapping("/Session", "Session");
 
         Engine engine = new StandardEngine();
         engine.addChild(host);

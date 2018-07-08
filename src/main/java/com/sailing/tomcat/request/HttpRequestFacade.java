@@ -19,6 +19,8 @@ package com.sailing.tomcat.request;
 
 
 
+import com.sailing.tomcat.session.StandardSessionFacade;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
@@ -152,14 +154,12 @@ public final class HttpRequestFacade
 
 
     public HttpSession getSession(boolean create) {
-        //TODO
-//        HttpSession session =
-//            ((HttpServletRequest) request).getSession(create);
-//        if (session == null)
-//            return null;
-//        else
-//            return new StandardSessionFacade(session);
-        return null;
+        HttpSession session = ((HttpServletRequest) request).getSession(create);
+        if (session == null) {
+            return null;
+        } else {
+            return new StandardSessionFacade(session);
+        }
     }
 
 
