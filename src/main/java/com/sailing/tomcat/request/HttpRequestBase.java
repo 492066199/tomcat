@@ -993,14 +993,13 @@ public class HttpRequestBase
      */
     public String getPathTranslated() {
 
-//        if (context == null)
-//            return (null);
-//
-//        if (pathInfo == null)
-//            return (null);
-//        else
-//            return (context.getServletContext().getRealPath(pathInfo));
-        return null;
+        if (context == null)
+            return (null);
+
+        if (pathInfo == null)
+            return (null);
+        else
+            return (context.getServletContext().getRealPath(pathInfo));
     }
 
 
@@ -1272,24 +1271,24 @@ public class HttpRequestBase
      */
     public boolean isRequestedSessionIdValid() {
 
-//        if (requestedSessionId == null)
-//            return (false);
-//        if (context == null)
-//            return (false);
-//        Manager manager = context.getManager();
-//        if (manager == null)
-//            return (false);
-//        Session session = null;
-//        try {
-//            session = manager.findSession(requestedSessionId);
-//        } catch (IOException e) {
-//            session = null;
-//        }
-//        if ((session != null) && session.isValid())
-//            return (true);
-//        else
-//            return (false);
-        return false;
+        if (requestedSessionId == null)
+            return (false);
+        if (context == null)
+            return (false);
+        Manager manager = context.getManager();
+        if (manager == null)
+            return (false);
+        Session session = null;
+        try {
+            session = manager.findSession(requestedSessionId);
+        } catch (IOException e) {
+            session = null;
+        }
+        if ((session != null) && session.isValid())
+            return (true);
+        else
+            return (false);
+
     }
 
 

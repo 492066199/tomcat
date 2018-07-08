@@ -618,6 +618,7 @@ public abstract class ResponseBase implements Response, ServletResponse {
             throw new IllegalStateException
                 (sm.getString("responseBase.getWriter.ise"));
 
+        //http_response_stream
         ResponseStream newStream = (ResponseStream) createOutputStream();
         newStream.setCommit(false);
         OutputStreamWriter osr = new OutputStreamWriter(newStream, getCharacterEncoding());

@@ -28,6 +28,7 @@ import com.sailing.tomcat.util.RequestUtil;
 import com.sailing.tomcat.util.StringManager;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 import java.io.*;
@@ -841,19 +842,18 @@ public abstract class RequestBase
      */
     public String getRealPath(String path) {
 
-//        if (context == null)
-//            return (null);
-//        ServletContext servletContext = context.getServletContext();
-//        if (servletContext == null)
-//            return (null);
-//        else {
-//            try {
-//                return (servletContext.getRealPath(path));
-//            } catch (IllegalArgumentException e) {
-//                return (null);
-//            }
-//        }
-        return null;
+        if (context == null)
+            return (null);
+        ServletContext servletContext = context.getServletContext();
+        if (servletContext == null)
+            return (null);
+        else {
+            try {
+                return (servletContext.getRealPath(path));
+            } catch (IllegalArgumentException e) {
+                return (null);
+            }
+        }
     }
 
 
