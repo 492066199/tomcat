@@ -418,7 +418,7 @@ public abstract class ResponseBase implements Response, ServletResponse {
         contentCount = 0;
         contentLength = -1;
         contentType = null;
-//        context = null;
+        context = null;
         encoding = null;
         included = false;
         locale = Locale.getDefault();

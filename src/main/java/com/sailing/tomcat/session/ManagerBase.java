@@ -1,23 +1,7 @@
-/*
- * Copyright 1999,2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
 package com.sailing.tomcat.session;
 
 
+import com.google.common.collect.Maps;
 import com.sailing.tomcat.container.Container;
 import com.sailing.tomcat.engine.Engine;
 import com.sailing.tomcat.logger.Logger;
@@ -151,7 +135,7 @@ public abstract class ManagerBase implements Manager {
      * The set of currently active Sessions for this Manager, keyed by
      * session identifier.
      */
-    protected HashMap sessions = new HashMap();
+    protected Map<String, Session> sessions = Maps.newConcurrentMap();
 
     // Total number of sessions created by this manager
     protected int sessionCounter=0;
@@ -165,8 +149,7 @@ public abstract class ManagerBase implements Manager {
     /**
      * The string manager for this package.
      */
-    protected static StringManager sm =
-        StringManager.getManager(Constants.Package);
+    protected static StringManager sm = StringManager.getManager(Constants.Package);
 
 
     /**
@@ -486,11 +469,9 @@ public abstract class ManagerBase implements Manager {
      */
     public void add(Session session) {
 
-        synchronized (sessions) {
-            sessions.put(session.getId(), session);
-            if( sessions.size() > maxActive ) {
-                maxActive=sessions.size();
-            }
+        sessions.put(session.getId(), session);
+        if( sessions.size() > maxActive ) {
+            maxActive=sessions.size();
         }
 
     }
@@ -589,13 +570,10 @@ public abstract class ManagerBase implements Manager {
      */
     public Session findSession(String id) throws IOException {
 
-        if (id == null)
+        if (id == null) {
             return (null);
-        synchronized (sessions) {
-            Session session = (Session) sessions.get(id);
-            return (session);
         }
-
+        return sessions.get(id);
     }
 
 
@@ -605,12 +583,7 @@ public abstract class ManagerBase implements Manager {
      */
     public Session[] findSessions() {
 
-        Session results[] = null;
-        synchronized (sessions) {
-            results = new Session[sessions.size()];
-            results = (Session[]) sessions.values().toArray(results);
-        }
-        return (results);
+        return sessions.values().toArray(new Session[sessions.size()]);
 
     }
 
@@ -622,9 +595,7 @@ public abstract class ManagerBase implements Manager {
      */
     public void remove(Session session) {
 
-        synchronized (sessions) {
-            sessions.remove(session.getId());
-        }
+        sessions.remove(session.getId());
 
     }
 
@@ -832,29 +803,29 @@ public abstract class ManagerBase implements Manager {
      * @param key
      * @return
      */
-    public String getSessionAttribute( String sessionId, String key ) {
-        Session s=(Session)sessions.get(sessionId);
-        if( s==null ) {
+    public String getSessionAttribute(String sessionId, String key) {
+        Session s = (Session) sessions.get(sessionId);
+        if (s == null) {
             log("Session not found " + sessionId);
             return null;
         }
-        Object o=s.getSession().getAttribute(key);
-        if( o==null ) return null;
+        Object o = s.getSession().getAttribute(key);
+        if (o == null) return null;
         return o.toString();
     }
 
-    public void expireSession( String sessionId ) {
-        Session s=(Session)sessions.get(sessionId);
-        if( s==null ) {
+    public void expireSession(String sessionId) {
+        Session s = (Session) sessions.get(sessionId);
+        if (s == null) {
             log("Session not found " + sessionId);
             return;
         }
         s.expire();
     }
 
-    public String getLastAccessedTime( String sessionId ) {
-        Session s=(Session)sessions.get(sessionId);
-        if( s==null ) {
+    public String getLastAccessedTime(String sessionId) {
+        Session s = (Session) sessions.get(sessionId);
+        if (s == null) {
             log("Session not found " + sessionId);
             return "";
         }

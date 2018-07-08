@@ -8,6 +8,7 @@ import com.sailing.tomcat.life.Lifecycle;
 import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.life.LifecycleSupport;
+import com.sailing.tomcat.logger.Logger;
 import com.sailing.tomcat.request.HttpRequest;
 import com.sailing.tomcat.request.HttpRequestImpl;
 import com.sailing.tomcat.response.HttpResponseImpl;
@@ -172,7 +173,6 @@ public class HttpProcessor implements Lifecycle, Runnable{
                 }
             } catch (ServletException e) {
                 log("process.invoke");
-                System.out.println();
                 System.out.println(e);
                 e.printStackTrace();
                 try {
@@ -186,7 +186,6 @@ public class HttpProcessor implements Lifecycle, Runnable{
                 ok = false;
             } catch (Throwable e) {
                 log("process.invoke" + e);
-                System.out.println();
                 System.out.println(e);
                 e.printStackTrace();
                 try {
@@ -206,7 +205,6 @@ public class HttpProcessor implements Lifecycle, Runnable{
                     ok = false;
                 } catch (Throwable e) {
                     log("process.invoke" + e);
-                    System.out.println();
                     System.out.println(e);
                     e.printStackTrace();
                     ok = false;
@@ -217,7 +215,6 @@ public class HttpProcessor implements Lifecycle, Runnable{
                     ok = false;
                 } catch (Throwable e) {
                     log("process.invoke"+ e);
-                    System.out.println();
                     System.out.println(e);
                     e.printStackTrace();
                     ok = false;
@@ -682,10 +679,9 @@ public class HttpProcessor implements Lifecycle, Runnable{
      */
     private void log(String message) {
 
-//        Logger logger = connector.getContainer().getLogger();
-//        if (logger != null)
-//            logger.log(threadName + " " + message);
-        System.out.println(message);
+        Logger logger = connector.getContainer().getLogger();
+        if (logger != null)
+            logger.log(threadName + " " + message);
     }
 
     /**
