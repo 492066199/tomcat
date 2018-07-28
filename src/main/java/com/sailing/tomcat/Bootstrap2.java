@@ -18,7 +18,7 @@ import com.sailing.tomcat.session.Manager;
 import com.sailing.tomcat.session.StandardManager;
 import com.sailing.tomcat.wrapper.StandardWrapper;
 
-public class Bootstartp2 {
+public class Bootstrap2 {
     public static void main(String[] args) {
         System.setProperty("catalina.base", System.getProperty("user.dir"));
 

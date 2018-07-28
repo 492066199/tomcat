@@ -19,6 +19,7 @@ package com.sailing.tomcat.engine;
 
 import com.sailing.tomcat.container.Container;
 import com.sailing.tomcat.container.Context;
+import com.sailing.tomcat.server.Service;
 
 /**
  * An <b>Engine</b> is a Container that represents the entire Catalina servlet
@@ -81,19 +82,19 @@ public interface Engine extends Container {
     public void setJvmRoute(String jvmRouteId);
 
 
-//    /**
-//     * Return the <code>Service</code> with which we are associated (if any).
-//     */
-//    public Service getService();
-//
-//
-//    /**
-//     * Set the <code>Service</code> with which we are associated (if any).
-//     *
-//     * @param service The service that owns this Engine
-//     */
-//    public void setService(Service service);
-//
+    /**
+     * Return the <code>Service</code> with which we are associated (if any).
+     */
+    public Service getService();
+
+
+    /**
+     * Set the <code>Service</code> with which we are associated (if any).
+     *
+     * @param service The service that owns this Engine
+     */
+    public void setService(Service service);
+
 //
 //    /**
 //     * Set the DefaultContext

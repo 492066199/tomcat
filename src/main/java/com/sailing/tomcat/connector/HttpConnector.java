@@ -11,6 +11,7 @@ import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.life.LifecycleSupport;
 import com.sailing.tomcat.processor.HttpProcessor;
+import com.sailing.tomcat.server.Service;
 import com.sailing.tomcat.socket.DefaultServerSocketFactory;
 import com.sailing.tomcat.socket.ServerSocketFactory;
 import com.sailing.tomcat.util.Constants;
@@ -29,7 +30,7 @@ import java.util.Vector;
 
 public final class HttpConnector implements Connector, Lifecycle, Runnable {
 
-    //    private Service service = null;
+    private Service service = null;
 
     protected Container container = null;
     //other info, use for other object
@@ -143,27 +144,27 @@ public final class HttpConnector implements Connector, Lifecycle, Runnable {
 
     // ------------------------------------------------------------- Properties
 
-//
-//    /**
-//     * Return the <code>Service</code> with which we are associated (if any).
-//     */
-//    public Service getService() {
-//
-//        return (this.service);
-//
-//    }
-//
-//
-//    /**
-//     * Set the <code>Service</code> with which we are associated (if any).
-//     *
-//     * @param service The service that owns this Engine
-//     */
-//    public void setService(Service service) {
-//
-//        this.service = service;
-//
-//    }
+
+    /**
+     * Return the <code>Service</code> with which we are associated (if any).
+     */
+    public Service getService() {
+
+        return (this.service);
+
+    }
+
+
+    /**
+     * Set the <code>Service</code> with which we are associated (if any).
+     *
+     * @param service The service that owns this Engine
+     */
+    public void setService(Service service) {
+
+        this.service = service;
+
+    }
 
 
     /**

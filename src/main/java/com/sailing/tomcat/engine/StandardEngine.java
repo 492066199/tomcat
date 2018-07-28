@@ -23,6 +23,7 @@ import com.sailing.tomcat.container.ContainerBase;
 import com.sailing.tomcat.container.Context;
 import com.sailing.tomcat.host.Host;
 import com.sailing.tomcat.life.LifecycleException;
+import com.sailing.tomcat.server.Service;
 
 /**
  * Standard implementation of the <b>Engine</b> interface.  Each
@@ -75,11 +76,11 @@ public class StandardEngine
     private String mapperClass = "com.sailing.tomcat.engine.StandardEngineMapper";
 
 
-//    /**
-//     * The <code>Service</code> that owns this Engine, if any.
-//     */
-//    private Service service = null;
-//
+    /**
+     * The <code>Service</code> that owns this Engine, if any.
+     */
+    private Service service = null;
+
 //
 //    /**
 //     * DefaultContext config
@@ -196,26 +197,26 @@ public class StandardEngine
     }
 
 
-//    /**
-//     * Return the <code>Service</code> with which we are associated (if any).
-//     */
-//    public Service getService() {
-//
-//        return (this.service);
-//
-//    }
-//
-//
-//    /**
-//     * Set the <code>Service</code> with which we are associated (if any).
-//     *
-//     * @param service The service that owns this Engine
-//     */
-//    public void setService(Service service) {
-//
-//        this.service = service;
-//
-//    }
+    /**
+     * Return the <code>Service</code> with which we are associated (if any).
+     */
+    public Service getService() {
+
+        return (this.service);
+
+    }
+
+
+    /**
+     * Set the <code>Service</code> with which we are associated (if any).
+     *
+     * @param service The service that owns this Engine
+     */
+    public void setService(Service service) {
+
+        this.service = service;
+
+    }
 
 
     // --------------------------------------------------------- Public Methods

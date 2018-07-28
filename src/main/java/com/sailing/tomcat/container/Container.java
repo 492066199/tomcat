@@ -1,5 +1,6 @@
 package com.sailing.tomcat.container;
 
+import com.sailing.tomcat.life.Lifecycle;
 import com.sailing.tomcat.loader.Loader;
 import com.sailing.tomcat.logger.Logger;
 import com.sailing.tomcat.request.Request;
@@ -12,7 +13,7 @@ import javax.servlet.ServletException;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
-public interface Container {
+public interface Container{
     /**
      * The ContainerEvent event type sent when a child container is added
      * by <code>addChild()</code>.

@@ -254,5 +254,8 @@ public final class Globals {
     public static final String WORK_DIR_ATTR =
         "javax.servlet.context.tempdir";
 
-
+    /**
+     * Default domain for MBeans if none can be determined
+     */
+    public static final String DEFAULT_MBEAN_DOMAIN = "Catalina";
 }

@@ -21,6 +21,7 @@ import com.sailing.tomcat.container.Container;
 import com.sailing.tomcat.request.Request;
 import com.sailing.tomcat.response.Response;
 import com.sailing.tomcat.life.LifecycleException;
+import com.sailing.tomcat.server.Service;
 import com.sailing.tomcat.socket.ServerSocketFactory;
 
 /**
@@ -179,18 +180,18 @@ public interface Connector {
     public void setSecure(boolean secure);
 
 
-//    /**
-//     * Return the <code>Service</code> with which we are associated (if any).
-//     */
-//    public Service getService();
-//
-//
-//    /**
-//     * Set the <code>Service</code> with which we are associated (if any).
-//     *
-//     * @param service The service that owns this Engine
-//     */
-//    public void setService(Service service);
+    /**
+     * Return the <code>Service</code> with which we are associated (if any).
+     */
+    public Service getService();
+
+
+    /**
+     * Set the <code>Service</code> with which we are associated (if any).
+     *
+     * @param service The service that owns this Engine
+     */
+    public void setService(Service service);
 
 
     // --------------------------------------------------------- Public Methods
