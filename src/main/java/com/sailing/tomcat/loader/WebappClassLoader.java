@@ -27,8 +27,7 @@ import java.util.jar.Manifest;
 
 public class WebappClassLoader extends URLClassLoader implements Reloader, Lifecycle {
 
-    protected class PrivilegedFindResource
-        implements PrivilegedAction {
+    protected class PrivilegedFindResource implements PrivilegedAction {
 
         private String name;
         private String path;
@@ -902,11 +901,10 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
 
         URL url = null;
 
-        ResourceEntry entry = (ResourceEntry) resourceEntries.get(name);
+        ResourceEntry entry = resourceEntries.get(name);
         if (entry == null) {
             if (securityManager != null) {
-                PrivilegedAction dp =
-                    new PrivilegedFindResource(name, name);
+                PrivilegedAction dp = new PrivilegedFindResource(name, name);
                 entry = (ResourceEntry)AccessController.doPrivileged(dp);
             } else {
                 entry = findResourceInternal(name, name);
@@ -1497,8 +1495,7 @@ public class WebappClassLoader extends URLClassLoader implements Reloader, Lifec
         ResourceEntry entry = null;
 
         if (securityManager != null) {
-            PrivilegedAction dp =
-                new PrivilegedFindResource(name, classPath);
+            PrivilegedAction dp = new PrivilegedFindResource(name, classPath);
             entry = (ResourceEntry)AccessController.doPrivileged(dp);
         } else {
             entry = findResourceInternal(name, classPath);

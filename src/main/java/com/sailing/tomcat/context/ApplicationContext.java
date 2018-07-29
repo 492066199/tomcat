@@ -4,6 +4,7 @@ package com.sailing.tomcat.context;
 import com.sailing.tomcat.container.Context;
 import com.sailing.tomcat.container.Wrapper;
 import com.sailing.tomcat.host.Host;
+import com.sailing.tomcat.resource.DirContextURLStreamHandler;
 import com.sailing.tomcat.resource.Resource;
 import com.sailing.tomcat.logger.Logger;
 import com.sailing.tomcat.util.Constants;
@@ -664,8 +665,7 @@ public class ApplicationContext implements ServletContext {
                     }
                 } else {
                     return new URL("jndi", null, 0, getJNDIUri(hostName, fullPath),
-//                         new DirContextURLStreamHandler(resources));
-                            null);
+                         new DirContextURLStreamHandler(resources));
                 }
             } catch (Exception e) {
                 //e.printStackTrace();

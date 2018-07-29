@@ -7,6 +7,7 @@ import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.life.LifecycleSupport;
 import com.sailing.tomcat.logger.Logger;
+import com.sailing.tomcat.resource.DirContextURLStreamHandler;
 import com.sailing.tomcat.resource.DirContextURLStreamHandlerFactory;
 import com.sailing.tomcat.resource.Resource;
 import com.sailing.tomcat.util.Constants;
@@ -110,7 +111,7 @@ public class WebappLoader implements Lifecycle, Loader, PropertyChangeListener, 
                 ((Lifecycle) classLoader).start();
 
             // Binding the Webapp class loader to the directory context
-            //TODO DirContextURLStreamHandler.bind((ClassLoader) classLoader, this.container.getResources());
+            DirContextURLStreamHandler.bind((ClassLoader) classLoader, this.container.getResources());
 
         } catch (Throwable t) {
             throw new LifecycleException("start: ", t);

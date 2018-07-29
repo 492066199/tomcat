@@ -3388,7 +3388,7 @@ public class StandardContext
 //        getCharsetMapper();
 
         // Post work directory
-//        postWorkDirectory();
+        postWorkDirectory();
 
         // Reading the "catalina.useNaming" environment variable
         String useNamingProperty = System.getProperty("catalina.useNaming");
@@ -3916,9 +3916,9 @@ public class StandardContext
 
         // Set the appropriate servlet context attribute
         getServletContext().setAttribute(Globals.WORK_DIR_ATTR, dir);
-//        if (getServletContext() instanceof ApplicationContext)
-//            ((ApplicationContext) getServletContext()).setAttributeReadOnly
-//                (Globals.WORK_DIR_ATTR);
+        if (getServletContext() instanceof ApplicationContext)
+            ((ApplicationContext) getServletContext()).setAttributeReadOnly
+                (Globals.WORK_DIR_ATTR);
 
     }
 
