@@ -7,6 +7,8 @@ import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.life.LifecycleSupport;
 import com.sailing.tomcat.logger.Logger;
+import com.sailing.tomcat.resource.DirContextURLStreamHandlerFactory;
+import com.sailing.tomcat.resource.Resource;
 import com.sailing.tomcat.util.Constants;
 import com.sailing.tomcat.util.Globals;
 import com.sailing.tomcat.util.StringManager;
@@ -42,9 +44,9 @@ public class WebappLoader implements Lifecycle, Loader, PropertyChangeListener, 
 
     private ClassLoader parentClassLoader = null;
     private boolean started = false;
-    private static final String info = "org.apache.catalina.loader.WebappLoader/1.0";
+    private static final String info = "com.sailing.tomcat.loader.WebappLoader/1.0";
     protected LifecycleSupport lifecycle = new LifecycleSupport(this);
-    private String loaderClass = "org.apache.catalina.loader.WebappClassLoader";
+    private String loaderClass = "com.sailing.tomcat.loader.WebappClassLoader";
     private WebappClassLoader classLoader = null;
     private Container container = null;
     private int debug = 0;
@@ -79,7 +81,7 @@ public class WebappLoader implements Lifecycle, Loader, PropertyChangeListener, 
             return;
 
         // Register a stream handler factory for the JNDI protocol
-        URLStreamHandlerFactory streamHandlerFactory = null; //TODO= new DirContextURLStreamHandlerFactory();
+        URLStreamHandlerFactory streamHandlerFactory = new DirContextURLStreamHandlerFactory();
 
         try {
             URL.setURLStreamHandlerFactory(streamHandlerFactory);

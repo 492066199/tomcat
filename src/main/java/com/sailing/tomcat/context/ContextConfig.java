@@ -86,7 +86,7 @@ public final class ContextConfig implements LifecycleListener {
      * The <code>Digester</code> we will use to process tag library
      * descriptor files.
      */
-    private static Digester tldDigester = createTldDigester();
+    private static Digester tldDigester; // TODO= createTldDigester();
 
 
     /**
@@ -423,8 +423,7 @@ public final class ContextConfig implements LifecycleListener {
         // Open the default web.xml file, if it exists
         File file = new File(Constants.DefaultWebXml);
         if (!file.isAbsolute())
-            file = new File(System.getProperty("catalina.base"),
-                            Constants.DefaultWebXml);
+            file = new File(System.getProperty("catalina.base"), Constants.DefaultWebXml);
         FileInputStream stream = null;
         try {
             stream = new FileInputStream(file.getCanonicalPath());
@@ -550,7 +549,7 @@ public final class ContextConfig implements LifecycleListener {
         // Scan tag library descriptor files for additional listener classes
         if (ok) {
             try {
-                tldScan();
+//                tldScan();
             } catch (Exception e) {
                 log(e.getMessage(), e);
                 ok = false;

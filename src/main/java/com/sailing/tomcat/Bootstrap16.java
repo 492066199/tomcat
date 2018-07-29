@@ -38,7 +38,7 @@ public class Bootstrap16 {
         Host host = new StandardHost();
         host.addChild(context);
         host.setName("localhost");
-        host.setAppBase("webapps");
+        host.setAppBase("");
 
         connector.setContainer(host);
         try {

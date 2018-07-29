@@ -1,4 +1,4 @@
-package com.sailing.tomcat.loader;
+package com.sailing.tomcat.resource;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -47,8 +47,7 @@ public class Resource {
      * 
      * @return InputStream
      */
-    public InputStream streamContent()
-        throws IOException {
+    public InputStream streamContent() throws IOException {
         if (binaryContent != null) {
             return new ByteArrayInputStream(binaryContent);
         }

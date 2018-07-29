@@ -1,20 +1,3 @@
-/*
- * Copyright 1999-2001,2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
 package com.sailing.tomcat.context;
 
 
@@ -174,10 +157,10 @@ public class WebRuleSet extends RuleSetBase {
                                "setLocation", 0);
 
         digester.addObjectCreate(prefix + "web-app/filter",
-                                 "org.apache.catalina.deploy.FilterDef");
+                                 "com.sailing.tomcat.wrapper.FilterDef");
         digester.addSetNext(prefix + "web-app/filter",
                             "addFilterDef",
-                            "org.apache.catalina.deploy.FilterDef");
+                            "com.sailing.tomcat.wrapper.FilterDef");
 
         digester.addCallMethod(prefix + "web-app/filter/description",
                                "setDescription", 0);
@@ -200,10 +183,10 @@ public class WebRuleSet extends RuleSetBase {
                               1);
 
         digester.addObjectCreate(prefix + "web-app/filter-mapping",
-                                 "org.apache.catalina.deploy.FilterMap");
+                                 "com.sailing.tomcat.wrapper.FilterMap");
         digester.addSetNext(prefix + "web-app/filter-mapping",
                             "addFilterMap",
-                            "org.apache.catalina.deploy.FilterMap");
+                            "com.sailing.tomcat.wrapper.FilterMap");
 
         digester.addCallMethod(prefix + "web-app/filter-mapping/filter-name",
                                "setFilterName", 0);
@@ -216,10 +199,10 @@ public class WebRuleSet extends RuleSetBase {
                                "addApplicationListener", 0);
 
         digester.addObjectCreate(prefix + "web-app/login-config",
-                                 "org.apache.catalina.deploy.LoginConfig");
+                                 "com.sailing.tomcat.security.LoginConfig");
         digester.addSetNext(prefix + "web-app/login-config",
                             "setLoginConfig",
-                            "org.apache.catalina.deploy.LoginConfig");
+                            "com.sailing.tomcat.security.LoginConfig");
 
         digester.addCallMethod(prefix + "web-app/login-config/auth-method",
                                "setAuthMethod", 0);
@@ -258,10 +241,10 @@ public class WebRuleSet extends RuleSetBase {
                                "setType", 0);
 
         digester.addObjectCreate(prefix + "web-app/security-constraint",
-                                 "org.apache.catalina.deploy.SecurityConstraint");
+                                 "com.sailing.tomcat.security.SecurityConstraint");
         digester.addSetNext(prefix + "web-app/security-constraint",
                             "addConstraint",
-                            "org.apache.catalina.deploy.SecurityConstraint");
+                            "com.sailing.tomcat.security.SecurityConstraint");
 
         digester.addRule(prefix + "web-app/security-constraint/auth-constraint",
                          new SetAuthConstraintRule(digester));
@@ -273,10 +256,10 @@ public class WebRuleSet extends RuleSetBase {
                                "setUserConstraint", 0);
 
         digester.addObjectCreate(prefix + "web-app/security-constraint/web-resource-collection",
-                                 "org.apache.catalina.deploy.SecurityCollection");
+                                 "com.sailing.tomcat.security.SecurityCollection");
         digester.addSetNext(prefix + "web-app/security-constraint/web-resource-collection",
                             "addCollection",
-                            "org.apache.catalina.deploy.SecurityCollection");
+                            "com.sailing.tomcat.security.SecurityCollection");
         digester.addCallMethod(prefix + "web-app/security-constraint/web-resource-collection/http-method",
                                "addMethod", 0);
         digester.addCallMethod(prefix + "web-app/security-constraint/web-resource-collection/url-pattern",
@@ -291,7 +274,7 @@ public class WebRuleSet extends RuleSetBase {
                          new WrapperCreateRule(digester));
         digester.addSetNext(prefix + "web-app/servlet",
                             "addChild",
-                            "org.apache.catalina.Container");
+                            "com.sailing.tomcat.container.Container");
 
         digester.addCallMethod(prefix + "web-app/servlet/init-param",
                                "addInitParameter", 2);

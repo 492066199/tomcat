@@ -15,7 +15,7 @@ public class Constants {
     public static final int MINOR_VERSION = 3;
 
 
-    public static final String ApplicationWebXml = "/WEB-INF/web.xml";
+    public static final String ApplicationWebXml = "web.xml";
 
     public static final String DefaultWebXml = "conf/web.xml";
 
@@ -40,6 +40,12 @@ public class Constants {
     public static final String WebDtdPublicId_23 =
             "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN";
     public static final String WebDtdResourcePath_23 =
-                  "dtd/web-app_2_3.dtd";
+                  "/dtd/web-app_2_3.dtd";
 //            "/javax/servlet/resources/web-app_2_3.dtd";
+
+    public static final String PROTOCOL_HANDLER_VARIABLE =
+            "java.protocol.handler.pkgs";
+
+    // Default namespace name
+    public static final String DEFAULT_NAMESPACE = "DAV:";
 }

@@ -1,18 +1,19 @@
 package com.sailing.tomcat.context;
 
 
-
 import com.sailing.tomcat.container.*;
 import com.sailing.tomcat.engine.StandardEngine;
 import com.sailing.tomcat.host.Host;
 import com.sailing.tomcat.host.StandardHost;
 import com.sailing.tomcat.life.Lifecycle;
-import com.sailing.tomcat.life.LifecycleEvent;
 import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
 import com.sailing.tomcat.loader.Loader;
 import com.sailing.tomcat.loader.WebappLoader;
 import com.sailing.tomcat.request.Request;
+import com.sailing.tomcat.resource.BaseDirContext;
+import com.sailing.tomcat.resource.FileDirContext;
+import com.sailing.tomcat.resource.ProxyDirContext;
 import com.sailing.tomcat.response.Response;
 import com.sailing.tomcat.security.LoginConfig;
 import com.sailing.tomcat.security.SecurityCollection;
@@ -25,7 +26,6 @@ import com.sailing.tomcat.wrapper.FilterMap;
 import com.sailing.tomcat.wrapper.InstanceListener;
 import com.sailing.tomcat.wrapper.StandardWrapper;
 
-import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.servlet.*;
 import java.io.File;
@@ -663,17 +663,8 @@ public class StandardContext
 
     }
 
-
-    /**
-     * Set the document root for this Context.  This can be an absolute
-     * pathname, a relative pathname, or a URL.
-     *
-     * @param docBase The new document root
-     */
     public void setDocBase(String docBase) {
-
         this.docBase = docBase;
-
     }
 
 
@@ -1037,40 +1028,33 @@ public class StandardContext
 
     }
 
-
-    /**
-     * Set the resources DirContext object with which this Container is
-     * associated.
-     *
-     * @param resources The newly associated DirContext
-     */
+    @Override
     public synchronized void setResources(DirContext resources) {
 
-//        if (started) {
-//            throw new IllegalStateException
-//                (sm.getString("standardContext.resources.started"));
-//        }
-//
-//        DirContext oldResources = this.webappResources;
-//        if (oldResources == resources)
-//            return;
-//
-//        if (resources instanceof BaseDirContext) {
-//            ((BaseDirContext) resources).setCached(
-//                    isCachingAllowed() &&
-//                    ((BaseDirContext) resources).isCached()
-//                    );
-//        }
-//        if (resources instanceof FileDirContext) {
-//            filesystemBased = true;
-//        }
-//        this.webappResources = resources;
-//
-//        // The proxied resources will be refreshed on start
-//        this.resources = null;
-//
-//        support.firePropertyChange("resources", oldResources,
-//                                   this.webappResources);
+        if (started) {
+            throw new IllegalStateException
+                (sm.getString("standardContext.resources.started"));
+        }
+
+        DirContext oldResources = this.webappResources;
+        if (oldResources == resources)
+            return;
+
+        if (resources instanceof BaseDirContext) {
+            ((BaseDirContext) resources).setCached(
+                    isCachingAllowed() &&
+                    ((BaseDirContext) resources).isCached()
+                    );
+        }
+        if (resources instanceof FileDirContext) {
+            filesystemBased = true;
+        }
+        this.webappResources = resources;
+
+        // The proxied resources will be refreshed on start
+        this.resources = null;
+
+        support.firePropertyChange("resources", oldResources, this.webappResources);
 
     }
 
@@ -3227,23 +3211,24 @@ public class StandardContext
         boolean ok = true;
 
         Hashtable env = new Hashtable();
-//        if (getParent() != null)
-//            env.put(ProxyDirContext.HOST, getParent().getName());
-//        env.put(ProxyDirContext.CONTEXT, getName());
-//
-//        try {
-//            ProxyDirContext proxyDirContext =
-//                new ProxyDirContext(env, webappResources);
-//            if (webappResources instanceof BaseDirContext) {
-//                ((BaseDirContext) webappResources).setDocBase(getBasePath());
-//                ((BaseDirContext) webappResources).allocate();
-//            }
-//            this.resources = proxyDirContext;
-//        } catch (Throwable t) {
-//            log(sm.getString("standardContext.resourcesStart"), t);
-//            ok = false;
-//        }
-//
+        if (getParent() != null) {
+            env.put(ProxyDirContext.HOST, getParent().getName());
+        }
+        env.put(ProxyDirContext.CONTEXT, getName());
+
+        try {
+            ProxyDirContext proxyDirContext =
+                new ProxyDirContext(env, webappResources);
+            if (webappResources instanceof BaseDirContext) {
+                ((BaseDirContext) webappResources).setDocBase(getBasePath());
+                ((BaseDirContext) webappResources).allocate();
+            }
+            this.resources = proxyDirContext;
+        } catch (Throwable t) {
+            log(sm.getString("standardContext.resourcesStart"), t);
+            ok = false;
+        }
+
         return (ok);
 
     }
@@ -3261,9 +3246,9 @@ public class StandardContext
                 if (resources instanceof Lifecycle) {
                     ((Lifecycle) resources).stop();
                 }
-//                if (webappResources instanceof BaseDirContext) {
-//                    ((BaseDirContext) webappResources).release();
-//                }
+                if (webappResources instanceof BaseDirContext) {
+                    ((BaseDirContext) webappResources).release();
+                }
             }
         } catch (Throwable t) {
             log(sm.getString("standardContext.resourcesStop"), t);
@@ -3355,10 +3340,11 @@ public class StandardContext
             if (debug >= 1)
                 log("Configuring default Resources");
             try {
-//                if ((docBase != null) && (docBase.endsWith(".war")))
+                if ((docBase != null) && (docBase.endsWith(".war"))) {
 //                    setResources(new WARDirContext());
-//                else
-//                    setResources(new FileDirContext());
+                }else {
+                    setResources(new FileDirContext());
+                }
             } catch (IllegalArgumentException e) {
                 log("Error initializing resources: " + e.getMessage());
                 ok = false;

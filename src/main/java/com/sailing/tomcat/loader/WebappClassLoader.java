@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.sailing.tomcat.life.Lifecycle;
 import com.sailing.tomcat.life.LifecycleException;
 import com.sailing.tomcat.life.LifecycleListener;
+import com.sailing.tomcat.resource.Resource;
 import com.sailing.tomcat.util.URLEncoder;
 
 import javax.naming.NameClassPair;
