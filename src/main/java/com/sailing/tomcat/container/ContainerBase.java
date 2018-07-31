@@ -1368,7 +1368,7 @@ public abstract class ContainerBase
      * @param message Message to be logged
      * @param throwable Related exception
      */
-    protected void log(String message, Throwable throwable) {
+    public void log(String message, Throwable throwable) {
 
         Logger logger = getLogger();
         if (logger != null)

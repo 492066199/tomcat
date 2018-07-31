@@ -20,17 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-/**
- * Convenience base implementation of the <b>HttpResponse</b> interface, which
- * can be used for the <code>Response</code> implementation required by most
- * <code>Connectors</code> that deal with HTTP.  Only the connector-specific
- * methods need to be implemented.
- *
- * @author Craig R. McClanahan
- * @author Remy Maucherat
- * @version $Revision: 1.55 $ $Date: 2004/08/26 21:30:19 $
- * @deprecated
- */
 public class HttpResponseBase extends ResponseBase implements HttpResponse, HttpServletResponse {
 
     protected class PrivilegedFlushBuffer implements PrivilegedExceptionAction {
